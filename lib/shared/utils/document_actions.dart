@@ -1,0 +1,160 @@
+import 'package:flutter/material.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class DocumentActions {
+  static void confirmDelete({
+    required BuildContext context,
+    required String title,
+    required VoidCallback onDeleteConfirm,
+  }) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
+        content: const Text('Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.', style: TextStyle(color: Color(0xFF94A3B8))),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Annuler', style: TextStyle(color: Color(0xFF94A3B8))),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              onDeleteConfirm();
+            },
+            child: const Text('Supprimer', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+  static void showPdfOptions({
+    required BuildContext context,
+    required String filePath,
+    required String numero,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(numero, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF1E293B))),
+            const SizedBox(height: 16),
+            ListTile(
+              leading: const Icon(Icons.open_in_new, color: Color(0xFF2563EB)),
+              title: const Text('Ouvrir le PDF', style: TextStyle(fontSize: 14, color: Color(0xFF1E293B))),
+              onTap: () {
+                Navigator.pop(context);
+                OpenFilex.open(filePath);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.share, color: Colors.green),
+              title: const Text('Partager (WhatsApp, Email...)', style: TextStyle(fontSize: 14, color: Color(0xFF1E293B))),
+              onTap: () {
+                Navigator.pop(context);
+                Share.shareXFiles(
+                  [XFile(filePath)],
+                  subject: 'Document $numero',
+                  text: 'Veuillez trouver ci-joint le document $numero.',
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  static void remindClient({
+    required BuildContext context,
+    required String docNumero,
+    required String clientNom,
+    required String? telephone,
+    required String? email,
+    required double montant,
+    required String dateInfo,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Relancer le client', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF1E293B))),
+            Text('$docNumero — $clientNom', style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12)),
+            const SizedBox(height: 16),
+            ListTile(
+              leading: const Icon(Icons.message, color: Color(0xFF25D366)),
+              title: const Text('Envoyer via WhatsApp', style: TextStyle(fontSize: 14)),
+              subtitle: Text(telephone ?? 'Aucun numéro', style: const TextStyle(fontSize: 11)),
+              onTap: () async {
+                Navigator.pop(context);
+                if (telephone == null || telephone.isEmpty) return;
+
+                final message = Uri.encodeComponent(
+                    '''Bonjour $clientNom,
+
+Nous espérons que vous allez bien.
+
+Nous vous rappelons que le document *$docNumero* d'un montant de *${montant.toStringAsFixed(2)} MAD* ($dateInfo) est toujours en attente.
+
+Merci de bien vouloir le consulter dès que possible.
+
+Cordialement,
+TPE Manager'''
+                );
+                String phone = telephone.replaceAll(' ', '').replaceAll('-', '');
+                if (phone.startsWith('0')) phone = '+212${phone.substring(1)}';
+
+                final url = Uri.parse('https://wa.me/$phone?text=$message');
+                if (await canLaunchUrl(url)) await launchUrl(url, mode: LaunchMode.externalApplication);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.email_outlined, color: Color(0xFF2563EB)),
+              title: const Text('Envoyer par Email', style: TextStyle(fontSize: 14)),
+              subtitle: Text(email ?? 'Aucune adresse', style: const TextStyle(fontSize: 11)),
+              onTap: () async {
+                Navigator.pop(context);
+                if (email == null || email.isEmpty) return;
+
+                final subject = Uri.encodeComponent('Rappel - $docNumero');
+                final body = Uri.encodeComponent(
+                    '''Bonjour $clientNom,
+
+Nous espérons que vous allez bien.
+
+Nous vous rappelons que le document $docNumero d'un montant de ${montant.toStringAsFixed(2)} MAD ($dateInfo) est toujours en attente.
+
+Nous vous remercions de bien vouloir effectuer les démarches nécessaires.
+
+Cordialement,
+L'équipe TPE Manager'''
+                );
+                final url = Uri.parse('mailto:$email?subject=$subject&body=$body');
+                if (await canLaunchUrl(url)) await launchUrl(url);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
