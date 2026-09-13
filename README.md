@@ -1,94 +1,101 @@
-# tpe_mobile — TPE Manager (Application Mobile)
+# TPE Manager — Mobile
 
-Application mobile Flutter pour la gestion de TPE et auto-entrepreneurs marocains : devis, factures, trésorerie, scoring de crédit et notifications en temps réel. Cette application communique avec le [backend Django REST Framework](https://github.com/fatima-aitoulahyan/tpe-manager-backend) du même projet.
+Flutter mobile app for managing small Moroccan businesses and self-employed entrepreneurs: quotes, invoices, cash flow, credit scoring, and real-time notifications. This app communicates with the [Django REST Framework backend](https://github.com/fatima-aitoulahyan/tpe-manager-backend) of the same project.
 
-## Sommaire
+## Table of contents
 
-- [Fonctionnalités](#fonctionnalités)
-- [Stack technique](#stack-technique)
+- [Preview](#preview)
+- [Features](#features)
+- [Tech stack](#tech-stack)
 - [Architecture](#architecture)
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Lancer le projet](#lancer-le-projet)
-- [Structure du projet](#structure-du-projet)
+- [Running the project](#running-the-project)
+- [Project structure](#project-structure)
 
-## Fonctionnalités
+## Preview
 
-- **Authentification** — Connexion, inscription, mot de passe oublié (code par email), gestion sécurisée des tokens JWT
-- **Tableau de bord** — Visualisation des indicateurs clés via des graphiques (`fl_chart`)
-- **Devis** — Création, modification, suivi du cycle de vie (Brouillon → Envoyé → Accepté / Refusé / Expiré)
-- **Factures** — Création, suivi des statuts de paiement, génération et export PDF
-- **Trésorerie (Cashflow)** — Suivi des transactions et flux financiers
-- **Crédit** — Consultation du score d'éligibilité au crédit (jauge visuelle personnalisée) et suivi des demandes
-- **Notifications** — Réception de notifications push en temps réel (Firebase Cloud Messaging) avec navigation contextuelle, historique des notifications in-app
-- **Profil & Paramètres** — Configuration du compte, y compris la configuration email personnelle pour l'envoi de relances aux clients
+| Login | Dashboard | Quotes | Credit score |
+|---|---|---|---|
+| ![Login](docs/screenshots/login.jpg) | ![Dashboard](docs/screenshots/dashboard.jpg) | ![Quotes](docs/screenshots/devis.jpg) | ![trésorerie](docs/screenshots/trésorerie.jpg) |
 
-## Stack technique
+## Features
 
-| Composant | Technologie |
+- **Authentication** — login, sign up, forgot password (email code), secure JWT token handling
+- **Dashboard** — key metrics visualized through charts (`fl_chart`)
+- **Quotes** — creation, editing, full lifecycle tracking (Draft → Sent → Accepted / Rejected / Expired)
+- **Invoices** — creation, payment status tracking, PDF generation and export
+- **Cash flow** — transaction and cash flow tracking
+- **Credit** — credit eligibility score (custom visual gauge) and request tracking
+- **Notifications** — real-time push notifications (Firebase Cloud Messaging) with contextual navigation, in-app notification history
+- **Profile & Settings** — account configuration, including personal email setup for sending client reminders
+
+## Tech stack
+
+| Component | Technology |
 |---|---|
 | Framework | Flutter |
-| Gestion d'état | `flutter_bloc` (pattern BLoC) |
+| State management | `flutter_bloc` (BLoC pattern) |
 | Navigation | `go_router` |
-| Requêtes HTTP | `dio` |
-| Stockage sécurisé | `flutter_secure_storage` |
-| Notifications push | `firebase_messaging` + `flutter_local_notifications` |
-| Graphiques | `fl_chart` |
-| Variables d'environnement | `flutter_dotenv` |
-| Injection de dépendances | `get_it` |
-| Internationalisation | `flutter_localizations` / `intl` (Français) |
+| HTTP requests | `dio` |
+| Secure storage | `flutter_secure_storage` |
+| Push notifications | `firebase_messaging` + `flutter_local_notifications` |
+| Charts | `fl_chart` |
+| Environment variables | `flutter_dotenv` |
+| Dependency injection | `get_it` |
+| Internationalization | `flutter_localizations` / `intl` (French, Arabic) |
 
 ## Architecture
 
-Le projet suit une architecture par fonctionnalités (*feature-first*), avec séparation des couches données / présentation :
+The project follows a feature-first architecture, with data / presentation layer separation:
 
 ```
 lib/
 ├── core/
-│   └── network/          # Client Dio, intercepteurs JWT
+│   └── network/          # Dio client, JWT interceptors
 ├── features/
-│   ├── auth/             # Authentification (login, register, mot de passe oublié)
-│   ├── dashboard/        # Tableau de bord
-│   ├── devis/            # Gestion des devis
-│   ├── factures/         # Gestion des factures
-│   ├── cashflow/         # Trésorerie
-│   ├── credit/           # Scoring et demandes de crédit
-│   ├── notifications/    # Notifications in-app
-│   └── profile/          # Profil et paramètres
+│   ├── auth/             # Authentication (login, register, forgot password)
+│   ├── dashboard/        # Dashboard
+│   ├── devis/             # Quotes management
+│   ├── factures/          # Invoices management
+│   ├── cashflow/          # Cash flow
+│   ├── credit/             # Credit scoring and requests
+│   ├── notifications/     # In-app notifications
+│   └── profile/            # Profile and settings
 ├── routes/
-│   └── app_router.dart   # Configuration GoRouter
-├── shared/                # Widgets et pages partagés
+│   └── app_router.dart    # GoRouter configuration
+├── shared/                 # Shared widgets and pages
 └── main.dart
 ```
 
-Chaque fonctionnalité suit généralement la structure :
+Each feature generally follows this structure:
 
 ```
 feature/
 ├── data/
-│   └── datasources/      # Appels API (Dio)
+│   └── datasources/      # API calls (Dio)
 ├── presentation/
-│   ├── bloc/              # Bloc, Events, States
-│   ├── pages/             # Écrans
-│   └── widgets/           # Composants réutilisables
+│   ├── bloc/               # Bloc, Events, States
+│   ├── pages/               # Screens
+│   └── widgets/              # Reusable components
 ```
 
 ## Installation
 
-### Prérequis
+### Prerequisites
 
 - [Flutter SDK](https://docs.flutter.dev/get-started/install) (^3.12.0)
-- Un compte Firebase avec un projet configuré (pour les notifications push)
-- Le [backend TPE Manager](https://github.com/fatima-aitoulahyan/tpe-manager-backend) démarré et accessible
+- A Firebase account with a configured project (for push notifications)
+- The [TPE Manager backend](https://github.com/fatima-aitoulahyan/tpe-manager-backend) running and reachable
 
-### Cloner le projet
+### Clone the project
 
 ```bash
 git clone https://github.com/fatima-aitoulahyan/tpe-manager-mobile.git
 cd tpe-manager-mobile
 ```
 
-### Installer les dépendances
+### Install dependencies
 
 ```bash
 flutter pub get
@@ -96,60 +103,70 @@ flutter pub get
 
 ## Configuration
 
-### Variables d'environnement
+### Environment variables
 
-1. Copier le fichier d'exemple :
+1. Copy the example file:
 
 ```bash
 cp .env.example .env
 ```
 
-2. Renseigner l'URL de l'API backend dans `.env` :
+2. Set the backend API URL in `.env`:
 
 ```env
 BASE_URL=http://192.168.8.4:8000/api
 ```
 
-> 💡 Remplacez l'adresse IP par celle de votre machine hébergeant le backend si vous testez sur un appareil physique (et non un émulateur), l'appareil devant être sur le même réseau local que le serveur.
+> 💡 Replace the IP address with the one of the machine hosting the backend if you're testing on a physical device (not an emulator) — the device must be on the same local network as the server.
 
-### Firebase (notifications push)
+### Firebase (push notifications)
 
-1. Créer un projet sur la [console Firebase](https://console.firebase.google.com/)
-2. Ajouter une application Android au projet
-3. Télécharger le fichier `google-services.json` généré
-4. Le placer dans `android/app/google-services.json`
+1. Create a project on the [Firebase console](https://console.firebase.google.com/)
+2. Add an Android app to the project
+3. Download the generated `google-services.json` file
+4. Place it in `android/app/google-services.json`
 
-> ⚠️ Les fichiers `.env` et `google-services.json` contiennent des informations sensibles propres à chaque environnement et ne sont pas versionnés (voir `.gitignore`).
+> ⚠️ The `.env` and `google-services.json` files contain environment-specific sensitive information and are not versioned (see `.gitignore`).
 
-## Lancer le projet
+## Running the project
 
-Vérifier qu'un appareil ou émulateur est bien détecté :
+Check that a device or emulator is detected:
 
 ```bash
 flutter devices
 ```
 
-Lancer l'application :
+Run the app:
 
 ```bash
 flutter run
 ```
 
-Build d'une version release Android :
+Build an Android release version:
 
 ```bash
 flutter build apk --release
 ```
 
-## Structure du projet
+## Project structure
 
 ```
 tpe_mobile/
-├── android/               # Configuration native Android
-├── ios/                   # Configuration native iOS
-├── lib/                   # Code source Dart
+├── android/               # Native Android configuration
+├── ios/                   # Native iOS configuration
+├── lib/                   # Dart source code
 ├── test/                  # Tests
-├── .env.example           # Exemple de configuration
-├── pubspec.yaml           # Dépendances du projet
-└── analysis_options.yaml  # Règles de lint
+├── docs/
+│   └── screenshots/       # App screenshots used in this README
+├── .env.example           # Example configuration
+├── pubspec.yaml           # Project dependencies
+└── analysis_options.yaml  # Lint rules
 ```
+
+## License
+
+This project is distributed under the MIT License.
+
+## Author
+
+Built as a final-year project (PFA) — GLSID, ENSET Mohammedia.
