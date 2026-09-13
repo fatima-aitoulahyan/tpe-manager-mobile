@@ -6,6 +6,7 @@ import '../bloc/notification_bloc.dart';
 import '../bloc/notification_event.dart';
 import '../bloc/notification_state.dart';
 import '../widgets/notification_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
@@ -49,17 +50,18 @@ class _NotificationsViewState extends State<NotificationsView> {
 
   void _confirmDelete(BuildContext context) {
     final notificationBloc = context.read<NotificationBloc>();
+    final l10n = AppLocalizations.of(context)!;
 
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Supprimer les notifications', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-        content: Text('Voulez-vous vraiment supprimer les ${_selectedIds.length} notifications sélectionnées ?'),
+        title: Text(l10n.deleteNotificationsDialogTitle, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        content: Text(l10n.deleteNotificationsDialogContent(_selectedIds.length)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Annuler', style: TextStyle(color: Color(0xFF64748B))),
+            child: Text(l10n.cancelButton, style: const TextStyle(color: Color(0xFF64748B))),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -73,7 +75,7 @@ class _NotificationsViewState extends State<NotificationsView> {
               _cancelSelection();
               Navigator.pop(dialogContext);
             },
-            child: const Text('Supprimer', style: TextStyle(fontWeight: FontWeight.bold)),
+            child: Text(l10n.deleteButton, style: const TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -81,6 +83,8 @@ class _NotificationsViewState extends State<NotificationsView> {
   }
 
   void _onNotificationTap(BuildContext context, dynamic notification) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (_isSelectionMode) {
       _toggleSelection(notification.id);
     } else {
@@ -100,7 +104,8 @@ class _NotificationsViewState extends State<NotificationsView> {
         case 'credit':
           if (notification.referenceId != null) {
             context.go('/credit/${notification.referenceId}');
-          } else {context.go('/credit');
+          } else {
+            context.go('/credit');
           }
           break;
 
@@ -140,7 +145,7 @@ class _NotificationsViewState extends State<NotificationsView> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: typeColor.withOpacity(0.1),
+                          color: typeColor.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                         alignment: Alignment.center,
@@ -181,7 +186,7 @@ class _NotificationsViewState extends State<NotificationsView> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Fermer', style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text(l10n.closeButton, style: const TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],
@@ -192,8 +197,11 @@ class _NotificationsViewState extends State<NotificationsView> {
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocBuilder<NotificationBloc, NotificationState>(
       builder: (context, state) {
         bool showMarkAllRead = state is NotificationsLoaded && state.unreadCount > 0 && !_isSelectionMode;
@@ -226,8 +234,8 @@ class _NotificationsViewState extends State<NotificationsView> {
 
             title: Text(
               _isSelectionMode
-                  ? '${_selectedIds.length} sélectionné(s)'
-                  : 'Notifications',
+                  ? l10n.selectedCountTitle(_selectedIds.length)
+                  : l10n.notificationsTitle,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -251,7 +259,7 @@ class _NotificationsViewState extends State<NotificationsView> {
                         .add(MarkAllAsRead());
                   },
                   child: Text(
-                    'Tout marquer comme lu (${state.unreadCount})',
+                    l10n.markAllAsReadButton(state.unreadCount),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,
@@ -277,7 +285,7 @@ class _NotificationsViewState extends State<NotificationsView> {
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: () => context.read<NotificationBloc>().add(LoadNotifications()),
-                        child: const Text('Réessayer'),
+                        child: Text(l10n.retryButton),
                       ),
                     ],
                   ),
@@ -300,7 +308,7 @@ class _NotificationsViewState extends State<NotificationsView> {
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFF0F172A).withOpacity(0.03),
+                                  color: const Color(0xFF0F172A).withValues(alpha: 0.03),
                                   blurRadius: 20,
                                   offset: const Offset(0, 8),
                                 )
@@ -314,9 +322,9 @@ class _NotificationsViewState extends State<NotificationsView> {
                             ),
                           ),
                           const SizedBox(height: 24),
-                          const Text(
-                            'Votre historique est propre',
-                            style: TextStyle(
+                          Text(
+                            l10n.emptyNotificationsTitle,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF0F172A),
@@ -324,10 +332,10 @@ class _NotificationsViewState extends State<NotificationsView> {
                             ),
                           ),
                           const SizedBox(height: 6),
-                          const Text(
-                            'Nous vous préviendrons dès qu\'une facture ou un devis nécessitera votre attention.',
+                          Text(
+                            l10n.emptyNotificationsSubtitle,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Color(0xFF64748B),
                               fontSize: 13,
                               height: 1.5,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import '../../../../l10n/app_localizations.dart';
 
 class EligibiliteGauge extends StatelessWidget {
   final double score;
@@ -20,17 +21,19 @@ class EligibiliteGauge extends StatelessWidget {
     }
   }
 
-  String get _label {
+  String _getLabel(AppLocalizations l10n) {
     switch (niveau) {
-      case 'VERT':   return 'Éligibilité élevée';
-      case 'ORANGE': return 'Éligibilité moyenne';
-      case 'ROUGE':  return 'Éligibilité faible';
-      default:       return 'Non évalué';
+      case 'VERT':   return l10n.eligibilityHigh;
+      case 'ORANGE': return l10n.eligibilityMedium;
+      case 'ROUGE':  return l10n.eligibilityLow;
+      default:       return l10n.eligibilityNotEvaluated;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(children: [
       SizedBox(
         width: 160, height: 100,
@@ -52,10 +55,10 @@ class EligibiliteGauge extends StatelessWidget {
         padding: const EdgeInsets.symmetric(
             horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
-          color: _color.withOpacity(0.1),
+          color: _color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Text(_label,
+        child: Text(_getLabel(l10n),
           style: TextStyle(
             color: _color,
             fontSize: 12,

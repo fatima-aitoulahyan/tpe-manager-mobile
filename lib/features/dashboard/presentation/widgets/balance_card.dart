@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../shared/utils/currency_format.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class BalanceCard extends StatelessWidget {
   final double solde;
@@ -14,6 +16,8 @@ class BalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -23,7 +27,7 @@ class BalanceCard extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0F172A).withOpacity(0.03),
+            color: const Color(0xFF0F172A).withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -35,7 +39,7 @@ class BalanceCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Solde actuel', style: TextStyle(color: Color(0xFF64748B), fontSize: 13, fontWeight: FontWeight.w500)),
+              Text(l10n.currentBalanceLabel, style: const TextStyle(color: Color(0xFF64748B), fontSize: 13, fontWeight: FontWeight.w500)),
               IconButton(
                 style: IconButton.styleFrom(
                   padding: EdgeInsets.zero,
@@ -57,7 +61,7 @@ class BalanceCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  isVisible ? '${solde.toStringAsFixed(2)} MAD' : '••••••• MAD',
+                  isVisible ? '${solde.toDH()} ' : '••••••• DH',
                   style: const TextStyle(color: Color(0xFF0F172A), fontSize: 28, fontWeight: FontWeight.bold, letterSpacing: -0.5),
                 ),
               ),
@@ -71,7 +75,7 @@ class BalanceCard extends StatelessWidget {
                   children: [
                     Icon(solde >= 0 ? Icons.trending_up : Icons.trending_down, color: solde >= 0 ? const Color(0xFF15803D) : const Color(0xFFB91C1C), size: 14),
                     const SizedBox(width: 4),
-                    Text(solde >= 0 ? 'Positif' : 'Négatif', style: TextStyle(color: solde >= 0 ? const Color(0xFF15803D) : const Color(0xFFB91C1C), fontSize: 11, fontWeight: FontWeight.bold)),
+                    Text(solde >= 0 ? l10n.positiveStatusLabel : l10n.negativeStatusLabel, style: TextStyle(color: solde >= 0 ? const Color(0xFF15803D) : const Color(0xFFB91C1C), fontSize: 11, fontWeight: FontWeight.bold)),
                   ],
                 ),
               ),

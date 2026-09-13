@@ -73,3 +73,12 @@ class DevisConvertedToFacture extends DevisState {
   @override
   List<Object> get props => [factureId];
 }
+class DevisAiGenerated extends DevisState {
+  final Map<String, dynamic> data;
+  DevisAiGenerated(this.data);
+}
+class DevisAiClientNotFound extends DevisState {
+  final String clientNom;
+  final String message;
+  DevisAiClientNotFound(this.clientNom, this.message);
+}

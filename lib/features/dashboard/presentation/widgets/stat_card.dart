@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../shared/utils/currency_format.dart';
 
 class StatCard extends StatelessWidget {
   final String label;
@@ -18,7 +19,7 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String displayValue = isVisible ? '${value.toStringAsFixed(2)} MAD' : '••••••• MAD';
+    String displayValue = isVisible ? '${value.toDH()} ' : '••••••• DH';
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -36,7 +37,7 @@ class StatCard extends StatelessWidget {
               Text(label, style: const TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
               Container(
                 padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(color: color.withOpacity(0.08), shape: BoxShape.circle),
+                decoration: BoxDecoration(color: color.withValues(alpha: 0.08), shape: BoxShape.circle),
                 child: Icon(icon, color: color, size: 16),
               ),
             ],

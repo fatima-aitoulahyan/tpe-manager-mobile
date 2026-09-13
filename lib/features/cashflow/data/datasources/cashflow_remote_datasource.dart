@@ -15,6 +15,7 @@ class CashflowRemoteDataSource {
     String? categorie,
     String? dateDebut,
     String? dateFin,
+    String? search,
     int     page     = 1,
     int     pageSize = 20,
   }) async {
@@ -23,6 +24,7 @@ class CashflowRemoteDataSource {
       if (categorie != null && categorie.isNotEmpty) 'categorie':  categorie,
       if (dateDebut != null)                         'date_debut': dateDebut,
       if (dateFin != null)                           'date_fin':   dateFin,
+      if (search != null && search.trim().isNotEmpty) 'search':    search.trim(),
       'page':      page,
       'page_size': pageSize,
     });

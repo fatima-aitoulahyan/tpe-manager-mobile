@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/models/dashboard_model.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class DevisActivityCard extends StatelessWidget {
   final DevisStats devisStats;
@@ -8,10 +9,12 @@ class DevisActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Activité des devis', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
+        Text(l10n.quoteActivityTitle, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
         const SizedBox(height: 12),
         Container(
           padding: const EdgeInsets.all(20),
@@ -29,7 +32,7 @@ class DevisActivityCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Total des devis générés', style: TextStyle(color: Color(0xFF64748B), fontSize: 12)),
+                      Text(l10n.totalQuotesGeneratedLabel, style: const TextStyle(color: Color(0xFF64748B), fontSize: 12)),
                       const SizedBox(height: 4),
                       Text('${devisStats.totalQuotes}', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
                     ],
@@ -37,7 +40,7 @@ class DevisActivityCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(8)),
-                    child: Text('Conversion : ${devisStats.conversionRate}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
+                    child: Text('${l10n.conversionRateLabel} : ${devisStats.conversionRate}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF475569))),
                   )
                 ],
               ),
@@ -55,10 +58,10 @@ class DevisActivityCard extends StatelessWidget {
                 runSpacing: 8,
                 alignment: WrapAlignment.spaceBetween,
                 children: [
-                  _StatusIndicator(label: 'Acceptés', count: devisStats.byStatus['ACCEPTE'] ?? 0, color: const Color(0xFF10B981)),
-                  _StatusIndicator(label: 'En attente', count: devisStats.byStatus['ENVOYE'] ?? 0, color: Colors.orange),
-                  _StatusIndicator(label: 'Refusés', count: devisStats.byStatus['REFUSE'] ?? 0, color: const Color(0xFF64748B)),
-                  _StatusIndicator(label: 'Expirés', count: devisStats.byStatus['EXPIRE'] ?? 0, color: const Color(0xFFEF4444)),
+                  _StatusIndicator(label: l10n.quoteStatusAccepted, count: devisStats.byStatus['ACCEPTE'] ?? 0, color: const Color(0xFF10B981)),
+                  _StatusIndicator(label: l10n.quoteStatusPending, count: devisStats.byStatus['ENVOYE'] ?? 0, color: Colors.orange),
+                  _StatusIndicator(label: l10n.quoteStatusRefused, count: devisStats.byStatus['REFUSE'] ?? 0, color: const Color(0xFF64748B)),
+                  _StatusIndicator(label: l10n.quoteStatusExpired, count: devisStats.byStatus['EXPIRE'] ?? 0, color: const Color(0xFFEF4444)),
                 ],
               ),
             ],

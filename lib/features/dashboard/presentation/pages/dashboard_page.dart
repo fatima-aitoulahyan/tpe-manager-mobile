@@ -14,6 +14,7 @@ import '../widgets/balance_bar_chart.dart';
 import '../widgets/balance_pie_chart.dart';
 import '../widgets/devis_activity_card.dart';
 import '../widgets/stat_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -39,6 +40,8 @@ class _DashboardViewState extends State<_DashboardView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       body: BlocBuilder<DashboardBloc, DashboardState>(
@@ -64,7 +67,7 @@ class _DashboardViewState extends State<_DashboardView> {
                       elevation: 0,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
-                    child: const Text('Réessayer'),
+                    child: Text(l10n.retryButton),
                   ),
                 ],
               ),
@@ -85,11 +88,11 @@ class _DashboardViewState extends State<_DashboardView> {
                     backgroundColor: const Color(0xFF2563EB),
                     elevation: 0,
                     centerTitle: false,
-                    title: const Padding(
-                      padding: EdgeInsets.only(left: 4.0),
+                    title: Padding(
+                      padding: const EdgeInsets.only(left: 4.0),
                       child: Text(
-                        'Tableau de bord',
-                        style: TextStyle(
+                        l10n.dashboardTitle,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -169,7 +172,7 @@ class _DashboardViewState extends State<_DashboardView> {
 
                         Row(children: [
                           Expanded(child: StatCard(
-                            label: 'Recettes du mois',
+                            label: l10n.monthlyIncomeLabel,
                             value: cf.recettesMois,
                             icon: Icons.arrow_downward_rounded,
                             color: const Color(0xFF10B981),
@@ -177,7 +180,7 @@ class _DashboardViewState extends State<_DashboardView> {
                           )),
                           const SizedBox(width: 12),
                           Expanded(child: StatCard(
-                            label: 'Dépenses du mois',
+                            label: l10n.monthlyExpensesLabel,
                             value: cf.depensesMois,
                             icon: Icons.arrow_upward_rounded,
                             color: const Color(0xFFEF4444),
@@ -189,7 +192,7 @@ class _DashboardViewState extends State<_DashboardView> {
                         DevisActivityCard(devisStats: ds),
                         const SizedBox(height: 28),
 
-                        const Text('Analyse des flux', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
+                        Text(l10n.flowAnalysisTitle, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
                         const SizedBox(height: 12),
                         Container(
                           padding: const EdgeInsets.all(20),

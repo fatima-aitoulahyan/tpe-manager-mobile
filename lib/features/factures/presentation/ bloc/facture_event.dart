@@ -99,8 +99,9 @@ class ConvertDevisToFacture extends FactureEvent {
 }
 class ArchiveFacture extends FactureEvent {
   final int id;
-  const ArchiveFacture(this.id);
+  final String? motif;
+  const ArchiveFacture(this.id, {this.motif});
 
   @override
-  List<Object> get props => [id];
+  List<Object?> get props => [id, motif];
 }

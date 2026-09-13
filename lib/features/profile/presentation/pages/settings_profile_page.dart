@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../shared/widgets/language_selector.dart';
 import '../../data/datasources/preferences_remote_datasource.dart';
 import '../../data/datasources/profile_remote_datasource.dart';
 import '../../data/models/preferences_model.dart';
@@ -14,6 +15,7 @@ import '../bloc/profile_event.dart';
 import '../bloc/profile_state.dart';
 import '../widgets/avatar_section_widget.dart';
 import '../widgets/password_dialog_widget.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class SettingsProfilePage extends StatelessWidget {
   const SettingsProfilePage({super.key});
@@ -99,9 +101,10 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
   }
 
   Future<void> _saveEmailConfig() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_emailConfigController.text.isEmpty || _passwordConfigController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez remplir tous les champs email'), backgroundColor: Colors.orange),
+        SnackBar(content: Text(l10n.fillAllEmailFieldsError), backgroundColor: Colors.orange),
       );
       return;
     }
@@ -113,13 +116,13 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Configuration email enregistrée !'), backgroundColor: Colors.green),
+          SnackBar(content: Text(l10n.emailConfigSavedSuccess), backgroundColor: Colors.green),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur : $e'), backgroundColor: Colors.red),
+          SnackBar(content: Text(l10n.errorPrefix(e.toString())), backgroundColor: Colors.red),
         );
       }
     } finally {
@@ -129,18 +132,20 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return MultiBlocListener(
       listeners: [
         BlocListener<ProfileBloc, ProfileState>(
           listener: (context, state) {
             if (state is ProfileUpdateSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Coordonnées mises à jour !'), backgroundColor: Colors.green),
+                SnackBar(content: Text(l10n.profileUpdatedSuccess), backgroundColor: Colors.green),
               );
             }
             if (state is PasswordChangeSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Mot de passe changé avec succès !'), backgroundColor: Colors.green),
+                SnackBar(content: Text(l10n.passwordChangedSuccess), backgroundColor: Colors.green),
               );
             }
             if (state is LogoutSuccess) context.go('/login');
@@ -164,7 +169,7 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
         child: Scaffold(
           backgroundColor: bgColor,
           appBar: AppBar(
-            title: const Text('Paramètres', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
+            title: Text(l10n.settingsTitle, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
             backgroundColor: primaryColor,
             foregroundColor: Colors.white,
             elevation: 0,
@@ -174,8 +179,8 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
               labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
               tabs: [
-                Tab(icon: Icon(Icons.person, size: 20, color: Colors.white,)),
-                Tab(icon: Icon(Icons.notifications_active, size: 20,color: Colors.white,)),
+                Tab(icon: Icon(Icons.person, size: 20, color: Colors.white)),
+                Tab(icon: Icon(Icons.notifications_active, size: 20, color: Colors.white)),
               ],
             ),
           ),
@@ -208,30 +213,30 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                                 children: [
                                   if (user != null) Center(child: AvatarSectionWidget(user: user)),
                                   const SizedBox(height: 24),
-                                  _buildSectionHeader(Icons.person_outline, 'Modifier mes coordonnées'),
+                                  _buildSectionHeader(Icons.person_outline, l10n.editCoordinatesHeader),
                                   const SizedBox(height: 12),
                                   _buildCardContainer([
                                     Row(
                                       children: [
-                                        Expanded(child: _buildTextField('Prénom', _prenomController, Icons.badge_outlined)),
+                                        Expanded(child: _buildTextField(l10n.firstNameLabel, _prenomController, Icons.badge_outlined)),
                                         const SizedBox(width: 12),
-                                        Expanded(child: _buildTextField('Nom', _nomController, Icons.badge_outlined)),
+                                        Expanded(child: _buildTextField(l10n.lastNameLabel, _nomController, Icons.badge_outlined)),
                                       ],
                                     ),
-                                    _buildTextField('Adresse Email', _emailController, Icons.email_outlined, keyboardType: TextInputType.emailAddress),
-                                    _buildTextField('Téléphone', _phoneController, Icons.phone_outlined, keyboardType: TextInputType.phone),
-                                    _buildTextField('ICE (Maroc)', _iceController, Icons.description_outlined, required: false),
+                                    _buildTextField(l10n.emailAddressLabel, _emailController, Icons.email_outlined, keyboardType: TextInputType.emailAddress),
+                                    _buildTextField(l10n.phoneLabel, _phoneController, Icons.phone_outlined, keyboardType: TextInputType.phone),
+                                    _buildTextField(l10n.iceLabel, _iceController, Icons.description_outlined, required: false),
                                     DropdownButtonFormField<String>(
                                       value: _selectedStatut,
                                       dropdownColor: Colors.white,
                                       style: const TextStyle(color: textColor, fontSize: 15, fontWeight: FontWeight.w500),
-                                      decoration: _inputDecoration('Statut Fiscal', Icons.business_center_outlined),
-                                      items: const [
-                                        DropdownMenuItem(value: 'auto_entrepreneur', child: Text('Auto-entrepreneur')),
-                                        DropdownMenuItem(value: 'tpe',              child: Text('TPE')),
-                                        DropdownMenuItem(value: 'artisan',           child: Text('Artisan')),
-                                        DropdownMenuItem(value: 'freelance',         child: Text('Freelance')),
-                                        DropdownMenuItem(value: 'commercant',        child: Text('Commerçant')),
+                                      decoration: _inputDecoration(l10n.fiscalStatusLabel, Icons.business_center_outlined),
+                                      items: [
+                                        DropdownMenuItem(value: 'auto_entrepreneur', child: Text(l10n.statusAutoEntrepreneur)),
+                                        DropdownMenuItem(value: 'tpe', child: Text(l10n.statusTpe)),
+                                        DropdownMenuItem(value: 'artisan', child: Text(l10n.statusArtisan)),
+                                        DropdownMenuItem(value: 'freelance', child: Text(l10n.statusFreelance)),
+                                        DropdownMenuItem(value: 'commercant', child: Text(l10n.statusCommercant)),
                                       ],
                                       onChanged: (value) => _selectedStatut = value,
                                     ),
@@ -259,38 +264,38 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                                           elevation: 0,
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                         ),
-                                        child: const Text('Enregistrer le profil', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                                        child: Text(l10n.saveProfileButton, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                                       ),
                                     ),
                                   ]),
                                   const SizedBox(height: 24),
-                                  _buildSectionHeader(Icons.mail_outline, 'Configuration SMTP Email'),
+                                  _buildSectionHeader(Icons.mail_outline, l10n.smtpConfigHeader),
                                   const SizedBox(height: 12),
                                   _buildCardContainer([
                                     Container(
                                       padding: const EdgeInsets.all(12),
                                       decoration: BoxDecoration(color: const Color(0xFFF0F6FF), borderRadius: BorderRadius.circular(12), border: Border.all(color: const Color(0xFFD1E4FF))),
-                                      child: const Row(
+                                      child: Row(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Icon(Icons.lightbulb_outline, color: primaryColor, size: 18),
+                                          const Icon(Icons.lightbulb_outline, color: primaryColor, size: 18),
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: Text(
-                                              'Validation 2 étapes Google requise. Utilisez un "Mot de passe d\'application" généré sur votre compte Google.',
-                                              style: TextStyle(fontSize: 12, color: Color(0xFF1E40AF), height: 1.4),
+                                              l10n.smtpGoogleInfoHint,
+                                              style: const TextStyle(fontSize: 12, color: Color(0xFF1E40AF), height: 1.4),
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
                                     const SizedBox(height: 16),
-                                    TextFormField(controller: _emailConfigController, keyboardType: TextInputType.emailAddress, decoration: _inputDecoration('Adresse Gmail Professionnelle', Icons.alternate_email)),
+                                    TextFormField(controller: _emailConfigController, keyboardType: TextInputType.emailAddress, decoration: _inputDecoration(l10n.profGmailLabel, Icons.alternate_email)),
                                     const SizedBox(height: 12),
                                     TextFormField(
                                       controller: _passwordConfigController,
                                       obscureText: !_showEmailPassword,
-                                      decoration: _inputDecoration('Mot de passe d\'application Google', Icons.lock_open_outlined).copyWith(
+                                      decoration: _inputDecoration(l10n.googleAppPasswordLabel, Icons.lock_open_outlined).copyWith(
                                         suffixIcon: IconButton(
                                           icon: Icon(_showEmailPassword ? Icons.visibility_off : Icons.visibility, color: const Color(0xFF94A3B8)),
                                           onPressed: () => setState(() => _showEmailPassword = !_showEmailPassword),
@@ -306,13 +311,19 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                                         icon: _emailConfigSaving
                                             ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: primaryColor))
                                             : const Icon(Icons.sync_alt, size: 16, color: primaryColor),
-                                        label: Text(_emailConfigSaving ? 'Liaison...' : 'Lier mon compte Gmail', style: const TextStyle(color: primaryColor, fontWeight: FontWeight.w600)),
+                                        label: Text(_emailConfigSaving ? l10n.linkingButton : l10n.linkGmailButton, style: const TextStyle(color: primaryColor, fontWeight: FontWeight.w600)),
                                         style: OutlinedButton.styleFrom(side: const BorderSide(color: primaryColor, width: 1.5), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
                                       ),
                                     ),
                                   ]),
                                   const SizedBox(height: 24),
-                                  _buildAccountActionButtons(context),
+                                  _buildSectionHeader(Icons.language_outlined, l10n.languageLabel),
+                                  const SizedBox(height: 12),
+                                  _buildCardContainer([
+                                    const LanguageSelector(),
+                                  ]),
+                                  const SizedBox(height: 24),
+                                  _buildAccountActionButtons(context, l10n),
                                   const SizedBox(height: 24),
                                 ],
                               ),
@@ -325,12 +336,12 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 if (_localPreferences != null) ...[
-                                  _buildSectionHeader(Icons.alarm_on_outlined, 'Rappels automatiques'),
+                                  _buildSectionHeader(Icons.alarm_on_outlined, l10n.autoRemindersHeader),
                                   const SizedBox(height: 12),
                                   _buildCardContainer([
                                     _buildSwitchTile(
-                                      title: 'Rappel facture impayée',
-                                      subtitle: 'Vous serez averti des factures en retard',
+                                      title: l10n.unpaidInvoiceReminderTitle,
+                                      subtitle: l10n.unpaidInvoiceReminderSubtitle,
                                       icon: Icons.receipt_long_outlined,
                                       iconColor: Colors.red,
                                       value: _localPreferences!.rappelFactureImpayee,
@@ -338,14 +349,14 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                                     ),
                                     if (_localPreferences!.rappelFactureImpayee)
                                       _buildDaysSelector(
-                                        label: 'Envoyer un rappel après',
+                                        label: l10n.reminderAfterLabel,
                                         value: _localPreferences!.rappelFactureJours,
                                         onChanged: (v) => _updatePreferences((p) => p.copyWith(rappelFactureJours: v)),
                                       ),
                                     const Divider(height: 24, color: borderColor),
                                     _buildSwitchTile(
-                                      title: 'Rappel devis expirant',
-                                      subtitle: 'Alerte avant expiration du devis',
+                                      title: l10n.expiringQuoteReminderTitle,
+                                      subtitle: l10n.expiringQuoteReminderSubtitle,
                                       icon: Icons.description_outlined,
                                       iconColor: Colors.orange,
                                       value: _localPreferences!.rappelDevisExpirant,
@@ -353,14 +364,14 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                                     ),
                                     if (_localPreferences!.rappelDevisExpirant)
                                       _buildDaysSelector(
-                                        label: 'M\'avertir avant expiration',
+                                        label: l10n.warnBeforeExpirationLabel,
                                         value: _localPreferences!.rappelDevisJoursAvant,
                                         onChanged: (v) => _updatePreferences((p) => p.copyWith(rappelDevisJoursAvant: v)),
                                       ),
                                     const Divider(height: 24, color: borderColor),
                                     _buildSwitchTile(
-                                      title: 'Rappel déclaration fiscale',
-                                      subtitle: 'Rappel trimestriel auto-entrepreneur / TPE',
+                                      title: l10n.taxDeclarationReminderTitle,
+                                      subtitle: l10n.taxDeclarationReminderSubtitle,
                                       icon: Icons.account_balance_outlined,
                                       iconColor: primaryColor,
                                       value: _localPreferences!.rappelDeclarationFiscale,
@@ -368,8 +379,8 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                                     ),
                                     const Divider(height: 24, color: borderColor),
                                     _buildSwitchTile(
-                                      title: 'Rappel cotisation CNSS',
-                                      subtitle: 'Rappel mensuel de paiement de cotisations',
+                                      title: l10n.cnssReminderTitle,
+                                      subtitle: l10n.cnssReminderSubtitle,
                                       icon: Icons.health_and_safety_outlined,
                                       iconColor: Colors.teal,
                                       value: _localPreferences!.rappelCotisationCnss,
@@ -377,8 +388,8 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                                     ),
                                     const Divider(height: 24, color: borderColor),
                                     _buildSwitchTile(
-                                      title: 'Notifications demande de crédit',
-                                      subtitle: 'Changement de statut de dossier de crédit',
+                                      title: l10n.creditRequestNotifTitle,
+                                      subtitle: l10n.creditRequestNotifSubtitle,
                                       icon: Icons.monetization_on_outlined,
                                       iconColor: Colors.purple,
                                       value: _localPreferences!.notificationDemandeCredit,
@@ -386,11 +397,11 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                                     ),
                                   ]),
                                   const SizedBox(height: 24),
-                                  _buildSectionHeader(Icons.toggle_on_outlined, 'Modes de réception'),
+                                  _buildSectionHeader(Icons.toggle_on_outlined, l10n.receptionModesHeader),
                                   const SizedBox(height: 12),
                                   _buildCardContainer([
                                     _buildSwitchTile(
-                                      title: 'Notification dans l\'application',
+                                      title: l10n.inAppNotifTitle,
                                       icon: Icons.notifications_outlined,
                                       iconColor: primaryColor,
                                       value: _localPreferences!.canalInApp,
@@ -398,7 +409,7 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                                     ),
                                     const Divider(height: 24, color: borderColor),
                                     _buildSwitchTile(
-                                      title: 'Notification Push',
+                                      title: l10n.pushNotifTitle,
                                       icon: Icons.phone_iphone_outlined,
                                       iconColor: Colors.green,
                                       value: _localPreferences!.canalPush,
@@ -406,8 +417,8 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                                     ),
                                     const Divider(height: 24, color: borderColor),
                                     _buildSwitchTile(
-                                      title: 'SMS',
-                                      subtitle: 'Frais opérateur possibles',
+                                      title: l10n.smsNotifTitle,
+                                      subtitle: l10n.smsNotifSubtitle,
                                       icon: Icons.sms_outlined,
                                       iconColor: Colors.orange,
                                       value: _localPreferences!.canalSms,
@@ -415,7 +426,7 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                                     ),
                                   ]),
                                 ] else ...[
-                                  const Center(child: Padding(padding: EdgeInsets.all(20), child: Text('Aucune préférence trouvée.'))),
+                                  Center(child: Padding(padding: const EdgeInsets.all(20), child: Text(l10n.noPreferencesFound))),
                                 ],
                                 const SizedBox(height: 24),
                               ],
@@ -429,13 +440,13 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
                           right: 16,
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 12, offset: const Offset(0, 4))], border: Border.all(color: borderColor)),
-                            child: const Row(
+                            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24), boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 4))], border: Border.all(color: borderColor)),
+                            child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2.5, color: primaryColor)),
-                                SizedBox(width: 10),
-                                Text('Sauvegarde...', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: textColor)),
+                                const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2.5, color: primaryColor)),
+                                const SizedBox(width: 10),
+                                Text(l10n.savingLabel, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: textColor)),
                               ],
                             ),
                           ),
@@ -464,7 +475,7 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
   Widget _buildCardContainer(List<Widget> children) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.01), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 4))]),
+      decoration: BoxDecoration(boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.01), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, 4))]),
       child: Material(
         type: MaterialType.card,
         color: Colors.white,
@@ -474,7 +485,7 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
     );
   }
 
-  Widget _buildAccountActionButtons(BuildContext context) {
+  Widget _buildAccountActionButtons(BuildContext context, AppLocalizations l10n) {
     return Row(
       children: [
         Expanded(
@@ -489,7 +500,7 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
               );
             },
             icon: const Icon(Icons.key_outlined, size: 18, color: textColor),
-            label: const Text('Sécurité', style: TextStyle(color: textColor, fontWeight: FontWeight.w500)),
+            label: Text(l10n.securityButton, style: const TextStyle(color: textColor, fontWeight: FontWeight.w500)),
             style: OutlinedButton.styleFrom(fixedSize: const Size.fromHeight(48), side: const BorderSide(color: borderColor), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
           ),
         ),
@@ -498,7 +509,7 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
           child: ElevatedButton.icon(
             onPressed: () => context.read<ProfileBloc>().add(LogoutRequested()),
             icon: const Icon(Icons.logout, size: 18, color: Colors.white),
-            label: const Text('Déconnexion', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+            label: Text(l10n.logoutButton, style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
             style: ElevatedButton.styleFrom(fixedSize: const Size.fromHeight(48), backgroundColor: Colors.red.shade600, elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
           ),
         ),
@@ -518,7 +529,7 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
       children: [
         Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: iconColor.withOpacity(0.08), borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: iconColor.withValues(alpha: 0.08), borderRadius: BorderRadius.circular(10)),
           child: Icon(icon, color: iconColor, size: 18),
         ),
         const SizedBox(width: 12),
@@ -575,15 +586,20 @@ class _SettingsProfileViewState extends State<_SettingsProfileView> {
 
   Widget _buildTextField(String label, TextEditingController controller, IconData icon,
       {bool required = true, TextInputType keyboardType = TextInputType.text}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        controller: controller,
-        keyboardType: keyboardType,
-        style: const TextStyle(color: textColor, fontSize: 14, fontWeight: FontWeight.w500),
-        decoration: _inputDecoration(label, icon),
-        validator: required ? (value) => value == null || value.isEmpty ? 'Ce champ est obligatoire' : null : null,
-      ),
+    return Builder(
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: TextFormField(
+            controller: controller,
+            keyboardType: keyboardType,
+            style: const TextStyle(color: textColor, fontSize: 14, fontWeight: FontWeight.w500),
+            decoration: _inputDecoration(label, icon),
+            validator: required ? (value) => value == null || value.isEmpty ? l10n.fieldRequiredError : null : null,
+          ),
+        );
+      },
     );
   }
 

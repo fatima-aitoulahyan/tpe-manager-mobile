@@ -19,6 +19,7 @@ class FactureModel {
   final double  resteAPayer;
   final String? modePaiement;
   final String? conditions;
+  final String? motifArchivage;
   final List<LigneFactureModel> lignes;
   final ClientModel? clientDetail;
 
@@ -40,6 +41,7 @@ class FactureModel {
     required this.resteAPayer,
     this.modePaiement,
     this.conditions,
+    this.motifArchivage,
     required this.lignes,
     this.clientDetail,
   });
@@ -69,6 +71,7 @@ class FactureModel {
     resteAPayer:   double.tryParse(j['reste_a_payer']?.toString() ?? '0') ?? 0.0,
     modePaiement:  j['mode_paiement'] as String?,
     conditions:    j['conditions'] as String?,
+    motifArchivage: j['motif_archivage'] as String?,
     lignes:        (j['lignes'] as List? ?? [])
         .map((e) => LigneFactureModel.fromJson(e))
         .toList(),

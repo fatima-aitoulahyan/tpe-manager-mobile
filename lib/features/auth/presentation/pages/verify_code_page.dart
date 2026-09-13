@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class VerifyCodePage extends StatefulWidget {
   final String email;
@@ -55,6 +56,8 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: _bgColor,
       appBar: AppBar(
@@ -107,8 +110,9 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
                   ),
                   const SizedBox(height: 24),
 
-                  const Text('Vérification du code',
-                    style: TextStyle(
+                  Text(
+                    l10n.verifyCodeTitle,
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: _textColor,
@@ -120,8 +124,8 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
                       style: const TextStyle(
                           fontSize: 14, color: _subtitleColor, height: 1.4),
                       children: [
-                        const TextSpan(
-                            text: 'Entrez le code à 6 chiffres envoyé à '),
+                        TextSpan(
+                            text: l10n.verifyCodeSubtitle),
                         TextSpan(
                           text: widget.email,
                           style: const TextStyle(
@@ -184,11 +188,12 @@ class _VerifyCodePageState extends State<VerifyCodePage> {
                         context.read<AuthBloc>().add(
                             ForgotPasswordRequested(widget.email));
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Nouveau code envoyé')));
+                            SnackBar(
+                                content: Text(l10n.codeResentSuccess)));
                       },
-                      child: const Text('Renvoyer le code',
-                        style: TextStyle(
+                      child: Text(
+                        l10n.resendCodeAction,
+                        style: const TextStyle(
                           color: _primaryColor,
                           fontWeight: FontWeight.w600,
                         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../shared/utils/currency_format.dart';
 import '../../../../shared/utils/document_actions.dart';
 import '../../../../shared/widgets/info_row_widget.dart';
 import '../../../../shared/widgets/section_title.dart';
@@ -10,6 +11,7 @@ import '../bloc/devis_bloc.dart';
 import '../bloc/devis_event.dart';
 import '../bloc/devis_state.dart';
 import '../widgets/status_badge.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class DevisDetailPage extends StatelessWidget {
   final int id;
@@ -39,10 +41,12 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('Détail du Devis', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(l10n.quoteDetailTitle, style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF2563EB),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -52,31 +56,31 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
         ),
       ),
       body: BlocConsumer<DevisBloc, DevisState>(
-        listener: (context, state) {
-          if (state is DevisStatusChanged) context.read<DevisBloc>().add(LoadDevisDetail(widget.id));
-          if (state is DevisDeleted) context.go('/devis');
-          if (state is DevisDuplicated) context.go('/devis');
+          listener: (context, state) {
+            if (state is DevisStatusChanged) context.read<DevisBloc>().add(LoadDevisDetail(widget.id));
+            if (state is DevisDeleted) context.go('/devis');
+            if (state is DevisDuplicated) context.go('/devis');
 
-          if (state is DevisPdfReady) {
-            DocumentActions.showPdfOptions(
-              context: context,
-              filePath: state.filePath,
-              numero: state.numero,
-            );
-          }
-          if (state is DevisConvertedToFacture) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Devis converti en facture avec succès'),
-                backgroundColor: Colors.green,
-              ),
-            );
-            context.go('/factures/${state.factureId}');
-          }
-          if (state is DevisError) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
-          }
-        },
+            if (state is DevisPdfReady) {
+              DocumentActions.showPdfOptions(
+                context: context,
+                filePath: state.filePath,
+                numero: state.numero,
+              );
+            }
+            if (state is DevisConvertedToFacture) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(l10n.quoteConvertedSuccess),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              context.go('/factures/${state.factureId}');
+            }
+            if (state is DevisError) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
+            }
+          },
           builder: (context, state) {
             if (state is DevisLoading) {
               return const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB)));
@@ -93,7 +97,7 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    const SectionTitle('Informations générales'),
+                    SectionTitle(l10n.generalInformationTitle),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
@@ -130,15 +134,15 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                             const SizedBox(height: 8),
                           ],
 
-                          InfoRowWidget(icon: Icons.calendar_today_outlined, text: 'Valable jusqu\'au : ${d.dateValidite}'),
+                          InfoRowWidget(icon: Icons.calendar_today_outlined, text: '${l10n.validUntilPrefix} : ${d.dateValidite}'),
                           const SizedBox(height: 8),
-                          InfoRowWidget(icon: Icons.payment_outlined, text: 'Règlement : ${d.modePaiement}'),
+                          InfoRowWidget(icon: Icons.payment_outlined, text: '${l10n.paymentLabel} : ${d.modePaiement}'),
                         ],
                       ),
                     ),
                     const SizedBox(height: 20),
 
-                    const SectionTitle('Prestations'),
+                    SectionTitle(l10n.servicesSectionTitle),
                     ...d.lignes.map((l) => Container(
                       margin: const EdgeInsets.only(bottom: 6),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -164,17 +168,17 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(l.libelle, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF1E293B))),
-                                Text('${l.quantite % 1 == 0 ? l.quantite.toInt() : l.quantite} × ${l.prixUnitaire.toStringAsFixed(2)} MAD', style: const TextStyle(fontSize: 11, color: Color(0xFF94A3B8))),
+                                Text('${l.quantite % 1 == 0 ? l.quantite.toInt() : l.quantite} × ${l.prixUnitaire.toDH()} ', style: const TextStyle(fontSize: 11, color: Color(0xFF94A3B8))),
                               ],
                             ),
                           ),
-                          Text('${l.calculatedTotal.toStringAsFixed(2)} MAD', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF1E293B))),
+                          Text('${l.calculatedTotal.toDH()} ', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF1E293B))),
                         ],
                       ),
                     )),
                     const SizedBox(height: 20),
 
-                    const SectionTitle('Résumé financier'),
+                    SectionTitle(l10n.financialSummaryTitle),
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -185,18 +189,36 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                       child: Column(
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Text('Total HT', style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
-                              Text('${d.montantHt.toStringAsFixed(2)} MAD', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF1E293B))),
+                              Expanded(
+                                child: Text(
+                                  l10n.totalHtLabel,
+                                  style: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
+                                ),
+                              ),
+                              Text(
+                                '${d.montantHt.toDH()} ',
+                                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF1E293B)),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 6),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text('TVA (${d.tauxTva}%)', style: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
-                              Text('${(d.montantTtc - d.montantHt).toStringAsFixed(2)} MAD', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF1E293B))),
+                              Expanded(
+                                child: Text(
+                                  l10n.vatLabel(d.tauxTva),
+                                  style: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                '${(d.montantTtc - d.montantHt).toDH()} ',
+                                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF1E293B)),
+                              ),
                             ],
                           ),
                           const Padding(
@@ -204,10 +226,18 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                             child: Divider(color: Color(0xFFF1F5F9), height: 1),
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Text('Total TTC', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF1E293B))),
-                              Text('${d.montantTtc.toStringAsFixed(2)} MAD', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF2563EB))),
+                              Expanded(
+                                child: Text(
+                                  l10n.totalTtcLabel,
+                                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+                                ),
+                              ),
+                              Text(
+                                '${d.montantTtc.toDH()} ',
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF2563EB)),
+                              ),
                             ],
                           ),
                         ],
@@ -216,13 +246,13 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                     const SizedBox(height: 20),
 
                     if (d.factureId != null) ...[
-                      const SectionTitle('Facture liée'),
+                      SectionTitle(l10n.linkedInvoiceTitle),
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: const Color(0xFFEFF6FF),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.3)),
+                          border: Border.all(color: const Color(0xFF2563EB).withValues(alpha: 0.3)),
                         ),
                         child: Row(
                           children: [
@@ -232,14 +262,14 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(d.factureNumero ?? 'Facture liée', style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
-                                  const Text('Ce devis a été converti en facture', style: TextStyle(fontSize: 12, color: Color(0xFF64748B))),
+                                  Text(d.factureNumero ?? l10n.linkedInvoiceDefault, style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1E293B))),
+                                  Text(l10n.quoteConvertedToInvoiceInfo, style: const TextStyle(fontSize: 12, color: Color(0xFF64748B))),
                                 ],
                               ),
                             ),
                             TextButton(
                               onPressed: () => context.go('/factures/${d.factureId}'),
-                              child: const Text('Voir'),
+                              child: Text(l10n.viewButton),
                             ),
                           ],
                         ),
@@ -248,7 +278,7 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                     ],
 
                     if (d.conditions != null && d.conditions!.isNotEmpty) ...[
-                      const SectionTitle('Conditions particulières'),
+                      SectionTitle(l10n.specialConditionsTitle),
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(14),
@@ -262,18 +292,18 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                       const SizedBox(height: 20),
                     ],
 
-                    const SectionTitle('Actions disponibles'),
+                    SectionTitle(l10n.availableActionsTitle),
 
                     if (d.statut == 'BROUILLON') ...[
-                      _MenuButton(label: 'Modifier le devis', icon: Icons.edit_outlined, isPrimary: true, onTap: () => context.go('/devis/${d.id}/edit')),
-                      _MenuButton(label: 'Marquer comme Envoyé', icon: Icons.send_outlined, onTap: () => context.read<DevisBloc>().add(ChangeDevisStatus(d.id, 'ENVOYE'))),
+                      _MenuButton(label: l10n.editQuoteAction, icon: Icons.edit_outlined, isPrimary: true, onTap: () => context.go('/devis/${d.id}/edit')),
+                      _MenuButton(label: l10n.markAsSentAction, icon: Icons.send_outlined, onTap: () => context.read<DevisBloc>().add(ChangeDevisStatus(d.id, 'ENVOYE'))),
                       _MenuButton(
-                        label: 'Supprimer',
+                        label: l10n.deleteAction,
                         icon: Icons.delete_outline,
                         isDanger: true,
                         onTap: () => DocumentActions.confirmDelete(
                           context: context,
-                          title: 'Supprimer le devis',
+                          title: l10n.deleteQuoteTitle,
                           onDeleteConfirm: () => context.read<DevisBloc>().add(DeleteDevis(d.id)),
                         ),
                       ),
@@ -281,7 +311,7 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
 
                     if (d.statut == 'ENVOYE') ...[
                       _MenuButton(
-                        label: 'Relancer le client',
+                        label: l10n.remindClientAction,
                         icon: Icons.notifications_active_outlined,
                         isPrimary: true,
                         onTap: () => DocumentActions.remindClient(
@@ -291,34 +321,34 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                           telephone: d.clientDetail.telephone,
                           email: d.clientDetail.email,
                           montant: d.montantTtc,
-                          dateInfo: "valable jusqu'au ${d.dateValidite}",
+                          dateInfo: "${l10n.validUntilPrefix} ${d.dateValidite}",
                         ),
                       ),
-                      _MenuButton(label: 'Marquer comme Accepté', icon: Icons.check_circle_outline, onTap: () => context.read<DevisBloc>().add(ChangeDevisStatus(d.id, 'ACCEPTE'))),
-                      _MenuButton(label: 'Marquer comme Refusé', icon: Icons.cancel_outlined, onTap: () => context.read<DevisBloc>().add(ChangeDevisStatus(d.id, 'REFUSE'))),
-                      _MenuButton(label: 'Remettre en Brouillon', icon: Icons.history, onTap: () => context.read<DevisBloc>().add(ChangeDevisStatus(d.id, 'BROUILLON'))),
+                      _MenuButton(label: l10n.markAsAcceptedAction, icon: Icons.check_circle_outline, onTap: () => context.read<DevisBloc>().add(ChangeDevisStatus(d.id, 'ACCEPTE'))),
+                      _MenuButton(label: l10n.markAsRefusedAction, icon: Icons.cancel_outlined, onTap: () => context.read<DevisBloc>().add(ChangeDevisStatus(d.id, 'REFUSE'))),
+                      _MenuButton(label: l10n.resetToDraftAction, icon: Icons.history, onTap: () => context.read<DevisBloc>().add(ChangeDevisStatus(d.id, 'BROUILLON'))),
                     ],
 
                     if (d.statut == 'ACCEPTE') ...[
                       if (d.factureId == null)
                         _MenuButton(
-                          label: 'Convertir en facture',
+                          label: l10n.convertToInvoiceAction,
                           icon: Icons.receipt_long_outlined,
                           isPrimary: true,
                           onTap: () => showDialog(
                             context: context,
                             builder: (_) => AlertDialog(
-                              title: const Text('Convertir en facture'),
-                              content: const Text('Un brouillon de facture sera créé à partir de ce devis. Continuer ?'),
+                              title: Text(l10n.convertToInvoiceDialogTitle),
+                              content: Text(l10n.convertToInvoiceDialogContent),
                               actions: [
-                                TextButton(onPressed: () => Navigator.pop(context), child: const Text('Annuler')),
+                                TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.cancelButton)),
                                 ElevatedButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                     context.read<DevisBloc>().add(ConvertDevisToFacture(d.id));
                                   },
                                   style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
-                                  child: const Text('Convertir', style: TextStyle(color: Colors.white)),
+                                  child: Text(l10n.convertButton, style: const TextStyle(color: Colors.white)),
                                 ),
                               ],
                             ),
@@ -327,8 +357,8 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                     ],
 
                     if (d.statut == 'REFUSE' || d.statut == 'EXPIRE') ...[
-                      _MenuButton(label: 'Dupliquer le devis', icon: Icons.copy_outlined, isPrimary: true, onTap: () => context.read<DevisBloc>().add(DuplicateDevis(d.id))),
-                      _MenuButton(label: 'Archiver le devis', icon: Icons.archive_outlined, onTap: () => context.read<DevisBloc>().add(ChangeDevisStatus(d.id, 'ARCHIVE'))),
+                      _MenuButton(label: l10n.duplicateQuoteAction, icon: Icons.copy_outlined, isPrimary: true, onTap: () => context.read<DevisBloc>().add(DuplicateDevis(d.id))),
+                      _MenuButton(label: l10n.archiveQuoteAction, icon: Icons.archive_outlined, onTap: () => context.read<DevisBloc>().add(ChangeDevisStatus(d.id, 'ARCHIVE'))),
                     ],
 
                     const Padding(
@@ -337,7 +367,7 @@ class _DevisDetailViewState extends State<_DevisDetailView> {
                     ),
 
                     _MenuButton(
-                      label: 'Télécharger / Partager le PDF',
+                      label: l10n.downloadSharePdfAction,
                       icon: Icons.picture_as_pdf_outlined,
                       onTap: () => context.read<DevisBloc>().add(DownloadDevisPdf(d.id, d.numero)),
                     ),
@@ -384,7 +414,7 @@ class _MenuButton extends StatelessWidget {
             elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
-              side: BorderSide(color: isPrimary ? Colors.transparent : (isDanger ? Colors.red.withOpacity(0.3) : const Color(0xFFE2E8F0))),
+              side: BorderSide(color: isPrimary ? Colors.transparent : (isDanger ? Colors.red.withValues(alpha: 0.3) : const Color(0xFFE2E8F0))),
             ),
           ),
         ),

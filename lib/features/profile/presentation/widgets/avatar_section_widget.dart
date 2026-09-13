@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/models/user_model.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class AvatarSectionWidget extends StatelessWidget {
   final UserModel user;
@@ -7,6 +8,8 @@ class AvatarSectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -19,7 +22,7 @@ class AvatarSectionWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF2563EB).withOpacity(0.25),
+            color: const Color(0xFF2563EB).withValues(alpha: 0.25),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -33,11 +36,11 @@ class AvatarSectionWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withOpacity(0.4), width: 2),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.4), width: 2),
           ),
           child: Center(
             child: Text(
-              '${user.prenom[0]}${user.nom[0]}'.toUpperCase(),
+              '${user.prenom.isNotEmpty ? user.prenom[0] : ""}${user.nom.isNotEmpty ? user.nom[0] : ""}'.toUpperCase(),
               style: const TextStyle(
                 color: Color(0xFF2563EB),
                 fontWeight: FontWeight.bold,
@@ -96,11 +99,11 @@ class AvatarSectionWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
                 horizontal: 12, vertical: 5),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
+              color: Colors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              _statutLabel(user.statutFiscal!),
+              _statutLabel(user.statutFiscal!, l10n),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 11,
@@ -113,14 +116,20 @@ class AvatarSectionWidget extends StatelessWidget {
     );
   }
 
-  String _statutLabel(String statut) {
-    const labels = {
-      'auto_entrepreneur': 'Auto-entrepreneur',
-      'tpe':                'TPE',
-      'artisan':            'Artisan',
-      'freelance':          'Freelance',
-      'commercant':         'Commerçant',
-    };
-    return labels[statut] ?? statut;
+  String _statutLabel(String statut, AppLocalizations l10n) {
+    switch (statut) {
+      case 'auto_entrepreneur':
+        return l10n.statusAutoEntrepreneur;
+      case 'tpe':
+        return l10n.statusTpe;
+      case 'artisan':
+        return l10n.statusArtisan;
+      case 'freelance':
+        return l10n.statusFreelance;
+      case 'commercant':
+        return l10n.statusCommercant;
+      default:
+        return statut;
+    }
   }
 }

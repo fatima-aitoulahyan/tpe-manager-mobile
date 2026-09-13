@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/models/notification_model.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class NotificationCard extends StatelessWidget {
   final NotificationModel notification;
@@ -33,34 +34,35 @@ class NotificationCard extends StatelessWidget {
     }
   }
 
-  String _timeAgo(String dateStr) {
+  String _timeAgo(String dateStr, AppLocalizations l10n) {
     final date = DateTime.tryParse(dateStr);
     if (date == null) return '';
     final diff = DateTime.now().difference(date);
 
-    if (diff.inMinutes < 1)  return 'À l\'instant';
-    if (diff.inMinutes < 60) return 'Il y a ${diff.inMinutes} min';
-    if (diff.inHours < 24)   return 'Il y a ${diff.inHours} h';
-    if (diff.inDays < 7)     return 'Il y a ${diff.inDays} j';
+    if (diff.inMinutes < 1)  return l10n.timeJustNow;
+    if (diff.inMinutes < 60) return l10n.timeMinutesAgo(diff.inMinutes);
+    if (diff.inHours < 24)   return l10n.timeHoursAgo(diff.inHours);
+    if (diff.inDays < 7)     return l10n.timeDaysAgo(diff.inDays);
     return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isUnread = !notification.lue;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10, left: 16, right: 16),
       decoration: BoxDecoration(
-        color: isUnread ? const Color(0xFFEFF6FF).withOpacity(0.4) : Colors.white,
+        color: isUnread ? const Color(0xFFEFF6FF).withValues(alpha: 0.4) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isUnread ? const Color(0xFF2563EB).withOpacity(0.3) : const Color(0xFFE2E8F0),
+          color: isUnread ? const Color(0xFF2563EB).withValues(alpha: 0.3) : const Color(0xFFE2E8F0),
           width: isUnread ? 1.2 : 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.015),
+            color: Colors.black.withValues(alpha: 0.015),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -81,7 +83,7 @@ class NotificationCard extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: _typeColor.withOpacity(0.1),
+                      color: _typeColor.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     alignment: Alignment.center,
@@ -113,7 +115,7 @@ class NotificationCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              _timeAgo(notification.createdAt),
+                              _timeAgo(notification.createdAt, l10n),
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: isUnread ? FontWeight.w600 : FontWeight.w400,

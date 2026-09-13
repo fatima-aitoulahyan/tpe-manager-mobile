@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class BalanceBarChart extends StatelessWidget {
   final double recettes;
@@ -12,6 +13,7 @@ class BalanceBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final max = (recettes > depenses ? recettes : depenses).clamp(1.0, double.infinity);
     final rH = (recettes / max) * 130;
     final dH = (depenses / max) * 130;
@@ -19,9 +21,9 @@ class BalanceBarChart extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Volume des flux',
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF64748B)),
+        Text(
+          l10n.flowVolumeLabel,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF64748B)),
         ),
         const SizedBox(height: 16),
         SizedBox(
@@ -39,9 +41,9 @@ class BalanceBarChart extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _Legend(color: const Color(0xFF10B981), label: 'Recettes'),
+            _Legend(color: const Color(0xFF10B981), label: l10n.incomeLegendLabel),
             const SizedBox(width: 24),
-            _Legend(color: const Color(0xFFEF4444), label: 'Dépenses'),
+            _Legend(color: const Color(0xFFEF4444), label: l10n.expensesLegendLabel),
           ],
         ),
       ],

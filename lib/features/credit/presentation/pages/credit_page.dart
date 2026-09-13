@@ -7,6 +7,7 @@ import '../bloc/credit_event.dart';
 import '../bloc/credit_state.dart';
 import '../widgets/eligibilite_gauge.dart';
 import '../widgets/demande_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class CreditPage extends StatelessWidget {
   const CreditPage({super.key});
@@ -24,6 +25,7 @@ class CreditPage extends StatelessWidget {
 
 class _CreditView extends StatelessWidget {
   const _CreditView();
+
   bool _peutEtreSupprime(String statut) {
     return statut == 'SOUMISE' ||
         statut == 'DOSSIER_INCOMPLET' ||
@@ -31,41 +33,43 @@ class _CreditView extends StatelessWidget {
   }
 
   void _confirmDelete(BuildContext context, int id) {
+    final l10n = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Supprimer la demande'),
-        content: const Text(
-            'Êtes-vous sûr de vouloir supprimer cette demande de financement ? '
-                'Cette action est irréversible.'),
+        title: Text(l10n.deleteRequestTitle),
+        content: Text(l10n.deleteRequestConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Annuler'),
+            child: Text(l10n.cancelButton),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(dialogContext);
               context.read<CreditBloc>().add(DeleteDemande(id));
             },
-            child: const Text('Supprimer',
-                style: TextStyle(color: Colors.red)),
+            child: Text(l10n.deleteButton,
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('Financement',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(l10n.financingTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF2563EB),
         foregroundColor: Colors.white,
         elevation: 0,
-
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/credit/create'),
@@ -109,15 +113,15 @@ class _CreditView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.08),
+                        color: Colors.grey.withValues(alpha: 0.08),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
                     ],
                   ),
                   child: Column(children: [
-                    const Text('Votre éligibilité',
-                      style: TextStyle(
+                    Text(l10n.eligibilityTitle,
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                         color: Color(0xFF1E293B),
@@ -134,7 +138,7 @@ class _CreditView extends StatelessWidget {
                       const SizedBox(height: 8),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text('Conseils pour améliorer votre score',
+                        child: Text(l10n.improveScoreTipsTitle,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -168,8 +172,8 @@ class _CreditView extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            const Text('Mes demandes',
-              style: TextStyle(
+            Text(l10n.myRequestsTitle,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 15,
                 color: Color(0xFF1E293B),
@@ -183,8 +187,8 @@ class _CreditView extends StatelessWidget {
                 if (state is DemandeDeleted) {
                   context.read<CreditBloc>().add(LoadDemandes());
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Demande supprimée')));
+                      SnackBar(
+                          content: Text(l10n.requestDeletedSuccess)));
                 }
                 if (state is CreditError) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -216,7 +220,7 @@ class _CreditView extends StatelessWidget {
                         Icon(Icons.monetization_on_outlined,
                             size: 48, color: Colors.grey[300]),
                         const SizedBox(height: 12),
-                        Text('Aucune demande de financement',
+                        Text(l10n.noFinancingRequests,
                             style: TextStyle(color: Colors.grey[500])),
                       ]),
                     );

@@ -34,6 +34,7 @@ class CashflowBloc extends Bloc<CashflowEvent, CashflowState> {
           categorie: event.categorie,
           dateDebut: event.dateDebut,
           dateFin:   event.dateFin,
+          search:    event.search,
           page:      event.page,
         );
         final newT = result['transactions'] as List<TransactionModel>;

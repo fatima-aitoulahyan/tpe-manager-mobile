@@ -5,6 +5,7 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 import '../widgets/auth_text_field.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -15,28 +16,21 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey       = GlobalKey<FormState>();
-  final _nomCtrl        = TextEditingController();
-  final _prenomCtrl     = TextEditingController();
-  final _emailCtrl      = TextEditingController();
-  final _telephoneCtrl  = TextEditingController();
-  final _iceCtrl        = TextEditingController();
-  final _passwordCtrl   = TextEditingController();
-  final _confirmCtrl    = TextEditingController();
-  bool _obscurePass     = true;
-  bool _obscureConfirm  = true;
+  final _nomCtrl       = TextEditingController();
+  final _prenomCtrl    = TextEditingController();
+  final _emailCtrl     = TextEditingController();
+  final _telephoneCtrl = TextEditingController();
+  final _iceCtrl       = TextEditingController();
+  final _passwordCtrl  = TextEditingController();
+  final _confirmCtrl   = TextEditingController();
+  bool _obscurePass    = true;
+  bool _obscureConfirm = true;
   String? _statutFiscal;
+
   static const Color _primaryColor  = Color(0xFF2563EB);
   static const Color _textColor     = Color(0xFF0F172A);
   static const Color _subtitleColor = Color(0xFF475569);
   static const Color _borderColor   = Color(0xFFE2E8F0);
-
-  final List<Map<String, String>> _statuts = const [
-    {'value': 'auto_entrepreneur', 'label': 'Auto-entrepreneur'},
-    {'value': 'tpe',               'label': 'TPE'},
-    {'value': 'artisan',           'label': 'Artisan'},
-    {'value': 'freelance',         'label': 'Freelance'},
-    {'value': 'commercant',        'label': 'Commerçant'},
-  ];
 
   @override
   void dispose() {
@@ -51,7 +45,19 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void _onRegister() {
+    final l10n = AppLocalizations.of(context)!;
     if (_formKey.currentState!.validate()) {
+      if (_passwordCtrl.text != _confirmCtrl.text) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.passwordsDontMatch),
+            backgroundColor: Colors.red.shade600,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        );
+        return;
+      }
       context.read<AuthBloc>().add(RegisterRequested(
         nom:             _nomCtrl.text.trim(),
         prenom:          _prenomCtrl.text.trim(),
@@ -67,12 +73,22 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    final List<Map<String, String>> statuts = [
+      {'value': 'auto_entrepreneur', 'label': l10n.statusAutoEntrepreneur},
+      {'value': 'tpe',               'label': l10n.statusTpe},
+      {'value': 'artisan',           'label': l10n.statusArtisan},
+      {'value': 'freelance',         'label': l10n.statusFreelance},
+      {'value': 'commercant',        'label': l10n.statusCommercant},
+    ];
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Créer un compte',
-          style: TextStyle(
+        title: Text(
+          l10n.registerAppBarTitle,
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w700,
             fontSize: 17,
@@ -81,14 +97,13 @@ class _RegisterPageState extends State<RegisterPage> {
         centerTitle: true,
         backgroundColor: const Color(0xFF2563EB),
         elevation: 0,
-
       ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is RegisterSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Text('Compte créé ! Connectez-vous.'),
+                content: Text(l10n.registerSuccessMessage),
                 backgroundColor: Colors.green.shade600,
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -109,7 +124,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               );
           }
-        },        builder: (context, state) {
+        },
+        builder: (context, state) {
           return SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
             child: Form(
@@ -117,9 +133,9 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Bienvenue',
-                    style: TextStyle(
+                  Text(
+                    l10n.registerWelcomeTitle,
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: _textColor,
@@ -127,56 +143,61 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  const Text(
-                    'Renseignez vos informations pour démarrer',
-                    style: TextStyle(color: _subtitleColor, fontSize: 14),
+                  Text(
+                    l10n.registerWelcomeSubtitle,
+                    style: const TextStyle(color: _subtitleColor, fontSize: 14),
                   ),
                   const SizedBox(height: 28),
 
                   Row(children: [
                     Expanded(child: AuthTextField(
-                      label: 'Nom', hint: 'Benali',
+                      label: l10n.lastNameLabel,
+                      hint: l10n.lastNameHint,
                       controller: _nomCtrl,
                       prefixIcon: Icons.badge_outlined,
-                      validator: (v) => v == null || v.isEmpty ? 'Obligatoire' : null,
+                      validator: (v) => v == null || v.isEmpty ? l10n.fieldRequired : null,
                     )),
                     const SizedBox(width: 12),
                     Expanded(child: AuthTextField(
-                      label: 'Prénom', hint: 'Hassan',
+                      label: l10n.firstNameLabel,
+                      hint: l10n.firstNameHint,
                       controller: _prenomCtrl,
                       prefixIcon: Icons.badge_outlined,
-                      validator: (v) => v == null || v.isEmpty ? 'Obligatoire' : null,
+                      validator: (v) => v == null || v.isEmpty ? l10n.fieldRequired : null,
                     )),
                   ]),
 
                   AuthTextField(
-                    label: 'Adresse email', hint: 'vous@exemple.com',
+                    label: l10n.emailLabel,
+                    hint: l10n.emailHint,
                     controller: _emailCtrl,
                     keyboardType: TextInputType.emailAddress,
                     prefixIcon: Icons.mail_outline_rounded,
                     validator: (v) {
-                      if (v == null || v.isEmpty) return 'Obligatoire';
-                      if (!v.contains('@')) return 'Email invalide';
+                      if (v == null || v.isEmpty) return l10n.fieldRequired;
+                      if (!v.contains('@')) return l10n.emailInvalid;
                       return null;
                     },
                   ),
 
                   AuthTextField(
-                    label: 'Téléphone', hint: '06 12 34 56 78',
+                    label: l10n.phoneLabel,
+                    hint: l10n.phoneHint,
                     controller: _telephoneCtrl,
                     keyboardType: TextInputType.phone,
                     prefixIcon: Icons.phone_outlined,
-                    validator: (v) => v == null || v.isEmpty ? 'Obligatoire' : null,
+                    validator: (v) => v == null || v.isEmpty ? l10n.fieldRequired : null,
                   ),
 
                   AuthTextField(
-                    label: 'ICE (optionnel)', hint: '001234567000',
+                    label: l10n.iceLabel,
+                    hint: l10n.iceHint,
                     controller: _iceCtrl,
                     prefixIcon: Icons.description_outlined,
                   ),
 
                   Text(
-                    'Statut fiscal',
+                    l10n.fiscalStatusLabel,
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 13,
@@ -186,9 +207,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     value: _statutFiscal,
-                    hint: const Text(
-                      'Sélectionner un statut',
-                      style: TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
+                    hint: Text(
+                      l10n.fiscalStatusHint,
+                      style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
                     ),
                     dropdownColor: Colors.white,
                     style: const TextStyle(
@@ -197,7 +218,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       fontWeight: FontWeight.w500,
                     ),
                     icon: const Icon(Icons.keyboard_arrow_down_rounded, color: _subtitleColor),
-                    items: _statuts.map((s) => DropdownMenuItem(
+                    items: statuts.map((s) => DropdownMenuItem(
                       value: s['value'],
                       child: Text(s['label']!),
                     )).toList(),
@@ -224,7 +245,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 18),
 
                   AuthTextField(
-                    label: 'Mot de passe', hint: '••••••••',
+                    label: l10n.newPasswordLabel,
+                    hint: '••••••••',
                     controller: _passwordCtrl,
                     obscureText: _obscurePass,
                     prefixIcon: Icons.lock_outline_rounded,
@@ -237,14 +259,15 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: () => setState(() => _obscurePass = !_obscurePass),
                     ),
                     validator: (v) {
-                      if (v == null || v.isEmpty) return 'Obligatoire';
-                      if (v.length < 8) return 'Minimum 8 caractères';
+                      if (v == null || v.isEmpty) return l10n.fieldRequired;
+                      if (v.length < 8) return l10n.passwordMinLength;
                       return null;
                     },
                   ),
 
                   AuthTextField(
-                    label: 'Confirmer le mot de passe', hint: '••••••••',
+                    label: l10n.confirmPasswordLabel,
+                    hint: '••••••••',
                     controller: _confirmCtrl,
                     obscureText: _obscureConfirm,
                     prefixIcon: Icons.lock_outline_rounded,
@@ -257,7 +280,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
                     ),
                     validator: (v) {
-                      if (v != _passwordCtrl.text) return 'Les mots de passe ne correspondent pas';
+                      if (v == null || v.isEmpty) return l10n.fieldRequired;
+                      if (v != _passwordCtrl.text) return l10n.passwordsDontMatch;
                       return null;
                     },
                   ),
@@ -282,9 +306,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         width: 22, height: 22,
                         child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.4),
                       )
-                          : const Text(
-                        'Créer mon compte',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                          : Text(
+                        l10n.registerButton,
+                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
                       ),
                     ),
                   ),
@@ -294,12 +318,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Déjà un compte ? ", style: TextStyle(color: _subtitleColor, fontSize: 13.5)),
+                        Text(l10n.alreadyHaveAccount, style: const TextStyle(color: _subtitleColor, fontSize: 13.5)),
                         GestureDetector(
                           onTap: () => context.push('/login'),
-                          child: const Text(
-                            'Se connecter',
-                            style: TextStyle(color: _primaryColor, fontWeight: FontWeight.w700, fontSize: 13.5),
+                          child: Text(
+                            l10n.loginAction,
+                            style: const TextStyle(color: _primaryColor, fontWeight: FontWeight.w700, fontSize: 13.5),
                           ),
                         ),
                       ],

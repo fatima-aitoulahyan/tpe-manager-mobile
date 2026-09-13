@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tpe_mobile/shared/utils/currency_format.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class FinancialTotalsCard extends StatelessWidget {
   final double totalHt;
@@ -12,6 +14,8 @@ class FinancialTotalsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -24,8 +28,8 @@ class FinancialTotalsCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Total HT', style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
-              Text('${totalHt.toStringAsFixed(2)} MAD',
+              Text(l10n.totalHtLabel, style: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
+              Text('${totalHt.toDH()} ',
                   style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF1E293B))),
             ],
           ),
@@ -36,9 +40,9 @@ class FinancialTotalsCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Total TTC', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF1E293B))),
+              Text(l10n.totalTtcLabel, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Color(0xFF1E293B))),
               Text(
-                '${totalTtc.toStringAsFixed(2)} MAD',
+                '${totalTtc.toDH()} ',
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFF2563EB)),
               ),
             ],

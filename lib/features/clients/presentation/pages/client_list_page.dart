@@ -5,6 +5,7 @@ import '../bloc/client_event.dart';
 import '../bloc/client_state.dart';
 import '../../data/models/client_model.dart';
 import 'client_create_page.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ClientListPage extends StatelessWidget {
   const ClientListPage({super.key});
@@ -30,11 +31,13 @@ class _ClientListViewState extends State<_ClientListView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('Clients',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(l10n.clientsTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -65,7 +68,7 @@ class _ClientListViewState extends State<_ClientListView> {
               onChanged: (v) =>
                   context.read<ClientBloc>().add(SearchClients(v)),
               decoration: InputDecoration(
-                hintText: 'Rechercher par nom, entreprise...',
+                hintText: l10n.searchClientHint,
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
                 filled: true,
                 fillColor: Colors.white,
@@ -84,7 +87,7 @@ class _ClientListViewState extends State<_ClientListView> {
                 if (state is ClientDeleted) {
                   context.read<ClientBloc>().add(LoadClients());
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Client supprimé avec succès')));
+                      SnackBar(content: Text(l10n.clientDeletedSuccess)));
                 }
                 if (state is ClientError) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -108,7 +111,7 @@ class _ClientListViewState extends State<_ClientListView> {
                           Icon(Icons.people_outline,
                               size: 64, color: Colors.grey[300]),
                           const SizedBox(height: 12),
-                          Text('Aucun client trouvé',
+                          Text(l10n.noClientsFound,
                               style: TextStyle(color: Colors.grey[500])),
                         ],
                       ),
@@ -152,24 +155,25 @@ class _ClientListViewState extends State<_ClientListView> {
   }
 
   void _confirmDelete(BuildContext context, int id) {
+    final l10n = AppLocalizations.of(context)!;
+
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Supprimer le client'),
-        content: const Text(
-            'Êtes-vous sûr ? Cela peut impacter les devis associés à ce client.'),
+        title: Text(l10n.deleteClientTitle),
+        content: Text(l10n.deleteClientConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
+            child: Text(l10n.cancelButton),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               context.read<ClientBloc>().add(DeleteClient(id));
             },
-            child: const Text('Supprimer',
-                style: TextStyle(color: Colors.red)),
+            child: Text(l10n.deleteButton,
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -190,6 +194,8 @@ class _ClientCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
@@ -198,7 +204,7 @@ class _ClientCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.06),
+            color: Colors.grey.withValues(alpha: 0.06),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -208,7 +214,7 @@ class _ClientCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 24,
-            backgroundColor: const Color(0xFF2563EB).withOpacity(0.1),
+            backgroundColor: const Color(0xFF2563EB).withValues(alpha: 0.1),
             child: Text(client.initials,
               style: const TextStyle(
                 color: Color(0xFF2563EB),
@@ -252,21 +258,21 @@ class _ClientCard extends StatelessWidget {
               if (v == 'delete') onDelete();
             },
             itemBuilder: (_) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'edit',
                 child: Row(children: [
-                  Icon(Icons.edit_outlined, size: 16),
-                  SizedBox(width: 8),
-                  Text('Modifier'),
+                  const Icon(Icons.edit_outlined, size: 16),
+                  const SizedBox(width: 8),
+                  Text(l10n.editOption),
                 ]),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'delete',
                 child: Row(children: [
-                  Icon(Icons.delete_outline,
+                  const Icon(Icons.delete_outline,
                       size: 16, color: Colors.red),
-                  SizedBox(width: 8),
-                  Text('Supprimer', style: TextStyle(color: Colors.red)),
+                  const SizedBox(width: 8),
+                  Text(l10n.deleteOption, style: const TextStyle(color: Colors.red)),
                 ]),
               ),
             ],

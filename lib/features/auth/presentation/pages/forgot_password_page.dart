@@ -5,6 +5,7 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 import '../widgets/auth_text_field.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -37,6 +38,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: _bgColor,
       appBar: AppBar(
@@ -50,8 +53,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is ForgotPasswordEmailSent) {
-            context.push('/verify-code',
-                extra: _emailCtrl.text.trim());
+            context.push('/verify-code', extra: _emailCtrl.text.trim());
           }
           if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -87,18 +89,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                     const SizedBox(height: 24),
 
-                    const Text('Mot de passe oublié',
-                      style: TextStyle(
+                    Text(
+                      l10n.forgotPasswordTitle,
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: _textColor,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      'Entrez votre email. Nous vous enverrons un code '
-                          'pour réinitialiser votre mot de passe.',
-                      style: TextStyle(
+                    Text(
+                      l10n.forgotPasswordSubtitle,
+                      style: const TextStyle(
                         fontSize: 14,
                         color: _subtitleColor,
                         height: 1.4,
@@ -107,14 +109,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     const SizedBox(height: 32),
 
                     AuthTextField(
-                      label:        'Adresse email',
-                      hint:         'vous@exemple.com',
+                      label:        l10n.emailLabel,
+                      hint:         l10n.emailHint,
                       controller:   _emailCtrl,
                       keyboardType: TextInputType.emailAddress,
                       prefixIcon:   Icons.mail_outline_rounded,
                       validator: (v) {
-                        if (v == null || v.isEmpty) return 'Email requis';
-                        if (!v.contains('@')) return 'Email invalide';
+                        if (v == null || v.isEmpty) return l10n.emailRequired;
+                        if (!v.contains('@')) return l10n.emailInvalid;
                         return null;
                       },
                     ),
@@ -136,8 +138,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             width: 22, height: 22,
                             child: CircularProgressIndicator(
                                 color: Colors.white, strokeWidth: 2.4))
-                            : const Text('Envoyer le code',
-                          style: TextStyle(
+                            : Text(
+                          l10n.sendCode,
+                          style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,

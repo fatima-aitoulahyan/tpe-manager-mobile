@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../shared/utils/currency_format.dart';
 import '../../../clients/data/datasources/client_remote_datasource.dart';
 import '../../../clients/data/models/client_model.dart';
 import '../../../clients/presentation/widgets/client_dropdown_selector.dart';
@@ -10,6 +11,7 @@ import '../bloc/devis_bloc.dart';
 import '../bloc/devis_event.dart';
 import '../bloc/devis_state.dart';
 import '../../../../shared/widgets/ligne_devis_form.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class DevisEditPage extends StatelessWidget {
   final int id;
@@ -76,30 +78,31 @@ class _DevisEditViewState extends State<_DevisEditView> {
     return _totalHt * (1 + tva / 100);
   }
 
-  String _labelModePaiement(String mode) {
+  String _labelModePaiement(String mode, AppLocalizations l10n) {
     switch (mode) {
-      case 'ESPECES':      return 'Espèces';
-      case 'VIREMENT':     return 'Virement';
-      case 'MOBILE_MONEY': return 'Mobile Money';
+      case 'ESPECES':      return l10n.paymentModeCash;
+      case 'VIREMENT':     return l10n.paymentModeBankTransfer;
+      case 'MOBILE_MONEY': return l10n.paymentModeMobileMoney;
       default:             return mode;
     }
   }
 
   void _submit(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (!_formKey.currentState!.validate()) return;
     if (_selectedClient == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Veuillez sélectionner un client')));
+          SnackBar(content: Text(l10n.selectClientError)));
       return;
     }
     if (_dateValidite == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Veuillez sélectionner une date de validité')));
+          SnackBar(content: Text(l10n.selectValidityDateError)));
       return;
     }
     if (_lignes.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Veuillez ajouter au moins une ligne de prestation')));
+          SnackBar(content: Text(l10n.selectAtLeastOneLineError)));
       return;
     }
 
@@ -122,16 +125,18 @@ class _DevisEditViewState extends State<_DevisEditView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('Modifier le Devis',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(l10n.editQuoteTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF2563EB),
         foregroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => context.canPop()
               ? context.pop()
               : context.go('/devis'),
@@ -148,7 +153,7 @@ class _DevisEditViewState extends State<_DevisEditView> {
           if (state is DevisEditSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(
-                    'Devis ${state.devis.numero} mis à jour avec succès !')));
+                    l10n.quoteUpdatedSuccess(state.devis.numero))));
             context.go('/devis/${widget.id}');
           }
           if (state is DevisError) {
@@ -179,7 +184,7 @@ class _DevisEditViewState extends State<_DevisEditView> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () => context.go('/devis/${widget.id}'),
-                    child: const Text('Retour au détail'),
+                    child: Text(l10n.backToDetailButton),
                   ),
                 ],
               ),
@@ -211,8 +216,7 @@ class _DevisEditViewState extends State<_DevisEditView> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Vous modifiez actuellement un brouillon de devis. '
-                              'Les modifications seront enregistrées immédiatement.',
+                          l10n.editDraftNotice,
                           style: TextStyle(
                             color: Colors.blue[700],
                             fontSize: 12,
@@ -223,7 +227,7 @@ class _DevisEditViewState extends State<_DevisEditView> {
                   ),
                   const SizedBox(height: 20),
 
-                  _SectionTitle('Client'),
+                  _SectionTitle(l10n.clientLabel),
                   ClientDropdownSelector(
                     selectedClient: _selectedClient,
                     onSelected: (client) =>
@@ -231,7 +235,7 @@ class _DevisEditViewState extends State<_DevisEditView> {
                   ),
                   const SizedBox(height: 16),
 
-                  _SectionTitle('Valable jusqu\'au'),
+                  _SectionTitle(l10n.validUntilLabel),
                   GestureDetector(
                     onTap: () async {
                       final picked = await showDatePicker(
@@ -241,7 +245,6 @@ class _DevisEditViewState extends State<_DevisEditView> {
                         firstDate: DateTime.now(),
                         lastDate: DateTime.now()
                             .add(const Duration(days: 365)),
-                        locale: const Locale('fr', 'FR'),
                       );
                       if (picked != null) {
                         setState(() => _dateValidite = picked);
@@ -262,7 +265,7 @@ class _DevisEditViewState extends State<_DevisEditView> {
                           _dateValidite != null
                               ? _dateValidite!
                               .toIso8601String().split('T')[0]
-                              : 'Sélectionner une date',
+                              : l10n.selectValidityDateHint,
                           style: TextStyle(
                             color: _dateValidite != null
                                 ? Colors.black : Colors.grey,
@@ -280,12 +283,12 @@ class _DevisEditViewState extends State<_DevisEditView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _SectionTitle('TVA (%)'),
+                            _SectionTitle(l10n.vatRateLabel),
                             TextFormField(
                               controller: _tvaCtrl,
                               keyboardType: TextInputType.number,
                               onChanged: (_) => setState(() {}),
-                              decoration: _inputDecoration(),
+                              decoration: _inputDecoration(hint: l10n.vatRateHint),
                             ),
                           ],
                         ),
@@ -295,14 +298,14 @@ class _DevisEditViewState extends State<_DevisEditView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _SectionTitle('Mode de paiement'),
+                            _SectionTitle(l10n.paymentMethodLabel),
                             DropdownButtonFormField<String>(
                               value: _modePaiement,
                               isExpanded: true,
                               items: _modesPaiement.map((m) => DropdownMenuItem(
                                 value: m,
                                 child: Text(
-                                  _labelModePaiement(m),
+                                  _labelModePaiement(m, l10n),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               )).toList(),
@@ -316,7 +319,7 @@ class _DevisEditViewState extends State<_DevisEditView> {
                   ),
                   const SizedBox(height: 16),
 
-                  _SectionTitle('Lignes de prestation'),
+                  _SectionTitle(l10n.addProductsOrServicesLabel),
                   if (_lignes.isNotEmpty) ...[
                     ..._lignes.asMap().entries.map((e) {
                       final i = e.key;
@@ -340,7 +343,7 @@ class _DevisEditViewState extends State<_DevisEditView> {
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w500)),
                                 Text(
-                                  '${l['prix_unitaire']} MAD × ${l['quantite']}',
+                                  '${l['prix_unitaire']} DH × ${l['quantite']}',
                                   style: TextStyle(
                                     color: Colors.grey[600],
                                     fontSize: 12,
@@ -349,7 +352,7 @@ class _DevisEditViewState extends State<_DevisEditView> {
                               ],
                             ),
                           ),
-                          Text('${total.toStringAsFixed(2)} MAD',
+                          Text('${total.toDH()} ',
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold)),
                           const SizedBox(width: 8),
@@ -372,12 +375,12 @@ class _DevisEditViewState extends State<_DevisEditView> {
                   ),
                   const SizedBox(height: 16),
 
-                  _SectionTitle('Conditions particulières (optionnel)'),
+                  _SectionTitle(l10n.specialConditionsOptionalLabel),
                   TextFormField(
                     controller: _conditionsCtrl,
                     maxLines: 3,
                     decoration: _inputDecoration(
-                        hint: 'Ex: Règlement sous 30 jours...'),
+                        hint: l10n.specialConditionsHint),
                   ),
                   const SizedBox(height: 20),
 
@@ -391,17 +394,17 @@ class _DevisEditViewState extends State<_DevisEditView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Total HT', style: TextStyle(color: Colors.grey)),
-                          Text('${_totalHt.toStringAsFixed(2)} MAD', style: const TextStyle(fontWeight: FontWeight.w500)),
+                          Text(l10n.totalHtLabel, style: const TextStyle(color: Colors.grey)),
+                          Text('${_totalHt.toDH()} ', style: const TextStyle(fontWeight: FontWeight.w500)),
                         ],
                       ),
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Total TTC',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                          Text('${_totalTtc.toStringAsFixed(2)} MAD',
+                          Text(l10n.totalTtcLabel,
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                          Text('${_totalTtc.toDH()} ',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -429,8 +432,8 @@ class _DevisEditViewState extends State<_DevisEditView> {
                       child: state is DevisLoading
                           ? const CircularProgressIndicator(
                           color: Colors.white)
-                          : const Text('Enregistrer les modifications',
-                        style: TextStyle(
+                          : Text(l10n.saveChangesButton,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,

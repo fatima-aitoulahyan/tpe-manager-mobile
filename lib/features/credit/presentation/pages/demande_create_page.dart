@@ -5,6 +5,7 @@ import '../../data/datasources/credit_remote_datasource.dart';
 import '../bloc/credit_bloc.dart';
 import '../bloc/credit_event.dart';
 import '../bloc/credit_state.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class DemandeCreatePage extends StatelessWidget {
   const DemandeCreatePage({super.key});
@@ -33,24 +34,16 @@ class _DemandeCreateViewState extends State<_DemandeCreateView> {
   int    _dureeMois       = 12;
   bool   _consentement    = false;
 
-  static const _types = [
-    {'value': 'FONCTIONNEMENT', 'label': 'Crédit de fonctionnement',
-      'plafond': '200 000 MAD', 'icon': Icons.sync_outlined},
-    {'value': 'INVESTISSEMENT', 'label': 'Crédit d\'investissement',
-      'plafond': '500 000 MAD', 'icon': Icons.trending_up_outlined},
-    {'value': 'AVANCE_FACTURE', 'label': 'Avance sur factures',
-      'plafond': '100 000 MAD', 'icon': Icons.receipt_long_outlined},
-  ];
-
   static const _durees = [3, 6, 12, 18, 24, 36];
 
   void _submit(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (!_formKey.currentState!.validate()) return;
     if (!_consentement) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-              'Vous devez accepter la transmission de vos données.'),
+        SnackBar(
+          content: Text(l10n.consentRequiredError),
           backgroundColor: Colors.orange,
         ),
       );
@@ -75,11 +68,34 @@ class _DemandeCreateViewState extends State<_DemandeCreateView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    final types = [
+      {
+        'value': 'FONCTIONNEMENT',
+        'label': l10n.creditFonctionnementLabel,
+        'plafond': '200 000 DH',
+        'icon': Icons.sync_outlined
+      },
+      {
+        'value': 'INVESTISSEMENT',
+        'label': l10n.creditInvestissementLabel,
+        'plafond': '500 000 DH',
+        'icon': Icons.trending_up_outlined
+      },
+      {
+        'value': 'AVANCE_FACTURE',
+        'label': l10n.avanceFactureLabel,
+        'plafond': '100 000 DH',
+        'icon': Icons.receipt_long_outlined
+      },
+    ];
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('Nouvelle demande',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(l10n.newRequestAppBarTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF2563EB),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -89,8 +105,8 @@ class _DemandeCreateViewState extends State<_DemandeCreateView> {
           if (state is DemandeCreated) {
             context.pop();
             ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text('Demande soumise avec succès !'),
+                SnackBar(
+                    content: Text(l10n.requestSubmittedSuccess),
                     backgroundColor: Colors.green));
           }
           if (state is CreditError) {
@@ -107,9 +123,8 @@ class _DemandeCreateViewState extends State<_DemandeCreateView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-                  _Label('Type de financement'),
-                  ..._types.map((t) {
+                  _Label(l10n.typeFinancementLabel),
+                  ...types.map((t) {
                     final selected = _typeFinancement == t['value'];
                     return GestureDetector(
                       onTap: () => setState(
@@ -119,7 +134,7 @@ class _DemandeCreateViewState extends State<_DemandeCreateView> {
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
                           color: selected
-                              ? const Color(0xFF2563EB).withOpacity(0.06)
+                              ? const Color(0xFF2563EB).withValues(alpha: 0.06)
                               : Colors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
@@ -148,7 +163,7 @@ class _DemandeCreateViewState extends State<_DemandeCreateView> {
                                         : const Color(0xFF1E293B),
                                   ),
                                 ),
-                                Text('Plafond : ${t['plafond']}',
+                                Text('${l10n.plafondLabel} : ${t['plafond']}',
                                   style: const TextStyle(
                                       fontSize: 11,
                                       color: Color(0xFF94A3B8)),
@@ -164,26 +179,26 @@ class _DemandeCreateViewState extends State<_DemandeCreateView> {
                     );
                   }),
                   const SizedBox(height: 16),
-                  _Label('Montant demandé (MAD)'),
+                  _Label(l10n.montantDemandeLabel),
                   TextFormField(
                     controller: _montantCtrl,
                     keyboardType: const TextInputType.numberWithOptions(
                         decimal: true),
                     validator: (v) {
-                      if (v == null || v.isEmpty) return 'Requis';
+                      if (v == null || v.isEmpty) return l10n.requiredField;
                       if (double.tryParse(v) == null) {
-                        return 'Montant invalide';
+                        return l10n.invalidAmount;
                       }
                       if (double.parse(v) <= 0) {
-                        return 'Doit être > 0';
+                        return l10n.mustBeGreaterThanZero;
                       }
                       return null;
                     },
-                    decoration: _inputDecoration(hint: 'Ex : 50000'),
+                    decoration: _inputDecoration(hint: l10n.montantHint),
                   ),
                   const SizedBox(height: 16),
 
-                  _Label('Durée souhaitée'),
+                  _Label(l10n.dureeSouhaiteeLabel),
                   Wrap(
                     spacing: 8, runSpacing: 8,
                     children: _durees.map((d) {
@@ -203,7 +218,7 @@ class _DemandeCreateViewState extends State<_DemandeCreateView> {
                                   : const Color(0xFFE2E8F0),
                             ),
                           ),
-                          child: Text('$d mois',
+                          child: Text('$d ${l10n.monthsLabel}',
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
@@ -218,14 +233,14 @@ class _DemandeCreateViewState extends State<_DemandeCreateView> {
                   ),
                   const SizedBox(height: 16),
 
-                  _Label('Objet du financement'),
+                  _Label(l10n.objetFinancementLabel),
                   TextFormField(
                     controller: _objetCtrl,
                     maxLines: 3,
                     validator: (v) =>
-                    v == null || v.isEmpty ? 'Requis' : null,
+                    v == null || v.isEmpty ? l10n.requiredField : null,
                     decoration: _inputDecoration(
-                        hint: 'Décrivez l\'utilisation prévue des fonds...'),
+                        hint: l10n.objetHint),
                   ),
                   const SizedBox(height: 20),
 
@@ -248,9 +263,7 @@ class _DemandeCreateViewState extends State<_DemandeCreateView> {
                           child: Padding(
                             padding: const EdgeInsets.only(top: 12),
                             child: Text(
-                              'J\'accepte la transmission de mes données '
-                                  'financières aux partenaires financiers '
-                                  'conformément à la réglementation CNDP.',
+                              l10n.cndpConsentText,
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey[700],
@@ -278,8 +291,8 @@ class _DemandeCreateViewState extends State<_DemandeCreateView> {
                       child: state is CreditLoading
                           ? const CircularProgressIndicator(
                           color: Colors.white)
-                          : const Text('Soumettre la demande',
-                        style: TextStyle(
+                          : Text(l10n.submitRequestButton,
+                        style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,

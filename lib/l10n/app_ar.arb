@@ -1,0 +1,716 @@
+{
+  "@@locale": "ar",
+  "loginTitle": "مرحباً بعودتك",
+  "loginSubtitle": "سجّل الدخول لإدارة نشاطك",
+  "emailLabel": "البريد الإلكتروني",
+  "emailHint": "example@email.com",
+  "emailRequired": "البريد الإلكتروني مطلوب",
+  "emailInvalid": "بريد إلكتروني غير صالح",
+  "passwordLabel": "كلمة المرور",
+  "passwordRequired": "كلمة المرور مطلوبة",
+  "passwordMinLength": "8 أحرف على الأقل",
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "loginButton": "تسجيل الدخول",
+  "orDivider": "أو",
+  "noAccount": "ليس لديك حساب؟ ",
+  "createAccount": "إنشاء حساب",
+  "forgotPasswordTitle": "نسيت كلمة المرور",
+  "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني. سنرسل لك رمزاً لإعادة تعيين كلمة المرور.",
+  "sendCode": "إرسال الرمز",
+  "newPasswordTitle": "كلمة مرور جديدة",
+    "newPasswordSubtitle": "اختر كلمة مرور آمنة مكونة من 8 أحرف على الأقل.",
+    "newPasswordLabel": "كلمة المرور الجديدة",
+    "confirmPasswordLabel": "تأكيد كلمة المرور",
+    "fieldRequired": "مطلوب",
+    "passwordsDontMatch": "كلمتا المرور غير متطابقتين",
+    "passwordResetSuccess": "تمت إعادة تعيين كلمة المرور بنجاح!",
+    "resetButton": "إعادة التعيين",
+    "registerTitle": "مرحباً",
+      "registerSubtitle": "أدخل بياناتك للبدء",
+      "nomLabel": "الاسم العائلي",
+      "nomHint": "بنعلي",
+      "prenomLabel": "الاسم الشخصي",
+      "prenomHint": "حسن",
+      "phoneLabel": "الهاتف",
+      "phoneHint": "0612345678",
+      "iceLabel": "ICE (اختياري)",
+      "iceHint": "001234567000",
+      "requiredField": "إلزامي",
+      "statutFiscalLabel": "الوضع الضريبي",
+      "statutFiscalHint": "اختر وضعاً",
+      "statutAutoEntrepreneur": "مقاول ذاتي",
+      "statutTpe": "مقاولة صغيرة جداً",
+      "statutArtisan": "حرفي",
+      "statutFreelance": "عمل حر",
+      "statutCommercant": "تاجر",
+      "createAccountButton": "إنشاء حسابي",
+      "accountCreatedSuccess": "تم إنشاء الحساب! سجّل الدخول.",
+      "alreadyHaveAccount": "لديك حساب بالفعل؟ ",
+      "loginLink": "تسجيل الدخول",
+      "verifyCodeTitle": "التحقق من الرمز",
+      "verifyCodeSubtitle": "أدخل الرمز المكون من 6 أرقام المرسل إلى ",
+      "resendCode": "إعادة إرسال الرمز",
+      "codeResentMessage": "تم إرسال رمز جديد",
+      "registerAppBarTitle": "إنشاء حساب",
+        "registerWelcomeTitle": "مرحباً",
+        "registerWelcomeSubtitle": "أدخل معلوماتك للبدء",
+        "lastNameLabel": "النسب",
+        "lastNameHint": "بنعلي",
+        "firstNameLabel": "الاسم الشخصي",
+        "firstNameHint": "حسن",
+        "emailLabel": "البريد الإلكتروني",
+        "emailHint": "vous@exemple.com",
+        "phoneLabel": "الهاتف",
+        "phoneHint": "06 12 34 56 78",
+        "iceLabel": "رقم التعريف الضريبي ICE (اختياري)",
+        "iceHint": "001234567000",
+        "fiscalStatusLabel": "النظام الضريبي",
+        "fiscalStatusHint": "اختر الحالة",
+        "registerButton": "إنشاء حسابي",
+        "registerSuccessMessage": "تم إنشاء الحساب! قم تسجيل الدخول.",
+        "alreadyHaveAccount": "لديك حساب بالفعل؟ ",
+        "loginAction": "تسجيل الدخول",
+        "statusAutoEntrepreneur": "مقاول ذاتي",
+        "statusTpe": "شركة صغيرة جداً",
+        "statusArtisan": "حرفي",
+        "statusFreelance": "مستقل",
+        "statusCommercant": "تاجر",
+        "emailInvalid": "بريد إلكتروني غير صالح",
+        "verifyCodeTitle": "التحقق من الرمز",
+         "verifyCodeSubtitle": "أدخل الرمز المكون من 6 أرقام المرسل إلى ",
+         "codeResentSuccess": "تم إرسال رمز جديد",
+         "resendCodeAction": "إعادة إرسال الرمز",
+         "cashflowAppBarTitle": "التدفق النقدي",
+           "selectedCount": "تم تحديد {count}",
+           "@selectedCount": {
+             "placeholders": {
+               "count": {
+                 "type": "int"
+               }
+             }
+           },
+           "multipleDeletionTitle": "حذف متعدد",
+           "multipleDeletionContent": "هل أنت متأكد أنك تريد حذف المعاملات الـ {count} المحددة؟",
+           "@multipleDeletionContent": {
+             "placeholders": {
+               "count": {
+                 "type": "int"
+               }
+             }
+           },
+           "cancelAction": "إلغاء",
+           "deleteAction": "حذف",
+           "tabAll": "الكل",
+           "tabRecettes": "المداخيل",
+           "tabDepenses": "المصاريف",
+           "availableBalanceLabel": "الرصيد المتاح",
+           "noTransactions": "لا توجد معاملات",
+           "paymentRecordedSuccess": "تم تسجيل الدفع ✓",
+           "expenseRecordedSuccess": "تم تسجيل المصروف ✓",
+    "selectCategoryError": "الرجاء اختيار فئة",
+      "registerPaymentTitle": "تسجيل دفع",
+      "newTransactionTitle": "معاملة جديدة",
+      "paymentLinkedToInvoice": "الدفع مرتبط بالفاتورة",
+      "registerPaymentOrExpenseSubtitle": "تسجيل دفعة أو مصروف",
+      "transactionTypeLabel": "نوع المعاملة",
+      "paymentReceivedType": "دفعة مستلمة",
+      "expenseType": "مصروف",
+      "categoryLabel": "الفئة",
+      "catPaymentInvoice": "دفع الفاتورة",
+      "catDeposit": "عربون / دفعة مقدمة",
+      "catOtherIncome": "إيرادات أخرى",
+      "catEquipmentPurchase": "شراء معدات",
+      "catRent": "إيجار",
+      "catSalary": "راتب",
+      "catTransport": "نقل",
+      "catOtherExpense": "مصروف آخر",
+      "amountDhLabel": "المبلغ (درهم)",
+      "fieldRequiredError": "مطلوب",
+      "invalidAmountError": "مبلغ غير صالح",
+      "greaterThanZeroError": "يجب أن يكون أكبر من 0",
+      "amountHint": "مثال: 1500.00",
+      "descriptionLabel": "الوصف",
+      "descriptionRecetteHint": "مثال: دفع الفاتورة FAC-2026-001",
+      "descriptionDepenseHint": "مثال: شراء لوازم المكتب",
+      "transactionDateLabel": "تاريخ المعاملة",
+      "savePaymentButton": "حفظ الدفع",
+      "saveExpenseButton": "حفظ المصروف",
+      "transactionAmountLabel": "مبلغ المعاملة",
+      "paymentDateLabel": "تاريخ الدفع",
+      "justificationLabel": "المستند المبرر",
+      "invoiceLoadError": "تعذر تحميل رابط الفاتورة.",
+      "viewInvoiceLabel": "عرض الفاتورة",
+      "editClientTitle": "تعديل العميل",
+      "newClientTitle": "عميل جديد",
+      "clientCreatedSuccess": "تم إنشاء العميل بنجاح!",
+      "clientUpdatedSuccess": "تم تحديث العميل!",
+      "lastNameLabel": "النسب",
+      "lastNameHint": "بنعلي",
+      "firstNameLabel": "الاسم الشخصي",
+      "firstNameHint": "حسن",
+      "companyNameLabel": "اسم الشركة",
+      "companyNameHint": "شركتي (اختياري)",
+      "iceLabel": "التعريف الضريبي (ICE)",
+      "iceHint": "001234567000 (اختياري)",
+      "emailAddressLabel": "البريد الإلكتروني",
+      "emailAddressHint": "client@email.com",
+      "invalidEmailError": "بريد إلكتروني غير صالح",
+      "phoneLabel": "الهاتف",
+      "phoneHint": "0612345678",
+      "saveChangesButton": "حفظ التعديلات",
+      "createClientButton": "إنشاء العميل",
+      "clientsTitle": "العملاء",
+      "searchClientHint": "البحث بالاسم، الشركة...",
+      "clientDeletedSuccess": "تم حذف العميل بنجاح",
+      "noClientsFound": "لم يتم العثور على أي عميل",
+      "deleteClientTitle": "حذف العميل",
+      "deleteClientConfirmation": "هل أنت متأكد؟ قد يؤثر ذلك على عروض الأسعار المرتبطة بهذا العميل.",
+      "cancelButton": "إلغاء",
+      "deleteButton": "حذف",
+      "editOption": "تعديل",
+      "deleteOption": "حذف",
+      "newClientOption": "عميل جديد",
+      "selectClientPrompt": "اختر عميلاً",
+      "noClientsAvailable": "لا يوجد عملاء متاحون",
+      "financingTitle": "التمويل",
+      "deleteRequestTitle": "حذف الطلب",
+      "deleteRequestConfirmation": "هل أنت متأكد من رغبتك في حذف طلب التمويل هذا؟ لا يمكن التراجع عن هذا الإجراء.",
+      "cancelButton": "إلغاء",
+      "deleteButton": "حذف",
+      "eligibilityTitle": "أهليتك",
+      "improveScoreTipsTitle": "نصائح لتحسين درجاتك",
+      "myRequestsTitle": "طلباتي",
+      "requestDeletedSuccess": "تم حذف الطلب",
+      "noFinancingRequests": "لا توجد طلبات تمويل",
+      "newRequestAppBarTitle": "طلب جديد",
+      "consentRequiredError": "يجب عليك الموافقة على نقل بياناتك.",
+      "requestSubmittedSuccess": "تم تقديم الطلب بنجاح!",
+      "typeFinancementLabel": "نوع التمويل",
+      "creditFonctionnementLabel": "قرض التشغيل",
+      "creditInvestissementLabel": "قرض الاستثمار",
+      "avanceFactureLabel": "سلفة على الفواتير",
+      "plafondLabel": "الحد الأقصى",
+      "montantDemandeLabel": "المبلغ المطلوب (درهم)",
+      "requiredField": "مطلوب",
+      "invalidAmount": "مبلغ غير صالح",
+      "mustBeGreaterThanZero": "يجب أن يكون أكبر من 0",
+      "montantHint": "مثال : 50000",
+      "dureeSouhaiteeLabel": "المدة المطلوبة",
+      "monthsLabel": "أشهر",
+      "objetFinancementLabel": "غرض التمويل",
+      "objetHint": "صف الاستخدام المقصود للتمويل...",
+      "cndpConsentText": "أوافق على نقل بياناتي المالية إلى الشركاء الماليين وفقاً لوائح اللجنة الوطنية لحماية المعطيات ذات الطابع الشخصي (CNDP).",
+      "submitRequestButton": "تقديم الطلب",
+      "monthsLabel": "أشهر",
+      "reasonLabel": "السبب",
+      "eligibilityHigh": "أهلية عالية",
+      "eligibilityMedium": "أهلية متوسطة",
+      "eligibilityLow": "أهلية ضعيفة",
+      "eligibilityNotEvaluated": "لم يتم التقييم",
+      "statusSoumise": "تم التقديم",
+      "statusEnAnalyse": "قيد التحليل",
+      "statusFavorable": "موافق عليها",
+      "statusDefavorable": "مرفوضة",
+      "statusIncomplet": "غير مكتمل",
+      "retryButton": "إعادة المحاولة",
+      "dashboardTitle": "لوحة القيادة",
+      "monthlyIncomeLabel": "مداخل الشهر",
+      "monthlyExpensesLabel": "مصاريف الشهر",
+      "flowAnalysisTitle": "تحليل التدفقات المالية",
+      "flowVolumeLabel": "حجم التدفقات",
+      "incomeLegendLabel": "المداخيل",
+      "expensesLegendLabel": "المصاريف",
+      "currentBalanceLabel": "الرصيد الحالي",
+      "positiveStatusLabel": "إيجابي",
+      "negativeStatusLabel": "سلبي",
+      "incomeLegendLabel": "المداخيل",
+      "expensesLegendLabel": "المصاريف",
+      "quoteActivityTitle": "نشاط عروض الأسعار",
+      "totalQuotesGeneratedLabel": "إجمالي عروض الأسعار المُنشأة",
+      "conversionRateLabel": "معدل التحويل",
+      "quoteStatusAccepted": "مقبولة",
+      "quoteStatusPending": "قيد الانتظار",
+      "quoteStatusRefused": "مرفوضة",
+      "quoteStatusExpired": "منتهية الصلاحية",
+      "newQuoteTitle": "عرض سعر جديد",
+      "selectClientError": "المرجو اختيار الزميـل أو العميل",
+      "selectValidityDateError": "المرجو تحديد تاريخ صلاحية العرض",
+      "selectAtLeastOneLineError": "المرجو إضافة سطر خدمة واحد على الأقل",
+      "quoteCreatedSuccess": "تم إنشاء عرض السعر {numero} بنجاح!",
+      "@quoteCreatedSuccess": {
+          "placeholders": {
+            "numero": {
+              "type": "String"
+            }
+          }
+        },
+      "clientLabel": "العميل",
+      "validUntilLabel": "صالح لغاية",
+      "selectValidityDateHint": "اختر تاريخ الصلاحية",
+      "vatRateLabel": "نسبة الضريبة على القيمة المضافة (%)",
+      "vatRateHint": "مثال: 20",
+      "paymentMethodLabel": "طريقة الدفع",
+      "addProductsOrServicesLabel": "إضافة منتجات / خدمات",
+      "addedItemsLabel": "العناصر المضافة",
+      "specialConditionsOptionalLabel": "شروط خاصّة (اختياري)",
+      "specialConditionsHint": "مثال: الأداء في غضون 30 يوماً...",
+      "createQuoteButton": "إنشاء عرض السعر",
+
+      "quoteDetailTitle": "تفاصيل عرض السعر",
+      "quoteConvertedSuccess": "تم تحويل عرض السعر إلى فاتورة بنجاح",
+      "generalInformationTitle": "معلومات عامة",
+      "validUntilPrefix": "صالح لغاية",
+      "paymentLabel": "طريقة الدفع",
+      "servicesSectionTitle": "الخدمات",
+      "financialSummaryTitle": "الملخص المالي",
+      "totalHtLabel": "المجموع بدون ضريبة",
+      "vatLabel": "الضريبة",
+      "totalTtcLabel": "المجموع مع الضريبة",
+      "linkedInvoiceTitle": "الفاتورة المرتبطة",
+      "linkedInvoiceDefault": "فاتورة مرتبطة",
+      "quoteConvertedToInvoiceInfo": "تم تحويل عرض السعر هذا إلى فاتورة",
+      "viewButton": "عرض",
+      "specialConditionsTitle": "شروط خاصّة",
+      "availableActionsTitle": "الإجراءات المتاحة",
+      "editQuoteAction": "تعديل عرض السعر",
+      "markAsSentAction": "وضع كـ 'مُرسل'",
+      "deleteAction": "حذف",
+      "deleteQuoteTitle": "حذف عرض السعر",
+      "remindClientAction": "تذكير العميل",
+      "markAsAcceptedAction": "وضع كـ 'مقبول'",
+      "markAsRefusedAction": "وضع كـ 'مرفوض'",
+      "resetToDraftAction": "إعادة مسودة",
+      "convertToInvoiceAction": "تحويل إلى فاتورة",
+      "convertToInvoiceDialogTitle": "تحويل إلى فاتورة",
+      "convertToInvoiceDialogContent": "سيتم إنشاء مسودة فاتورة بناءً على عرض السعر هذا. هل تريد المتابعة؟",
+      "cancelButton": "إلغاء",
+      "convertButton": "تحويل",
+      "duplicateQuoteAction": "نسخ عرض السعر",
+      "archiveQuoteAction": "أرشفة عرض السعر",
+      "downloadSharePdfAction": "تحميل / مشاركة ملف PDF",
+
+      "editQuoteTitle": "تعديل عرض السعر",
+      "quoteUpdatedSuccess": "تم تحديث عرض السعر {numero} بنجاح!",
+      "@quoteUpdatedSuccess": {
+        "placeholders": {
+          "numero": {
+            "type": "String"
+          }
+        }
+      },
+      "backToDetailButton": "العودة إلى التفاصيل",
+      "editDraftNotice": "أنت تقوم حالياً بتعديل مسودة عرض سعر. سيتم حفظ التعديلات فوراً.",
+      "paymentModeCash": "نقداً",
+      "paymentModeBankTransfer": "تحويل بنكي",
+      "paymentModeMobileMoney": "موبايل موني",
+      "saveChangesButton": "حفظ التعديلات",
+
+      "quotesListTitle": "عروض الأسعار",
+      "activeTabLabel": "النشطة",
+      "archivedTabLabel": "المؤرشفة",
+      "clearAllFiltersButton": "مسح الكل",
+      "filterAll": "الكل",
+      "filterDrafts": "المسودات",
+      "filterSent": "المُرسلة",
+      "filterAccepted": "المقبولة",
+      "filterRefused": "المرفوضة",
+      "filterExpired": "المنتهية",
+      "quoteDeletedSuccessMessage": "تم حذف عرض السعر",
+      "quoteDuplicatedSuccessMessage": "تم نسخ عرض السعر",
+      "noArchivedQuotesFound": "لا توجد عروض أسعار مؤرشفة",
+      "noQuotesFound": "لم يتم العثور على أي عروض أسعار",
+      "clearFiltersButton": "مسح الفلاتر",
+      "deleteQuoteDialogTitle": "حذف عرض السعر",
+      "deleteQuoteDialogContent": "هل أنت متأكد أنك تريد حذف عرض السعر هذا؟",
+
+      "filtersTitle": "التصفية",
+      "resetFilterButton": "إعادة تعيين",
+      "refineQuotesSubtitle": "تحسين قائمة عروض الأسعار",
+      "clientFilterLabel": "العميل",
+      "allClientsOption": "جميع العملاء",
+      "periodFilterLabel": "الفترة",
+      "startDatePlaceholder": "تاريخ البدء",
+      "endDatePlaceholder": "تاريخ الانتهاء",
+      "applyFiltersButton": "تطبيق الفلاتر",
+
+      "validUntilCardLabel": "صالح حتى: {date}",
+      "@validUntilCardLabel": {
+        "placeholders": {
+          "date": {
+            "type": "String"
+          }
+        }
+      },
+
+      "statusDraft": "مسودة",
+      "statusSent": "مُرسل",
+      "statusAccepted": "مقبول",
+      "statusRefused": "مرفوض",
+      "statusExpired": "منتهي الصلاحية",
+       "statusArchived": "ملغاة",
+      "newInvoiceTitle": "فاتورة جديدة",
+      "invoiceCreatedDraftSuccess": "تم إنشاء الفاتورة {numero} كمسودة!",
+      "@invoiceCreatedDraftSuccess": {
+        "placeholders": {
+          "numero": {
+            "type": "String"
+          }
+        }
+      },
+      "selectDueDateError": "الرجاء اختيار تاريخ الاستحقاق",
+      "dueDateLabel": "تاريخ الاستحقاق",
+      "selectDueDateHint": "اختر الموعد النهائي للدفع",
+      "paymentMethodRequiredLabel": "طريقة الدفع المطلوبة",
+      "addedBillingItemsLabel": "عناصر الفوترة المضافة",
+      "paymentConditionsLegalMentionsLabel": "شروط الدفع أو الإشعارات القانونية",
+      "paymentConditionsHint": "مثال: غرامات تأخير بنسبة 10% بعد تاريخ الاستحقاق...",
+      "generateInvoiceButton": "إنشاء الفاتورة",
+
+      "invoicePaymentDescription": "دفع الفاتورة {numero}",
+      "@invoicePaymentDescription": {
+        "placeholders": {
+          "numero": {
+            "type": "String"
+          }
+        }
+      },
+      "invoiceDetailTitle": "تفاصيل الفاتورة",
+      "invoiceUpdatedSuccess": "تم تحديث الفاتورة",
+       "invoiceArchivedSuccess": "تم إلغاء الفاتورة",
+      "generalInfoSection": "المعلومات العامة",
+      "dueDateRowLabel": "تاريخ الاستحقاق: {date}",
+      "@dueDateRowLabel": {
+        "placeholders": {
+          "date": {
+            "type": "String"
+          }
+        }
+      },
+      "paymentMethodRowLabel": "طريقة الدفع: {method}",
+      "@paymentMethodRowLabel": {
+        "placeholders": {
+          "method": {
+            "type": "String"
+          }
+        }
+      },
+      "prestationsSection": "الخدمات",
+      "financialSummarySection": "الملخص المالي",
+      "totalHtLabel": "المجموع بدون ضريبة",
+      "vatLabel": "الضريبة ({rate}%)",
+      "@vatLabel": {
+        "placeholders": {
+          "rate": {
+            "type": "num"
+          }
+        }
+      },
+      "amountPaidLabel": "المبلغ المدفوع",
+      "remainingDueLabel": "المبلغ المتبقي",
+      "totalTtcLabel": "المجموع مع الضريبة",
+      "issuedFromQuoteLabel": "مأخوذ من عرض السعر {numero}",
+      "@issuedFromQuoteLabel": {
+        "placeholders": {
+          "numero": {
+            "type": "String"
+          }
+        }
+      },
+      "availableActionsSection": "الإجراءات المتاحة",
+      "editInvoiceButton": "تعديل الفاتورة",
+      "validateAndSendButton": "تحقق وإرسال",
+      "deleteButton": "حذف",
+      "deleteInvoiceDialogTitle": "حذف الفاتورة",
+      "registerPaymentButton": "تسجيل الدفع",
+      "remindForUnpaidButton": "التذكير بالمبلغ غير المدفوع",
+      "toBePaidBeforeDate": "الدفع قبل {date}",
+      "@toBePaidBeforeDate": {
+        "placeholders": {
+          "date": {
+            "type": "String"
+          }
+        }
+      },
+      "asSoonAsPossible": "في أسرع وقت ممكن",
+      "archiveInvoiceButton": "إلغاء الفاتورة",
+       "cancelInvoiceDialogTitle": "إلغاء الفاتورة",
+      "archiveInvoiceDialogContent": "سيتم نقل هذه الفاتورة إلى الفواتير الملغاة. هل تريد المتابعة؟",
+      "cancelButton": "إلغاء",
+        "archiveButton": "متابعة",
+      "downloadOrSharePdfButton": "تحميل / مشاركة ملف PDF",
+
+      "invoicesTitle": "الفواتير",
+      "tabActive": "النشطة",
+      "tabArchived": "الملغاة",
+      "clearAllFiltersButton": "مسح الكل",
+      "filterAll": "الكل",
+      "filterDrafts": "مسودات",
+      "filterSent": "مُرسلة",
+      "filterPaid": "مدفوعة",
+      "filterPartial": "جزئية",
+      "filterArchived": "مؤرشفة",
+      "invoiceDeletedSuccess": "تم حذف الفاتورة",
+      "noArchivedInvoicesFound": "لا توجد فواتير مؤرشفة",
+      "noInvoicesFound": "لم يتم العثور على فواتير",
+      "clearFiltersButton": "مسح الفلاتر",
+      "deleteInvoiceDialogContent": "هل أنت متأكد أنك تريد حذف هذه الفاتورة؟",
+
+      "statusPaid": "مدفوعة",
+      "statusPartial": "جزئية",
+      "statusSent": "مُرسلة",
+      "statusPending": "قيد الانتظار",
+      "statusArchived": "مؤرشفة",
+      "statusDraft": "مسودة",
+      "unknownNumber": "رقم غير معروف",
+      "unknownClient": "عميل غير معروف",
+
+      "notificationsTitle": "الإشعارات",
+      "selectedCountTitle": "تم تحديد {count}",
+      "@selectedCountTitle": {
+        "placeholders": {
+          "count": {
+            "type": "int"
+          }
+        }
+      },
+      "deleteNotificationsDialogTitle": "حذف الإشعارات",
+      "deleteNotificationsDialogContent": "هل تريد حقاً حذف الإشعارات الـ {count} المحددة؟",
+      "@deleteNotificationsDialogContent": {
+        "placeholders": {
+          "count": {
+            "type": "int"
+          }
+        }
+      },
+      "markAllAsReadButton": "تحديد الكل كمقروء ({count})",
+      "@markAllAsReadButton": {
+        "placeholders": {
+          "count": {
+            "type": "int"
+          }
+        }
+      },
+      "emptyNotificationsTitle": "سجلك نظيف",
+      "emptyNotificationsSubtitle": "سنقوم بتنبيهك بمجرد أن تتطلب أي فاتورة أو عرض سعر انتباهك.",
+      "closeButton": "إغلاق",
+      "retryButton": "إعادة المحاولة",
+
+      "timeJustNow": "الآن",
+      "timeMinutesAgo": "منذ {minutes} دقيقة",
+      "@timeMinutesAgo": {
+        "placeholders": {
+          "minutes": {
+            "type": "int"
+          }
+        }
+      },
+      "timeHoursAgo": "منذ {hours} ساعة",
+      "@timeHoursAgo": {
+        "placeholders": {
+          "hours": {
+            "type": "int"
+          }
+        }
+      },
+      "timeDaysAgo": "منذ {days} يوم",
+      "@timeDaysAgo": {
+        "placeholders": {
+          "days": {
+            "type": "int"
+          }
+        }
+      },
+
+        "fillAllEmailFieldsError": "يرجى ملء جميع حقول البريد الإلكتروني",
+        "emailConfigSavedSuccess": "تم حفظ إعدادات البريد الإلكتروني!",
+        "errorPrefix": "خطأ: {error}",
+        "@errorPrefix": {
+          "placeholders": {
+            "error": {
+              "type": "String"
+            }
+          }
+        },
+        "profileUpdatedSuccess": "تم تحديث المعلومات!",
+        "passwordChangedSuccess": "تم تغيير كلمة المرور بنجاح!",
+        "settingsTitle": "الإعدادات",
+        "editCoordinatesHeader": "تعديل معلوماتي الشخصية",
+        "firstNameLabel": "الاسم الشخصي",
+        "lastNameLabel": "الاسم العائلي",
+        "emailAddressLabel": "البريد الإلكتروني",
+        "phoneLabel": "الهاتف",
+        "iceLabel": "رقم التعريف الضريبي (ICE)",
+        "fiscalStatusLabel": "الوضع الضريبي",
+        "statusAutoEntrepreneur": "مقاول ذاتي",
+        "statusTpe": "شركة صغيرة جداً",
+        "statusArtisan": "حرفي",
+        "statusFreelance": "مستقل",
+        "statusCommercant": "تاجر",
+        "saveProfileButton": "حفظ الملف الشخصي",
+        "smtpConfigHeader": "إعدادات SMTP للبريد الإلكتروني",
+        "smtpGoogleInfoHint": "التحقق بخطوتين من جوجل مطلوب. استخدم \"كلمة مرور التطبيق\" المُنشأة على حساب جوجل الخاص بك.",
+        "profGmailLabel": "عنوان جيميل المهني",
+        "googleAppPasswordLabel": "كلمة مرور التطبيق من جوجل",
+        "linkingButton": "جاري الربط...",
+        "linkGmailButton": "ربط حساب جيميل الخاص بي",
+        "autoRemindersHeader": "التذكيرات التلقائية",
+        "unpaidInvoiceReminderTitle": "تذكير بالفواتير غير المدفوعة",
+        "unpaidInvoiceReminderSubtitle": "سيتم تنبيهك بالفواتير المتأخرة",
+        "reminderAfterLabel": "إرسال تذكير بعد",
+        "expiringQuoteReminderTitle": "تذكير بانتهاء صلاحية عروض الأسعار",
+        "expiringQuoteReminderSubtitle": "تنبيه قبل انتهاء صلاحية عرض السعر",
+        "warnBeforeExpirationLabel": "تنبيهي قبل انتهاء الصلاحية",
+        "taxDeclarationReminderTitle": "تذكير بالقرار الضريبي",
+        "taxDeclarationReminderSubtitle": "تذكير ربع سنوي للمقاول الذاتي / الشركات الصغيرة جداً",
+        "cnssReminderTitle": "تذكير باشتراكات الضمان الاجتماعي CNSS",
+        "cnssReminderSubtitle": "تذكير شهري لدفع الاشتراكات",
+        "creditRequestNotifTitle": "إشعارات طلبات القروض",
+        "creditRequestNotifSubtitle": "تغير حالة ملف القرض",
+        "receptionModesHeader": "طرق الاستلام",
+        "inAppNotifTitle": "الإشعارات داخل التطبيق",
+        "pushNotifTitle": "الإشعارات الفورية (Push)",
+        "smsNotifTitle": "رسائل نصية قصيرة (SMS)",
+        "smsNotifSubtitle": "قد تطبق رسوم المشغل",
+        "noPreferencesFound": "لم يتم العثور على أي تفضيلات.",
+        "savingLabel": "جاري الحفظ...",
+        "securityButton": "الأمان",
+        "logoutButton": "تسجيل الخروج",
+        "fieldRequiredError": "هذا الحقل إجباري",
+
+        "passwordsDoNotMatchError": "كلمات المرور غير متطابقة",
+        "changePasswordTitle": "تغيير كلمة المرور",
+        "changePasswordSubtitle": "اختر كلمة مرور آمنة تتكون من 8 أحرف على الأقل.",
+        "oldPasswordLabel": "كلمة المرور القديمة",
+        "newPasswordLabel": "كلمة المرور الجديدة",
+        "confirmNewPasswordLabel": "تأكيد كلمة المرور الجديدة",
+        "requiredFieldError": "مطلوب",
+        "minCharactersError": "الحد الأدنى {count} أحرف",
+        "@minCharactersError": {
+          "placeholders": {
+            "count": {
+              "type": "int"
+            }
+          }
+        },
+        "cancelButton": "إلغاء",
+        "validateButton": "تأكيد",
+
+        "deleteConfirmationMessage": "هل أنت متأكد أنك تريد حذف هذا العنصر؟ لا يمكن التراجع عن هذا الإجراء.",
+        "deleteButton": "حذف",
+        "openPdfOption": "فتح ملف PDF",
+        "sharePdfOption": "مشاركة (واتساب، بريد إلكتروني...)",
+        "documentSubject": "مستند {numero}",
+        "@documentSubject": {
+          "placeholders": {
+            "numero": {
+              "type": "String"
+            }
+          }
+        },
+        "documentShareText": "يرجى العثور على المستند {numero} مرفقاً.",
+        "@documentShareText": {
+          "placeholders": {
+            "numero": {
+              "type": "String"
+            }
+          }
+        },
+        "remindClientTitle": "تذكير العميل",
+        "sendViaWhatsApp": "الإرسال عبر واتساب",
+        "noPhoneNumber": "لا يوجد رقم",
+        "whatsappReminderMessage": "مرحباً {clientNom},\n\nنأمل أن تكون بخير.\n\nنذكركم أن المستند *{docNumero}* بقيمة *{montant}* ({dateInfo}) لا يزال معلقاً.\n\nيرجى مراجعته في أقرب وقت ممكن.\n\nمع خالص التحية،\nTPE Manager",
+        "@whatsappReminderMessage": {
+          "placeholders": {
+            "clientNom": { "type": "String" },
+            "docNumero": { "type": "String" },
+            "montant": { "type": "String" },
+            "dateInfo": { "type": "String" }
+          }
+        },
+        "sendViaEmail": "الإرسال عبر البريد الإلكتروني",
+        "noEmailAddress": "لا توجد عنوان بريد",
+        "emailReminderSubject": "تذكير - {docNumero}",
+        "@emailReminderSubject": {
+          "placeholders": {
+            "docNumero": { "type": "String" }
+          }
+        },
+        "emailReminderBody": "مرحباً {clientNom},\n\nنأمل أن تكون بخير.\n\nنذكركم أن المستند {docNumero} بقيمة {montant} ({dateInfo}) لا يزال معلقاً.\n\nنشكركم على اتخاذ الإجراءات اللازمة.\n\nمع خالص التحية،\nفريق TPE Manager",
+        "@emailReminderBody": {
+          "placeholders": {
+            "clientNom": { "type": "String" },
+            "docNumero": { "type": "String" },
+            "montant": { "type": "String" },
+            "dateInfo": { "type": "String" }
+          }
+        },
+
+        "navHome": "الرئيسية",
+        "navDevis": "عروض الأسعار",
+        "navFactures": "الفواتير",
+        "navTresorerie": "الخزينة",
+        "navCredit": "الرصيد/القرض",
+
+        "selectDateHint": "تحديد التاريخ",
+
+        "totalHtLabel": "المجموع بدون اضافة الرسوم (HT)",
+        "totalTtcLabel": "المجموع مع احتساب الرسوم (TTC)",
+
+        "addLineTitle": "إضافة سطر",
+        "designationLabel": "التعيين / الوصف",
+        "unitPriceLabel": "السعر الفردي (درهم)",
+        "quantityLabel": "الكمية",
+        "totalLineDisplay": "المجموع : {total} درهم",
+        "@totalLineDisplay": {
+          "placeholders": {
+            "total": {
+              "type": "String"
+            }
+          }
+        },
+        "addToDocumentButton": "إضافة إلى المستند",
+
+        "paymentVirementLabel": "تحويل",
+        "paymentVirementSub": "بنكي",
+        "paymentEspecesLabel": "نقداً",
+        "paymentEspecesSub": "باليد",
+        "paymentMobileLabel": "موبايل",
+        "paymentMobileSub": "موني",
+        "languageLabel": "اللغة",
+
+        "conseilVolumeEleve": "قم زيادة حجم الفوترة الخاص بك لتحسين نقاطك.",
+        "conseilVolumeFaible": "حجم الفوترة لديك لا يزال منخفضاً.",
+        "conseilVolumeDebut": "ابدأ في إصدار الفواتير بانتظام لبناء سجل تاريخي.",
+        "conseilAncienneteRecente": "حسابك لا يزال جديداً. الأقدمية تحسن الأهلية.",
+        "conseilAncienneteSuite": "استمر في استخدام التطبيق لزيادة أقدميتك.",
+        "conseilFacturesAttente": "قم بتسوية فواتيرك المعلقة لتحسين نقاطك.",
+        "conseilFacturesImpayees": "عدد كبير من الفواتير غير المدفوعة. يرجى تسويتها كأولوية.",
+        "conseilFacturesAbsentes": "قم بإصدار وتحصيل الفواتير لتقييم انتظامك.",
+        "conseilProfilFiscal": "أكمل ملفك الضريبي لتحسين أهلبتك.",
+        "searchTransactionsHint": "البحث عن معاملة...",
+        "noSearchResults": "لم يتم العثور على أي نتائج",
+        "archiveMotifLabel": "سبب الإلغاء",
+        "archiveMotifHint": "اشرح سبب إلغاء هذه الفاتورة..."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

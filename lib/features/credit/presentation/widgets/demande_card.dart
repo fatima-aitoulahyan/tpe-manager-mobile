@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../shared/utils/currency_format.dart';
 import '../../data/models/demande_model.dart';
 import 'statut_demande_badge.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class DemandeCard extends StatelessWidget {
   final DemandeListModel demande;
@@ -16,6 +18,8 @@ class DemandeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -26,7 +30,7 @@ class DemandeCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.06),
+              color: Colors.grey.withValues(alpha: 0.06),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -46,7 +50,7 @@ class DemandeCard extends StatelessWidget {
                 ),
               ),
               Text(
-                '${demande.montantDemande.toStringAsFixed(0)} MAD',
+                '${demande.montantDemande.toDH()} ',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
@@ -61,7 +65,7 @@ class DemandeCard extends StatelessWidget {
             children: [
               StatutDemandeBadge(statut: demande.statut),
               Row(children: [
-                Text('${demande.dureeMois} mois',
+                Text('${demande.dureeMois} ${l10n.monthsLabel}',
                     style: const TextStyle(
                         fontSize: 12, color: Color(0xFF94A3B8))),
                 if (onDelete != null) ...[
@@ -81,10 +85,10 @@ class DemandeCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.05),
+                color: Colors.red.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Text('Motif : ${demande.motifRefus}',
+              child: Text('${l10n.reasonLabel} : ${demande.motifRefus}',
                   style: const TextStyle(
                       fontSize: 11, color: Colors.red)),
             ),

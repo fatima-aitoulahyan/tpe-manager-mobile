@@ -96,6 +96,7 @@ class DevisBloc extends Bloc<DevisEvent, DevisState> {
         emit(DevisError(e.toString()));
       }
     });
+
     on<LoadDevisForEdit>((event, emit) async {
       emit(DevisLoading());
       try {
@@ -110,6 +111,7 @@ class DevisBloc extends Bloc<DevisEvent, DevisState> {
         emit(DevisError(e.toString()));
       }
     });
+
     on<EditDevis>((event, emit) async {
       emit(DevisLoading());
       try {
@@ -119,6 +121,7 @@ class DevisBloc extends Bloc<DevisEvent, DevisState> {
         emit(DevisError(e.toString()));
       }
     });
+
     on<LoadDevisListPaginated>((event, emit) async {
       if (!event.isLoadMore) {
         emit(DevisLoading());
@@ -158,11 +161,27 @@ class DevisBloc extends Bloc<DevisEvent, DevisState> {
         emit(DevisError(e.toString()));
       }
     });
+
     on<ConvertDevisToFacture>((event, emit) async {
       emit(DevisLoading());
       try {
         final facture = await _datasource.convertirEnFacture(event.devisId);
         emit(DevisConvertedToFacture(facture['id'] as int));
+      } catch (e) {
+        emit(DevisError(e.toString()));
+      }
+    });
+
+    // ── Génération IA : seul et unique handler pour cet event ──
+    // Le catch spécifique doit passer AVANT le catch générique,
+    // sinon ClientNotFoundAiException finirait dans DevisError comme n'importe quelle autre erreur.
+    on<GenerateDevisFromText>((event, emit) async {
+      emit(DevisLoading());
+      try {
+        final data = await _datasource.generateFromText(event.text);
+        emit(DevisAiGenerated(data));
+      } on ClientNotFoundAiException catch (e) {
+        emit(DevisAiClientNotFound(e.clientNomDetecte, e.message));
       } catch (e) {
         emit(DevisError(e.toString()));
       }

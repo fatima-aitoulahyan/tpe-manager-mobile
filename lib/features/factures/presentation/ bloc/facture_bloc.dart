@@ -136,7 +136,7 @@ class FactureBloc extends Bloc<FactureEvent, FactureState> {
     });
     on<ArchiveFacture>((event, emit) async {
       try {
-        await _datasource.changeStatus(event.id, 'ARCHIVE');
+        await _datasource.changeStatus(event.id, 'ARCHIVE', motif: event.motif);
         emit(FactureArchived());
       } catch (e) {
         emit(FactureError(e.toString()));

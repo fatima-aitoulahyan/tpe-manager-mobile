@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../shared/utils/currency_format.dart';
+import '../../../../l10n/app_localizations.dart';
+
 
 class FactureCard extends StatelessWidget {
   final dynamic facture;
@@ -24,21 +27,22 @@ class FactureCard extends StatelessWidget {
     }
   }
 
-  String _getStatusLabel(String status) {
+  String _getStatusLabel(String status, AppLocalizations l10n) {
     switch (status.toUpperCase()) {
-      case 'PAYEE':               return 'Payée';
-      case 'PARTIELLEMENT_PAYEE': return 'Partielle';
-      case 'ENVOYE':              return 'Envoyée';
-      case 'EN_ATTENTE':          return 'En attente';
-      case 'ARCHIVE':             return 'Archivée';
+      case 'PAYEE':               return l10n.statusPaid;
+      case 'PARTIELLEMENT_PAYEE': return l10n.statusPartial;
+      case 'ENVOYE':              return l10n.statusSent;
+      case 'EN_ATTENTE':          return l10n.statusPending;
+      case 'ARCHIVE':             return l10n.statusArchived;
       case 'BROUILLON':
-      default:                    return 'Brouillon';
+      default:                    return l10n.statusDraft;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final statusColor = _getStatusColor(facture.statut);
+    final l10n = AppLocalizations.of(context)!;
+    final statusColor = _getStatusColor(facture.statut ?? '');
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -59,7 +63,7 @@ class FactureCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    facture.numero ?? 'N° Inconnu',
+                    facture.numero ?? l10n.unknownNumber,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -69,11 +73,11 @@ class FactureCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: statusColor.withOpacity(0.1),
+                      color: statusColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      _getStatusLabel(facture.statut),
+                      _getStatusLabel(facture.statut ?? 'BROUILLON', l10n),
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
@@ -88,7 +92,7 @@ class FactureCard extends StatelessWidget {
               Text(
                 (facture.clientName != null && facture.clientName.toString().trim().isNotEmpty)
                     ? facture.clientName.toString()
-                    : 'Client inconnu',
+                    : l10n.unknownClient,
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
@@ -120,7 +124,7 @@ class FactureCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '${(facture.montantTtc ?? 0.0).toStringAsFixed(2)} MAD',
+                        (facture.montantTtc as num? ?? 0.0).toDH(),
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,

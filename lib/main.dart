@@ -4,11 +4,15 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'features/auth/data/datasources/auth_remote_datasource.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'routes/app_router.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'l10n/app_localizations.dart';
+import 'core/locale/locale_provider.dart';
+import 'firebase_options.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel',
@@ -26,9 +30,19 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
-  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  print("1");
+  await dotenv.load(fileName: ".env");
+  print("2");
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  print("3");
+
+  final localeProvider = LocaleProvider();
+  await localeProvider.loadSavedLocale();
+  print("4");
 
   await FirebaseMessaging.instance.requestPermission(
     alert: true,
@@ -75,35 +89,47 @@ void main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  runApp(const MyApp());
+  runApp(MyApp(localeProvider: localeProvider));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final LocaleProvider localeProvider;
+  const MyApp({super.key, required this.localeProvider});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AuthBloc(AuthRemoteDataSource())..add(CheckAuthStatus()),
-      child: MaterialApp.router(
-        routerConfig: appRouter,
-        title: 'TPE Manager',
-        debugShowCheckedModeBanner: false,
-
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('fr', ''),
-        ],
-        locale: const Locale('fr', ''),
-
-        theme: ThemeData(
-          primaryColor: const Color(0xFF2563EB),
-          fontFamily: 'Poppins',
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: localeProvider),
+        BlocProvider(
+          create: (_) => AuthBloc(AuthRemoteDataSource())..add(CheckAuthStatus()),
         ),
+      ],
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProv, _) {
+          return MaterialApp.router(
+            routerConfig: appRouter,
+            title: 'TPE Manager',
+            debugShowCheckedModeBanner: false,
+
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('fr'),
+              Locale('ar'),
+            ],
+            locale: localeProv.locale,
+
+            theme: ThemeData(
+              primaryColor: const Color(0xFF2563EB),
+              fontFamily: 'Poppins',
+            ),
+          );
+        },
       ),
     );
   }

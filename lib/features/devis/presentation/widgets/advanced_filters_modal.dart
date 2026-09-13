@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../clients/data/models/client_model.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class AdvancedFiltersModal extends StatefulWidget {
   final ClientModel? initialClient;
@@ -36,6 +37,8 @@ class _AdvancedFiltersModalState extends State<AdvancedFiltersModal> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Padding(
       padding: EdgeInsets.only(
         left: 20,
@@ -62,9 +65,9 @@ class _AdvancedFiltersModalState extends State<AdvancedFiltersModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Filtres',
-                style: TextStyle(
+              Text(
+                l10n.filtersTitle,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: Color(0xFF1E293B),
@@ -81,12 +84,12 @@ class _AdvancedFiltersModalState extends State<AdvancedFiltersModal> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.08),
+                    color: Colors.red.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text(
-                    'Réinitialiser',
-                    style: TextStyle(
+                  child: Text(
+                    l10n.resetFilterButton,
+                    style: const TextStyle(
                       color: Colors.red,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
@@ -97,21 +100,21 @@ class _AdvancedFiltersModalState extends State<AdvancedFiltersModal> {
             ],
           ),
           const SizedBox(height: 4),
-          const Text(
-            'Affiner la liste des devis',
-            style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
+          Text(
+            l10n.refineQuotesSubtitle,
+            style: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
           ),
           const SizedBox(height: 20),
-          _buildFilterLabel('Client'),
+          _buildFilterLabel(l10n.clientFilterLabel),
           DropdownButtonFormField<ClientModel>(
             value: _tempClient,
-            hint: const Text('Tous les clients',
-                style: TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
+            hint: Text(l10n.allClientsOption,
+                style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14)),
             isExpanded: true,
             items: [
-              const DropdownMenuItem(
+              DropdownMenuItem(
                 value: null,
-                child: Text('Tous les clients'),
+                child: Text(l10n.allClientsOption),
               ),
               ...widget.clients.map((c) => DropdownMenuItem(
                 value: c,
@@ -120,7 +123,7 @@ class _AdvancedFiltersModalState extends State<AdvancedFiltersModal> {
                   children: [
                     CircleAvatar(
                       radius: 12,
-                      backgroundColor: const Color(0xFF2563EB).withOpacity(0.1),
+                      backgroundColor: const Color(0xFF2563EB).withValues(alpha: 0.1),
                       child: Text(
                         c.initials,
                         style: const TextStyle(
@@ -144,7 +147,7 @@ class _AdvancedFiltersModalState extends State<AdvancedFiltersModal> {
             decoration: _getInputDecoration(),
           ),
           const SizedBox(height: 20),
-          _buildFilterLabel('Période'),
+          _buildFilterLabel(l10n.periodFilterLabel),
           Row(
             children: [
               Expanded(
@@ -161,7 +164,7 @@ class _AdvancedFiltersModalState extends State<AdvancedFiltersModal> {
                     }
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13), // Padding horizontal légèrement réduit
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
                     decoration: _getDateBoxDecoration(_tempDateDeb != null),
                     child: Row(
                       children: [
@@ -175,7 +178,7 @@ class _AdvancedFiltersModalState extends State<AdvancedFiltersModal> {
                           child: Text(
                             _tempDateDeb != null
                                 ? '${_tempDateDeb!.day.toString().padLeft(2, '0')}/${_tempDateDeb!.month.toString().padLeft(2, '0')}/${_tempDateDeb!.year}'
-                                : 'Date début',
+                                : l10n.startDatePlaceholder,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -230,7 +233,7 @@ class _AdvancedFiltersModalState extends State<AdvancedFiltersModal> {
                           child: Text(
                             _tempDateFin != null
                                 ? '${_tempDateFin!.day.toString().padLeft(2, '0')}/${_tempDateFin!.month.toString().padLeft(2, '0')}/${_tempDateFin!.year}'
-                                : 'Date fin',
+                                : l10n.endDatePlaceholder,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -267,9 +270,9 @@ class _AdvancedFiltersModalState extends State<AdvancedFiltersModal> {
                 elevation: 0,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text(
-                'Appliquer les filtres',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+              child: Text(
+                l10n.applyFiltersButton,
+                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
               ),
             ),
           ),

@@ -5,6 +5,7 @@ import '../bloc/client_bloc.dart';
 import '../bloc/client_event.dart';
 import '../bloc/client_state.dart';
 import '../pages/client_create_page.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ClientDropdownSelector extends StatelessWidget {
   final ClientModel? selectedClient;
@@ -46,6 +47,8 @@ class _ClientDropdownViewState extends State<_ClientDropdownView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocBuilder<ClientBloc, ClientState>(
       builder: (context, state) {
         final clients = state is ClientsLoaded ? state.clients : <ClientModel>[];
@@ -94,7 +97,7 @@ class _ClientDropdownViewState extends State<_ClientDropdownView> {
                       size: 14, color: Colors.grey[500]),
                   const SizedBox(width: 4),
                   Text(
-                    'Nouveau client',
+                    l10n.newClientOption,
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey[500],
@@ -133,6 +136,8 @@ class _ClientField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -190,7 +195,7 @@ class _ClientField extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      'Sélectionner un client',
+                      l10n.selectClientPrompt,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[400],
@@ -230,10 +235,10 @@ class _ClientField extends StatelessWidget {
               color: Colors.white,
               borderRadius: const BorderRadius.vertical(
                   bottom: Radius.circular(10)),
-              border: Border(
-                left: BorderSide(color: const Color(0xFF2563EB), width: 1.5),
-                right: BorderSide(color: const Color(0xFF2563EB), width: 1.5),
-                bottom: BorderSide(color: const Color(0xFF2563EB), width: 1.5),
+              border: const Border(
+                left: BorderSide(color: Color(0xFF2563EB), width: 1.5),
+                right: BorderSide(color: Color(0xFF2563EB), width: 1.5),
+                bottom: BorderSide(color: Color(0xFF2563EB), width: 1.5),
               ),
             ),
             child: clients.isEmpty
@@ -245,7 +250,7 @@ class _ClientField extends StatelessWidget {
                       size: 16, color: Colors.grey[400]),
                   const SizedBox(width: 8),
                   Text(
-                    'Aucun client disponible',
+                    l10n.noClientsAvailable,
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.grey[400],
@@ -301,7 +306,7 @@ class _ClientTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         color: isSelected
-            ? const Color(0xFF2563EB).withOpacity(0.04)
+            ? const Color(0xFF2563EB).withValues(alpha: 0.04)
             : Colors.transparent,
         child: Row(
           children: [
@@ -346,6 +351,7 @@ class _ClientTile extends StatelessWidget {
     );
   }
 }
+
 class _Avatar extends StatelessWidget {
   final ClientModel client;
   final double size;
@@ -358,7 +364,7 @@ class _Avatar extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: const Color(0xFF2563EB).withOpacity(0.08),
+        color: const Color(0xFF2563EB).withValues(alpha: 0.08),
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,

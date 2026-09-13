@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class PasswordDialogWidget extends StatefulWidget {
   final Function(String oldPassword, String newPassword) onConfirm;
@@ -31,11 +32,12 @@ class _PasswordDialogWidgetState extends State<PasswordDialogWidget> {
   }
 
   void _submit() {
+    final l10n = AppLocalizations.of(context)!;
     if (!_formKey.currentState!.validate()) return;
     if (_newPasswordCtrl.text != _confirmCtrl.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Les mots de passe ne correspondent pas'),
+        SnackBar(
+          content: Text(l10n.passwordsDoNotMatchError),
           backgroundColor: Colors.red,
         ),
       );
@@ -47,6 +49,8 @@ class _PasswordDialogWidgetState extends State<PasswordDialogWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -66,58 +70,58 @@ class _PasswordDialogWidgetState extends State<PasswordDialogWidget> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.1),
+                  color: primaryColor.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.lock_outline,
                     color: primaryColor, size: 22),
               ),
               const SizedBox(height: 14),
-              const Text('Modifier le mot de passe',
-                style: TextStyle(
+              Text(l10n.changePasswordTitle,
+                style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                   color: textColor,
                 ),
               ),
               const SizedBox(height: 4),
-              const Text(
-                'Choisissez un mot de passe sécurisé d\'au moins 8 caractères.',
-                style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+              Text(
+                l10n.changePasswordSubtitle,
+                style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
               ),
               const SizedBox(height: 20),
 
               _passwordField(
-                label: 'Ancien mot de passe',
+                label: l10n.oldPasswordLabel,
                 controller: _oldPasswordCtrl,
                 obscure: !_showOld,
                 onToggle: () => setState(() => _showOld = !_showOld),
                 validator: (v) =>
-                v == null || v.isEmpty ? 'Requis' : null,
+                v == null || v.isEmpty ? l10n.requiredFieldError : null,
               ),
               const SizedBox(height: 12),
 
               _passwordField(
-                label: 'Nouveau mot de passe',
+                label: l10n.newPasswordLabel,
                 controller: _newPasswordCtrl,
                 obscure: !_showNew,
                 onToggle: () => setState(() => _showNew = !_showNew),
                 validator: (v) {
-                  if (v == null || v.isEmpty) return 'Requis';
-                  if (v.length < 8) return 'Minimum 8 caractères';
+                  if (v == null || v.isEmpty) return l10n.requiredFieldError;
+                  if (v.length < 8) return l10n.minCharactersError(8);
                   return null;
                 },
               ),
               const SizedBox(height: 12),
 
               _passwordField(
-                label: 'Confirmer le nouveau mot de passe',
+                label: l10n.confirmNewPasswordLabel,
                 controller: _confirmCtrl,
                 obscure: !_showConfirm,
                 onToggle: () =>
                     setState(() => _showConfirm = !_showConfirm),
                 validator: (v) =>
-                v == null || v.isEmpty ? 'Requis' : null,
+                v == null || v.isEmpty ? l10n.requiredFieldError : null,
               ),
               const SizedBox(height: 24),
 
@@ -131,8 +135,8 @@ class _PasswordDialogWidgetState extends State<PasswordDialogWidget> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text('Annuler',
-                      style: TextStyle(
+                    child: Text(l10n.cancelButton,
+                      style: const TextStyle(
                         color: textColor,
                         fontWeight: FontWeight.w600,
                       ),
@@ -150,8 +154,8 @@ class _PasswordDialogWidgetState extends State<PasswordDialogWidget> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text('Valider',
-                      style: TextStyle(
+                    child: Text(l10n.validateButton,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                       ),

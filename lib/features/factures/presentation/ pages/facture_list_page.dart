@@ -5,12 +5,14 @@ import '../ bloc/facture_bloc.dart';
 import '../ bloc/facture_bloc_types.dart';
 import '../ bloc/facture_event.dart';
 import '../ bloc/facture_state.dart';
+
 import '../../../clients/data/datasources/client_remote_datasource.dart';
 import '../../../clients/data/models/client_model.dart';
 import '../../../../shared/widgets/custom_filter_chip.dart';
 import '../../../devis/presentation/widgets/advanced_filters_modal.dart';
 import '../../data/datasources/facture_remote_datasource.dart';
 import '../widgets/facture_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class FactureListPage extends StatelessWidget {
   const FactureListPage({super.key});
@@ -58,13 +60,13 @@ class _FactureListViewState extends State<_FactureListView>
   bool         _isLoadingMore = false;
   List<ClientModel> _clients = [];
 
-  final List<Map<String, String>> _statutFilters = [
-    {'label': 'Tous',        'value': ''},
-    {'label': 'Brouillons',  'value': 'BROUILLON'},
-    {'label': 'Envoyées',    'value': 'ENVOYE'},
-    {'label': 'Payées',      'value': 'PAYEE'},
-    {'label': 'Partielles',  'value': 'PARTIELLEMENT_PAYEE'},
-    {'label': 'Archivées',   'value': 'ARCHIVE'},
+  List<Map<String, String>> _getStatutFilters(AppLocalizations l10n) => [
+    {'label': l10n.filterAll,        'value': ''},
+    {'label': l10n.filterDrafts,     'value': 'BROUILLON'},
+    {'label': l10n.filterSent,       'value': 'ENVOYE'},
+    {'label': l10n.filterPaid,       'value': 'PAYEE'},
+    {'label': l10n.filterPartial,    'value': 'PARTIELLEMENT_PAYEE'},
+    {'label': l10n.filterArchived,   'value': 'ARCHIVE'},
   ];
 
   @override
@@ -179,12 +181,14 @@ class _FactureListViewState extends State<_FactureListView>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text(
-          'Factures',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          l10n.invoicesTitle,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF2563EB),
         foregroundColor: Colors.white,
@@ -221,7 +225,7 @@ class _FactureListViewState extends State<_FactureListView>
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white70,
           indicatorColor: Colors.white,
-          tabs: const [Tab(text: 'Actives'), Tab(text: 'Archivées')],
+          tabs: [Tab(text: l10n.tabActive), Tab(text: l10n.tabArchived)],
         ),
       ),
       body: Column(
@@ -266,8 +270,8 @@ class _FactureListViewState extends State<_FactureListView>
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-                    child: const Text('Tout effacer',
-                        style: TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.w600)),
+                    child: Text(l10n.clearAllFiltersButton,
+                        style: const TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.w600)),
                   ),
                 ],
               ),
@@ -276,8 +280,8 @@ class _FactureListViewState extends State<_FactureListView>
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildActiveTab(),
-                _buildArchivedTab(),
+                _buildActiveTab(l10n),
+                _buildArchivedTab(l10n),
               ],
             ),
           ),
@@ -286,7 +290,8 @@ class _FactureListViewState extends State<_FactureListView>
     );
   }
 
-  Widget _buildActiveTab() {
+  Widget _buildActiveTab(AppLocalizations l10n) {
+    final statutFilters = _getStatutFilters(l10n);
     return Column(
       children: [
         SizedBox(
@@ -294,9 +299,9 @@ class _FactureListViewState extends State<_FactureListView>
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            itemCount: _statutFilters.length,
+            itemCount: statutFilters.length,
             itemBuilder: (_, i) {
-              final f        = _statutFilters[i];
+              final f        = statutFilters[i];
               final selected = _selectedStatut == f['value'];
               return GestureDetector(
                 onTap: () {
@@ -332,21 +337,21 @@ class _FactureListViewState extends State<_FactureListView>
               if (state is FactureDeleted) {
                 _applyFilters(archived: false);
                 ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(content: Text('Facture supprimée')));
+                    .showSnackBar(SnackBar(content: Text(l10n.invoiceDeletedSuccess)));
               }
               if (state is FactureError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.message), backgroundColor: Colors.red));
               }
             },
-            builder: (context, state) => _buildListContent(context, state, archived: false),
+            builder: (context, state) => _buildListContent(context, state, archived: false, l10n: l10n),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildArchivedTab() {
+  Widget _buildArchivedTab(AppLocalizations l10n) {
     return BlocConsumer<ArchivedFactureBloc, FactureState>(
       listener: (context, state) {
         if (state is FactureListPaginatedLoaded || state is FactureError) {
@@ -355,18 +360,18 @@ class _FactureListViewState extends State<_FactureListView>
         if (state is FactureDeleted) {
           _applyFilters(archived: true);
           ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text('Facture supprimée')));
+              .showSnackBar(SnackBar(content: Text(l10n.invoiceDeletedSuccess)));
         }
         if (state is FactureError) {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message), backgroundColor: Colors.red));
         }
       },
-      builder: (context, state) => _buildListContent(context, state, archived: true),
+      builder: (context, state) => _buildListContent(context, state, archived: true, l10n: l10n),
     );
   }
 
-  Widget _buildListContent(BuildContext context, FactureState state, {required bool archived}) {
+  Widget _buildListContent(BuildContext context, FactureState state, {required bool archived, required AppLocalizations l10n}) {
     if (state is FactureLoading) {
       return const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB)));
     }
@@ -385,11 +390,11 @@ class _FactureListViewState extends State<_FactureListView>
               Icon(archived ? Icons.archive_outlined : Icons.receipt_long_outlined,
                   size: 64, color: Colors.grey[300]),
               const SizedBox(height: 12),
-              Text(archived ? 'Aucune facture archivée' : 'Aucune facture trouvée',
+              Text(archived ? l10n.noArchivedInvoicesFound : l10n.noInvoicesFound,
                   style: TextStyle(color: Colors.grey[500])),
               if (_activeFiltersCount > 0) ...[
                 const SizedBox(height: 8),
-                TextButton(onPressed: _resetFilters, child: const Text('Effacer les filtres')),
+                TextButton(onPressed: _resetFilters, child: Text(l10n.clearFiltersButton)),
               ],
             ],
           ),
@@ -414,7 +419,7 @@ class _FactureListViewState extends State<_FactureListView>
               facture: f,
               onTap: () => context.go('/factures/${f.id}'),
               onDelete: f.statut == 'BROUILLON'
-                  ? () => _confirmDelete(context, f.id, archived: archived)
+                  ? () => _confirmDelete(context, f.id, archived: archived, l10n: l10n)
                   : null,
             );
           },
@@ -424,20 +429,20 @@ class _FactureListViewState extends State<_FactureListView>
     return const SizedBox.shrink();
   }
 
-  void _confirmDelete(BuildContext context, int id, {required bool archived}) {
+  void _confirmDelete(BuildContext context, int id, {required bool archived, required AppLocalizations l10n}) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Supprimer la facture'),
-        content: const Text('Êtes-vous sûr de vouloir supprimer cette facture ?'),
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.deleteInvoiceDialogTitle),
+        content: Text(l10n.deleteInvoiceDialogContent),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Annuler')),
+          TextButton(onPressed: () => Navigator.pop(dialogContext), child: Text(l10n.cancelButton)),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext);
               _bloc(archived: archived).add(DeleteFacture(id));
             },
-            child: const Text('Supprimer', style: TextStyle(color: Colors.red)),
+            child: Text(l10n.deleteButton, style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),

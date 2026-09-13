@@ -5,6 +5,7 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 import '../widgets/auth_text_field.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class NewPasswordPage extends StatefulWidget {
   final String email;
@@ -29,11 +30,12 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   static const Color _subtitleColor = Color(0xFF475569);
 
   void _submit() {
+    final l10n = AppLocalizations.of(context)!;
     if (!_formKey.currentState!.validate()) return;
     if (_passwordCtrl.text != _confirmCtrl.text) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Les mots de passe ne correspondent pas'),
+          content: Text(l10n.passwordsDontMatch),
           backgroundColor: Colors.red.shade600,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -55,6 +57,8 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: _bgColor,
       appBar: AppBar(
@@ -67,8 +71,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
           if (state is PasswordResetSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Text(
-                    'Mot de passe réinitialisé avec succès !'),
+                content: Text(l10n.passwordResetSuccess),
                 backgroundColor: Colors.green.shade600,
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
@@ -111,18 +114,18 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                     ),
                     const SizedBox(height: 24),
 
-                    const Text('Nouveau mot de passe',
-                      style: TextStyle(
+                    Text(
+                      l10n.newPasswordTitle,
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: _textColor,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      'Choisissez un mot de passe sécurisé '
-                          'd\'au moins 8 caractères.',
-                      style: TextStyle(
+                    Text(
+                      l10n.newPasswordSubtitle,
+                      style: const TextStyle(
                         fontSize: 14,
                         color: _subtitleColor,
                         height: 1.4,
@@ -131,7 +134,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                     const SizedBox(height: 32),
 
                     AuthTextField(
-                      label:       'Nouveau mot de passe',
+                      label:       l10n.newPasswordLabel,
                       hint:        '••••••••',
                       controller:  _passwordCtrl,
                       obscureText: _obscurePass,
@@ -148,14 +151,14 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                 () => _obscurePass = !_obscurePass),
                       ),
                       validator: (v) {
-                        if (v == null || v.isEmpty) return 'Requis';
-                        if (v.length < 8) return 'Minimum 8 caractères';
+                        if (v == null || v.isEmpty) return l10n.fieldRequired;
+                        if (v.length < 8) return l10n.passwordMinLength;
                         return null;
                       },
                     ),
 
                     AuthTextField(
-                      label:       'Confirmer le mot de passe',
+                      label:       l10n.confirmPasswordLabel,
                       hint:        '••••••••',
                       controller:  _confirmCtrl,
                       obscureText: _obscureConfirm,
@@ -172,7 +175,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                 () => _obscureConfirm = !_obscureConfirm),
                       ),
                       validator: (v) =>
-                      v == null || v.isEmpty ? 'Requis' : null,
+                      v == null || v.isEmpty ? l10n.fieldRequired : null,
                     ),
                     const SizedBox(height: 24),
 
@@ -192,8 +195,9 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                             width: 22, height: 22,
                             child: CircularProgressIndicator(
                                 color: Colors.white, strokeWidth: 2.4))
-                            : const Text('Réinitialiser',
-                          style: TextStyle(
+                            : Text(
+                          l10n.resetButton,
+                          style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,

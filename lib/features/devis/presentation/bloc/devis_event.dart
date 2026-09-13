@@ -79,3 +79,7 @@ class ConvertDevisToFacture extends DevisEvent {
   @override
   List<Object> get props => [devisId];
 }
+class GenerateDevisFromText extends DevisEvent {
+  final String text;
+  GenerateDevisFromText(this.text);
+}

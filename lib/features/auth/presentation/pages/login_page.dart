@@ -5,6 +5,7 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 import '../widgets/auth_text_field.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,12 +20,11 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordCtrl = TextEditingController();
   bool _obscurePass   = true;
 
-  static const Color _primaryColor   = Color(0xFF2563EB);
-  static const Color _primaryDark    = Color(0xFF1E3A8A);
-  static const Color _bgColor        = Color(0xFFF8FAFC);
-  static const Color _textColor      = Color(0xFF0F172A);
-  static const Color _subtitleColor  = Color(0xFF475569);
-  static const Color _borderColor    = Color(0xFFE2E8F0);
+  static const Color _primaryColor  = Color(0xFF2563EB);
+  static const Color _bgColor       = Color(0xFFF8FAFC);
+  static const Color _textColor     = Color(0xFF0F172A);
+  static const Color _subtitleColor = Color(0xFF475569);
+  static const Color _borderColor   = Color(0xFFE2E8F0);
 
   @override
   void dispose() {
@@ -44,6 +44,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: _bgColor,
       body: BlocConsumer<AuthBloc, AuthState>(
@@ -64,7 +66,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               );
-          }        },
+          }
+        },
         builder: (context, state) {
           return SafeArea(
             child: SingleChildScrollView(
@@ -75,9 +78,9 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 28),
-                    const Text(
-                      'Bon retour',
-                      style: TextStyle(
+                    Text(
+                      l10n.loginTitle,
+                      style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                         color: _textColor,
@@ -85,9 +88,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    const Text(
-                      'Connectez-vous pour gérer votre activité',
-                      style: TextStyle(
+                    Text(
+                      l10n.loginSubtitle,
+                      style: const TextStyle(
                         fontSize: 14,
                         color: _subtitleColor,
                         fontWeight: FontWeight.w400,
@@ -96,20 +99,20 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 36),
 
                     AuthTextField(
-                      label:        'Adresse email',
-                      hint:         'vous@exemple.com',
+                      label:        l10n.emailLabel,
+                      hint:         l10n.emailHint,
                       controller:   _emailCtrl,
                       keyboardType: TextInputType.emailAddress,
                       prefixIcon:   Icons.mail_outline_rounded,
                       validator: (v) {
-                        if (v == null || v.isEmpty) return 'Email requis';
-                        if (!v.contains('@')) return 'Email invalide';
+                        if (v == null || v.isEmpty) return l10n.emailRequired;
+                        if (!v.contains('@')) return l10n.emailInvalid;
                         return null;
                       },
                     ),
 
                     AuthTextField(
-                      label:       'Mot de passe',
+                      label:       l10n.passwordLabel,
                       hint:        '••••••••',
                       controller:  _passwordCtrl,
                       obscureText: _obscurePass,
@@ -126,14 +129,14 @@ class _LoginPageState extends State<LoginPage> {
                             setState(() => _obscurePass = !_obscurePass),
                       ),
                       validator: (v) {
-                        if (v == null || v.isEmpty) return 'Mot de passe requis';
-                        if (v.length < 8) return 'Minimum 8 caractères';
+                        if (v == null || v.isEmpty) return l10n.passwordRequired;
+                        if (v.length < 8) return l10n.passwordMinLength;
                         return null;
                       },
                     ),
 
                     Align(
-                      alignment: Alignment.centerRight,
+                      alignment: AlignmentDirectional.centerEnd,
                       child: TextButton(
                         onPressed: () {
                           context.push('/forgot-password');
@@ -142,9 +145,9 @@ class _LoginPageState extends State<LoginPage> {
                           padding: EdgeInsets.zero,
                           minimumSize: const Size(0, 0),
                         ),
-                        child: const Text(
-                          'Mot de passe oublié ?',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.forgotPassword,
+                          style: const TextStyle(
                             color: _primaryColor,
                             fontWeight: FontWeight.w600,
                             fontSize: 13,
@@ -177,9 +180,9 @@ class _LoginPageState extends State<LoginPage> {
                             strokeWidth: 2.4,
                           ),
                         )
-                            : const Text(
-                          'Se connecter',
-                          style: TextStyle(
+                            : Text(
+                          l10n.loginButton,
+                          style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
@@ -191,15 +194,15 @@ class _LoginPageState extends State<LoginPage> {
 
                     Row(
                       children: [
-                        Expanded(child: Divider(color: _borderColor, thickness: 1)),
+                        const Expanded(child: Divider(color: _borderColor, thickness: 1)),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           child: Text(
-                            'ou',
+                            l10n.orDivider,
                             style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
                           ),
                         ),
-                        Expanded(child: Divider(color: _borderColor, thickness: 1)),
+                        const Expanded(child: Divider(color: _borderColor, thickness: 1)),
                       ],
                     ),
                     const SizedBox(height: 24),
@@ -209,14 +212,14 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Pas encore de compte ? ",
-                            style: TextStyle(color: _subtitleColor, fontSize: 13.5),
+                            l10n.noAccount,
+                            style: const TextStyle(color: _subtitleColor, fontSize: 13.5),
                           ),
                           GestureDetector(
                             onTap: () => context.go('/register'),
-                            child: const Text(
-                              'Créer un compte',
-                              style: TextStyle(
+                            child: Text(
+                              l10n.createAccount,
+                              style: const TextStyle(
                                 color: _primaryColor,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13.5,

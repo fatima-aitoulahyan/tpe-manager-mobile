@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/datasources/cashflow_remote_datasource.dart';
 import '../bloc/cashflow_bloc.dart';
 import '../bloc/cashflow_event.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class AddTransactionSheet extends StatefulWidget {
   final String? initialType;
@@ -88,23 +89,6 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
   static const Color _dangerColor = Color(0xFFEF4444);
   static const Color _primaryBlue = Color(0xFF2563EB);
 
-  static const _categoriesRecette = [
-    {'value': 'PAIEMENT_FACTURE', 'label': 'Paiement facture',  'icon': Icons.receipt_long_outlined},
-    {'value': 'ACOMPTE',          'label': 'Acompte',           'icon': Icons.payments_outlined},
-    {'value': 'AUTRE_RECETTE',    'label': 'Autre recette',     'icon': Icons.add_circle_outline},
-  ];
-
-  static const _categoriesDepense = [
-    {'value': 'ACHAT_MATERIEL', 'label': 'Achat matériel',  'icon': Icons.shopping_bag_outlined},
-    {'value': 'LOYER',          'label': 'Loyer',            'icon': Icons.home_outlined},
-    {'value': 'SALAIRE',        'label': 'Salaire',          'icon': Icons.person_outline},
-    {'value': 'TRANSPORT',      'label': 'Transport',        'icon': Icons.directions_car_outlined},
-    {'value': 'AUTRE_DEPENSE',  'label': 'Autre dépense',   'icon': Icons.more_horiz},
-  ];
-
-  List<Map<String, dynamic>> get _categories =>
-      _type == 'RECETTE' ? _categoriesRecette : _categoriesDepense;
-
   bool get _isRecette => _type == 'RECETTE';
 
   @override
@@ -123,10 +107,11 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
   }
 
   void _submit() {
+    final l10n = AppLocalizations.of(context)!;
     if (!_formKey.currentState!.validate()) return;
     if (_categorie == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Veuillez sélectionner une catégorie'), behavior: SnackBarBehavior.floating));
+          SnackBar(content: Text(l10n.selectCategoryError), behavior: SnackBarBehavior.floating));
       return;
     }
     final montant = double.parse(_montantCtrl.text);
@@ -157,7 +142,24 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final activeColor = _isRecette ? _successColor : _dangerColor;
+
+    final categoriesRecette = [
+      {'value': 'PAIEMENT_FACTURE', 'label': l10n.catPaymentInvoice,  'icon': Icons.receipt_long_outlined},
+      {'value': 'ACOMPTE',          'label': l10n.catDeposit,           'icon': Icons.payments_outlined},
+      {'value': 'AUTRE_RECETTE',    'label': l10n.catOtherIncome,     'icon': Icons.add_circle_outline},
+    ];
+
+    final categoriesDepense = [
+      {'value': 'ACHAT_MATERIEL', 'label': l10n.catEquipmentPurchase,  'icon': Icons.shopping_bag_outlined},
+      {'value': 'LOYER',          'label': l10n.catRent,            'icon': Icons.home_outlined},
+      {'value': 'SALAIRE',        'label': l10n.catSalary,          'icon': Icons.person_outline},
+      {'value': 'TRANSPORT',      'label': l10n.catTransport,        'icon': Icons.directions_car_outlined},
+      {'value': 'AUTRE_DEPENSE',  'label': l10n.catOtherExpense,   'icon': Icons.more_horiz},
+    ];
+
+    final currentCategories = _type == 'RECETTE' ? categoriesRecette : categoriesDepense;
 
     return SingleChildScrollView(
       padding: EdgeInsets.only(
@@ -181,27 +183,27 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
             ),
             const SizedBox(height: 20),
             Text(
-              _isFromFacture ? 'Enregistrer un paiement' : 'Nouvelle transaction',
+              _isFromFacture ? l10n.registerPaymentTitle : l10n.newTransactionTitle,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A), letterSpacing: -0.5),
             ),
             const SizedBox(height: 4),
             Text(
-              _isFromFacture ? 'Paiement lié à la facture' : 'Enregistrez un paiement ou une dépense',
+              _isFromFacture ? l10n.paymentLinkedToInvoice : l10n.registerPaymentOrExpenseSubtitle,
               style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w400),
             ),
             const SizedBox(height: 24),
 
             if (!_isFromFacture) ...[
-              _label('Type de transaction'),
+              _label(l10n.transactionTypeLabel),
               Row(children: [
                 Expanded(child: _TypeButton(
-                  label: 'Paiement reçu', icon: Icons.arrow_downward_rounded,
+                  label: l10n.paymentReceivedType, icon: Icons.arrow_downward_rounded,
                   color: _successColor, selected: _isRecette,
                   onTap: () => setState(() { _type = 'RECETTE'; _categorie = null; }),
                 )),
                 const SizedBox(width: 12),
                 Expanded(child: _TypeButton(
-                  label: 'Dépense', icon: Icons.arrow_upward_rounded,
+                  label: l10n.expenseType, icon: Icons.arrow_upward_rounded,
                   color: _dangerColor, selected: !_isRecette,
                   onTap: () => setState(() { _type = 'DEPENSE'; _categorie = null; }),
                 )),
@@ -209,12 +211,12 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
               const SizedBox(height: 20),
             ],
 
-            _label('Catégorie'),
+            _label(l10n.categoryLabel),
             if (_isFromFacture)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 decoration: BoxDecoration(
-                  color: _successColor.withOpacity(0.08),
+                  color: _successColor.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: _successColor, width: 1.5),
                 ),
@@ -223,17 +225,17 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
                   children: [
                     const Icon(Icons.receipt_long_outlined, size: 16, color: _successColor),
                     const SizedBox(width: 8),
-                    const Text('Paiement facture',
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: _successColor)),
+                    Text(l10n.catPaymentInvoice,
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: _successColor)),
                     const SizedBox(width: 8),
-                    Icon(Icons.lock_outline, size: 13, color: _successColor.withOpacity(0.8)),
+                    Icon(Icons.lock_outline, size: 13, color: _successColor.withValues(alpha: 0.8)),
                   ],
                 ),
               )
             else
               Wrap(
                 spacing: 8, runSpacing: 8,
-                children: _categories.map((c) {
+                children: currentCategories.map((c) {
                   final val      = c['value'] as String;
                   final label    = c['label'] as String;
                   final icon     = c['icon']  as IconData;
@@ -244,7 +246,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
                       duration: const Duration(milliseconds: 150),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
-                        color: selected ? activeColor.withOpacity(0.08) : Colors.white,
+                        color: selected ? activeColor.withValues(alpha: 0.08) : Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: selected ? activeColor : const Color(0xFFE2E8F0),
@@ -271,34 +273,32 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
               ),
             const SizedBox(height: 20),
 
-            _label('Montant (MAD)'),
+            _label(l10n.amountDhLabel),
             TextFormField(
               controller: _montantCtrl,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF0F172A)),
               validator: (v) {
-                if (v == null || v.isEmpty) return 'Requis';
-                if (double.tryParse(v) == null) return 'Montant invalide';
-                if (double.parse(v) <= 0) return 'Doit être > 0';
+                if (v == null || v.isEmpty) return l10n.fieldRequiredError;
+                if (double.tryParse(v) == null) return l10n.invalidAmountError;
+                if (double.parse(v) <= 0) return l10n.greaterThanZeroError;
                 return null;
               },
-              decoration: _inputDecoration(hint: 'Ex : 1500.00'),
+              decoration: _inputDecoration(hint: l10n.amountHint),
             ),
             const SizedBox(height: 16),
 
-            // ── Description ──
-            _label('Description'),
+            _label(l10n.descriptionLabel),
             TextFormField(
               controller: _descriptionCtrl,
               style: const TextStyle(color: Color(0xFF0F172A)),
-              validator: (v) => v == null || v.isEmpty ? 'Requis' : null,
+              validator: (v) => v == null || v.isEmpty ? l10n.fieldRequiredError : null,
               decoration: _inputDecoration(
-                  hint: _isRecette ? 'Ex : Paiement facture FAC-2026-001' : 'Ex : Achat fournitures bureau'),
+                  hint: _isRecette ? l10n.descriptionRecetteHint : l10n.descriptionDepenseHint),
             ),
             const SizedBox(height: 16),
 
-            // ── Date ──
-            _label('Date de transaction'),
+            _label(l10n.transactionDateLabel),
             GestureDetector(
               onTap: () async {
                 final picked = await showDatePicker(
@@ -356,7 +356,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      _isRecette ? 'Enregistrer le paiement' : 'Enregistrer la dépense',
+                      _isRecette ? l10n.savePaymentButton : l10n.saveExpenseButton,
                       style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                   ],
@@ -409,7 +409,7 @@ class _TypeButton extends StatelessWidget {
         duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
         decoration: BoxDecoration(
-          color: selected ? color.withOpacity(0.08) : Colors.white,
+          color: selected ? color.withValues(alpha: 0.08) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: selected ? color : const Color(0xFFE2E8F0), width: selected ? 1.5 : 1),
         ),
@@ -419,7 +419,7 @@ class _TypeButton extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
-                color: selected ? color.withOpacity(0.15) : const Color(0xFFF1F5F9),
+                color: selected ? color.withValues(alpha: 0.15) : const Color(0xFFF1F5F9),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, size: 14, color: selected ? color : const Color(0xFF94A3B8)),

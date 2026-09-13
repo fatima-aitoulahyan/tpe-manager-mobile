@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class CustomDatePickerField extends StatelessWidget {
   final DateTime? date;
-  final String hintText;
+  final String? hintText;
   final Function(DateTime) onPick;
 
   const CustomDatePickerField({
     super.key,
     required this.date,
     required this.onPick,
-    this.hintText = 'Sélectionner une date',
+    this.hintText,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final resolvedHint = hintText ?? l10n.selectDateHint;
+
     return GestureDetector(
       onTap: () async {
         final picked = await showDatePicker(
@@ -40,7 +44,7 @@ class CustomDatePickerField extends StatelessWidget {
             Text(
               date != null
                   ? '${date!.day.toString().padLeft(2, '0')}/${date!.month.toString().padLeft(2, '0')}/${date!.year}'
-                  : hintText,
+                  : resolvedHint,
               style: TextStyle(
                 fontSize: 14,
                 color: date != null ? const Color(0xFF0F172A) : const Color(0xFF94A3B8),

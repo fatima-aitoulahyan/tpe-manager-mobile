@@ -1,0 +1,733 @@
+{
+  "@@locale": "fr",
+  "loginTitle": "Bon retour",
+  "loginSubtitle": "Connectez-vous pour gérer votre activité",
+  "emailLabel": "Adresse email",
+  "emailHint": "vous@exemple.com",
+  "emailRequired": "Email requis",
+  "emailInvalid": "Email invalide",
+  "passwordLabel": "Mot de passe",
+  "passwordRequired": "Mot de passe requis",
+  "passwordMinLength": "Minimum 8 caractères",
+  "forgotPassword": "Mot de passe oublié ?",
+  "loginButton": "Se connecter",
+  "orDivider": "ou",
+  "noAccount": "Pas encore de compte ? ",
+  "createAccount": "Créer un compte",
+  "forgotPasswordTitle": "Mot de passe oublié",
+  "forgotPasswordSubtitle": "Entrez votre email. Nous vous enverrons un code pour réinitialiser votre mot de passe.",
+  "sendCode": "Envoyer le code",
+   "newPasswordTitle": "Nouveau mot de passe",
+    "newPasswordSubtitle": "Choisissez un mot de passe sécurisé d'au moins 8 caractères.",
+    "newPasswordLabel": "Nouveau mot de passe",
+    "confirmPasswordLabel": "Confirmer le mot de passe",
+    "fieldRequired": "Requis",
+    "passwordsDontMatch": "Les mots de passe ne correspondent pas",
+    "passwordResetSuccess": "Mot de passe réinitialisé avec succès !",
+    "resetButton": "Réinitialiser",
+    "registerTitle": "Bienvenue",
+      "registerSubtitle": "Renseignez vos informations pour démarrer",
+      "nomLabel": "Nom",
+      "nomHint": "Benali",
+      "prenomLabel": "Prénom",
+      "prenomHint": "Hassan",
+      "phoneLabel": "Téléphone",
+      "phoneHint": "06 12 34 56 78",
+      "iceLabel": "ICE (optionnel)",
+      "iceHint": "001234567000",
+      "requiredField": "Obligatoire",
+      "statutFiscalLabel": "Statut fiscal",
+      "statutFiscalHint": "Sélectionner un statut",
+      "statutAutoEntrepreneur": "Auto-entrepreneur",
+      "statutTpe": "TPE",
+      "statutArtisan": "Artisan",
+      "statutFreelance": "Freelance",
+      "statutCommercant": "Commerçant",
+      "createAccountButton": "Créer mon compte",
+      "accountCreatedSuccess": "Compte créé ! Connectez-vous.",
+      "alreadyHaveAccount": "Déjà un compte ? ",
+      "loginLink": "Se connecter",
+      "verifyCodeTitle": "Vérification du code",
+      "verifyCodeSubtitle": "Entrez le code à 6 chiffres envoyé à ",
+      "resendCode": "Renvoyer le code",
+      "codeResentMessage": "Nouveau code envoyé",
+
+        "registerAppBarTitle": "Créer un compte",
+        "registerWelcomeTitle": "Bienvenue",
+        "registerWelcomeSubtitle": "Renseignez vos informations pour démarrer",
+        "lastNameLabel": "Nom",
+        "lastNameHint": "Benali",
+        "firstNameLabel": "Prénom",
+        "firstNameHint": "Hassan",
+        "emailLabel": "Adresse email",
+        "emailHint": "vous@exemple.com",
+        "phoneLabel": "Téléphone",
+        "phoneHint": "06 12 34 56 78",
+        "iceLabel": "ICE (optionnel)",
+        "iceHint": "001234567000",
+        "fiscalStatusLabel": "Statut fiscal",
+        "fiscalStatusHint": "Sélectionner un statut",
+        "registerButton": "Créer mon compte",
+        "registerSuccessMessage": "Compte créé ! Connectez-vous.",
+        "alreadyHaveAccount": "Déjà un compte ? ",
+        "loginAction": "Se connecter",
+        "statusAutoEntrepreneur": "Auto-entrepreneur",
+        "statusTpe": "TPE",
+        "statusArtisan": "Artisan",
+        "statusFreelance": "Freelance",
+        "statusCommercant": "Commerçant",
+        "emailInvalid": "Email invalide",
+        "verifyCodeTitle": "Vérification du code",
+        "verifyCodeSubtitle": "Entrez le code à 6 chiffres envoyé à ",
+        "codeResentSuccess": "Nouveau code envoyé",
+        "resendCodeAction": "Renvoyer le code",
+        "cashflowAppBarTitle": "Trésorerie",
+          "selectedCount": "{count} sélectionné(s)",
+          "@selectedCount": {
+            "placeholders": {
+              "count": {
+                "type": "int"
+              }
+            }
+          },
+          "multipleDeletionTitle": "Suppression multiple",
+          "multipleDeletionContent": "Voulez-vous vraiment supprimer les {count} transactions sélectionnées ?",
+          "@multipleDeletionContent": {
+            "placeholders": {
+              "count": {
+                "type": "int"
+              }
+            }
+          },
+          "cancelAction": "Annuler",
+          "deleteAction": "Supprimer",
+          "tabAll": "Tout",
+          "tabRecettes": "Recettes",
+          "tabDepenses": "Dépenses",
+          "availableBalanceLabel": "Solde disponible",
+          "noTransactions": "Aucune transaction",
+          "paymentRecordedSuccess": "Paiement enregistré ✓",
+          "expenseRecordedSuccess": "Dépense enregistrée ✓",
+          "selectCategoryError": "Veuillez sélectionner une catégorie",
+            "registerPaymentTitle": "Enregistrer un paiement",
+            "newTransactionTitle": "Nouvelle transaction",
+            "paymentLinkedToInvoice": "Paiement lié à la facture",
+            "registerPaymentOrExpenseSubtitle": "Enregistrez un paiement ou une dépense",
+            "transactionTypeLabel": "Type de transaction",
+            "paymentReceivedType": "Paiement reçu",
+            "expenseType": "Dépense",
+            "categoryLabel": "Catégorie",
+            "catPaymentInvoice": "Paiement facture",
+            "catDeposit": "Acompte",
+            "catOtherIncome": "Autre recette",
+            "catEquipmentPurchase": "Achat matériel",
+            "catRent": "Loyer",
+            "catSalary": "Salaire",
+            "catTransport": "Transport",
+            "catOtherExpense": "Autre dépense",
+            "amountDhLabel": "Montant (DH)",
+            "fieldRequiredError": "Requis",
+            "invalidAmountError": "Montant invalide",
+            "greaterThanZeroError": "Doit être > 0",
+            "amountHint": "Ex : 1500.00",
+            "descriptionLabel": "Description",
+            "descriptionRecetteHint": "Ex : Paiement facture FAC-2026-001",
+            "descriptionDepenseHint": "Ex : Achat fournitures bureau",
+            "transactionDateLabel": "Date de transaction",
+            "savePaymentButton": "Enregistrer le paiement",
+            "saveExpenseButton": "Enregistrer la dépense",
+            "transactionAmountLabel": "Montant de la transaction",
+            "paymentDateLabel": "Date du paiement",
+            "justificationLabel": "Justificatif",
+            "invoiceLoadError": "Impossible de charger le lien de la facture.",
+            "viewInvoiceLabel": "Voir la facture",
+            "editClientTitle": "Modifier le Client",
+            "newClientTitle": "Nouveau Client",
+            "clientCreatedSuccess": "Client créé avec succès !",
+            "clientUpdatedSuccess": "Client mis à jour !",
+            "lastNameLabel": "Nom",
+            "lastNameHint": "Benali",
+            "firstNameLabel": "Prénom",
+            "firstNameHint": "Hassan",
+            "companyNameLabel": "Nom de l'entreprise",
+            "companyNameHint": "Ma Société (optionnel)",
+            "iceLabel": "ICE",
+            "iceHint": "001234567000 (optionnel)",
+            "emailAddressLabel": "Adresse email",
+            "emailAddressHint": "client@email.com",
+            "invalidEmailError": "Adresse email invalide",
+            "phoneLabel": "Téléphone",
+            "phoneHint": "0612345678",
+            "saveChangesButton": "Enregistrer les modifications",
+            "createClientButton": "Créer le client",
+            "clientsTitle": "Clients",
+            "searchClientHint": "Rechercher par nom, entreprise...",
+            "clientDeletedSuccess": "Client supprimé avec succès",
+            "noClientsFound": "Aucun client trouvé",
+            "deleteClientTitle": "Supprimer le client",
+            "deleteClientConfirmation": "Êtes-vous sûr ? Cela peut impacter les devis associés à ce client.",
+            "cancelButton": "Annuler",
+            "deleteButton": "Supprimer",
+            "editOption": "Modifier",
+            "deleteOption": "Supprimer",
+            "newClientOption": "Nouveau client",
+            "selectClientPrompt": "Sélectionner un client",
+            "noClientsAvailable": "Aucun client disponible",
+            "financingTitle": "Financement",
+            "deleteRequestTitle": "Supprimer la demande",
+            "deleteRequestConfirmation": "Êtes-vous sûr de vouloir supprimer cette demande de financement ? Cette action est irréversible.",
+            "cancelButton": "Annuler",
+            "deleteButton": "Supprimer",
+            "eligibilityTitle": "Votre éligibilité",
+            "improveScoreTipsTitle": "Conseils pour améliorer votre score",
+            "myRequestsTitle": "Mes demandes",
+            "requestDeletedSuccess": "Demande supprimée",
+            "noFinancingRequests": "Aucune demande de financement",
+            "newRequestAppBarTitle": "Nouvelle demande",
+            "consentRequiredError": "Vous devez accepter la transmission de vos données.",
+            "requestSubmittedSuccess": "Demande soumise avec succès !",
+            "typeFinancementLabel": "Type de financement",
+            "creditFonctionnementLabel": "Crédit de fonctionnement",
+            "creditInvestissementLabel": "Crédit d'investissement",
+            "avanceFactureLabel": "Avance sur factures",
+            "plafondLabel": "Plafond",
+            "montantDemandeLabel": "Montant demandé (DH)",
+            "requiredField": "Requis",
+            "invalidAmount": "Montant invalide",
+            "mustBeGreaterThanZero": "Doit être > 0",
+            "montantHint": "Ex : 50000",
+            "dureeSouhaiteeLabel": "Durée souhaitée",
+            "monthsLabel": "mois",
+            "objetFinancementLabel": "Objet du financement",
+            "objetHint": "Décrivez l'utilisation prévue des fonds...",
+            "cndpConsentText": "J'accepte la transmission de mes données financières aux partenaires financiers conformément à la réglementation CNDP.",
+            "submitRequestButton": "Soumettre la demande",
+            "requestDetailTitle": "Détail de la demande",
+            "documentTypeLabel": "Type de document",
+            "bankStatementLabel": "Relevé bancaire",
+            "documentAddedSuccess": "Document ajouté avec succès",
+            "overMonthsPrefix": "Sur",
+            "rejectionReasonLabel": "Motif de refus",
+            "justificatifsLabel": "Justificatifs",
+            "addButton": "Ajouter",
+            "noDocumentsAdded": "Aucun document ajouté",
+            "receivedOffersLabel": "Offres reçues",
+            "rateLabel": "Taux",
+            "estimatedMonthlyPaymentLabel": "Mensualité",
+            "unableToOpenPortalError": "Impossible d'ouvrir le portail partenaire",
+            "finalizeOnPortalButton": "Finaliser sur le portail",
+            "monthsLabel": "mois",
+            "reasonLabel": "Motif",
+            "eligibilityHigh": "Éligibilité élevée",
+            "eligibilityMedium": "Éligibilité moyenne",
+            "eligibilityLow": "Éligibilité faible",
+            "eligibilityNotEvaluated": "Non évalué",
+            "statusSoumise": "Soumise",
+            "statusEnAnalyse": "En analyse",
+            "statusFavorable": "Favorable",
+            "statusDefavorable": "Défavorable",
+            "statusIncomplet": "Incomplet",
+            "retryButton": "Réessayer",
+            "dashboardTitle": "Tableau de bord",
+            "monthlyIncomeLabel": "Recettes du mois",
+            "monthlyExpensesLabel": "Dépenses du mois",
+            "flowAnalysisTitle": "Analyse des flux",
+            "flowVolumeLabel": "Volume des flux",
+            "incomeLegendLabel": "Recettes",
+            "expensesLegendLabel": "Dépenses",
+            "currentBalanceLabel": "Solde actuel",
+            "positiveStatusLabel": "Positif",
+            "negativeStatusLabel": "Négatif",
+            "incomeLegendLabel": "Recettes",
+            "expensesLegendLabel": "Dépenses",
+            "quoteActivityTitle": "Activité des devis",
+            "totalQuotesGeneratedLabel": "Total des devis générés",
+            "conversionRateLabel": "Conversion",
+            "quoteStatusAccepted": "Acceptés",
+            "quoteStatusPending": "En attente",
+            "quoteStatusRefused": "Refusés",
+            "quoteStatusExpired": "Expirés",
+            "newQuoteTitle": "Nouveau Devis",
+            "selectClientError": "Veuillez sélectionner un client",
+            "selectValidityDateError": "Veuillez sélectionner une date de validité",
+            "selectAtLeastOneLineError": "Veuillez ajouter au moins une ligne de prestation",
+            "quoteCreatedSuccess": "Devis {numero} créé !",
+            "@quoteCreatedSuccess": {
+                "placeholders": {
+                  "numero": {
+                    "type": "String"
+                  }
+                }
+              },
+            "clientLabel": "Client",
+            "validUntilLabel": "Valable jusqu'au",
+            "selectValidityDateHint": "Sélectionner une date de validité",
+            "vatRateLabel": "Taux de TVA (%)",
+            "vatRateHint": "Ex : 20",
+            "paymentMethodLabel": "Mode de paiement",
+            "addProductsOrServicesLabel": "Ajouter des produits / prestations",
+            "addedItemsLabel": "Éléments ajoutés",
+            "specialConditionsOptionalLabel": "Conditions particulières (optionnel)",
+            "specialConditionsHint": "Ex : Règlement sous 30 jours...",
+            "createQuoteButton": "Créer le devis",
+            "quoteDetailTitle": "Détail du Devis",
+            "quoteConvertedSuccess": "Devis converti en facture avec succès",
+            "generalInformationTitle": "Informations générales",
+            "validUntilPrefix": "Valable jusqu'au",
+            "paymentLabel": "Règlement",
+            "servicesSectionTitle": "Prestations",
+            "financialSummaryTitle": "Résumé financier",
+            "totalHtLabel": "Total HT",
+            "vatLabel": "TVA",
+            "totalTtcLabel": "Total TTC",
+            "linkedInvoiceTitle": "Facture liée",
+            "linkedInvoiceDefault": "Facture liée",
+            "quoteConvertedToInvoiceInfo": "Ce devis a été converti en facture",
+            "viewButton": "Voir",
+            "specialConditionsTitle": "Conditions particulières",
+            "availableActionsTitle": "Actions disponibles",
+            "editQuoteAction": "Modifier le devis",
+            "markAsSentAction": "Marquer comme Envoyé",
+            "deleteAction": "Supprimer",
+            "deleteQuoteTitle": "Supprimer le devis",
+            "remindClientAction": "Relancer le client",
+            "markAsAcceptedAction": "Marquer comme Accepté",
+            "markAsRefusedAction": "Marquer comme Refusé",
+            "resetToDraftAction": "Remettre en Brouillon",
+            "convertToInvoiceAction": "Convertir en facture",
+            "convertToInvoiceDialogTitle": "Convertir en facture",
+            "convertToInvoiceDialogContent": "Un brouillon de facture sera créé à partir de ce devis. Continuer ?",
+            "cancelButton": "Annuler",
+            "convertButton": "Convertir",
+            "duplicateQuoteAction": "Dupliquer le devis",
+            "archiveQuoteAction": "Archiver le devis",
+            "downloadSharePdfAction": "Télécharger / Partager le PDF",
+
+            "editQuoteTitle": "Modifier le Devis",
+            "quoteUpdatedSuccess": "Devis {numero} mis à jour avec succès !",
+            "@quoteUpdatedSuccess": {
+              "placeholders": {
+                "numero": {
+                  "type": "String"
+                }
+              }
+            },
+            "backToDetailButton": "Retour au détail",
+            "editDraftNotice": "Vous modifiez actuellement un brouillon de devis. Les modifications seront enregistrées immédiatement.",
+            "paymentModeCash": "Espèces",
+            "paymentModeBankTransfer": "Virement",
+            "paymentModeMobileMoney": "Mobile Money",
+            "saveChangesButton": "Enregistrer les modifications",
+
+            "quotesListTitle": "Devis",
+            "activeTabLabel": "Actifs",
+            "archivedTabLabel": "Archivés",
+            "clearAllFiltersButton": "Tout effacer",
+            "filterAll": "Tous",
+            "filterDrafts": "Brouillons",
+            "filterSent": "Envoyés",
+            "filterAccepted": "Acceptés",
+            "filterRefused": "Refusés",
+            "filterExpired": "Expirés",
+            "quoteDeletedSuccessMessage": "Devis supprimé",
+            "quoteDuplicatedSuccessMessage": "Devis dupliqué",
+            "noArchivedQuotesFound": "Aucun devis archivé",
+            "noQuotesFound": "Aucun devis trouvé",
+            "clearFiltersButton": "Effacer les filtres",
+            "deleteQuoteDialogTitle": "Supprimer le devis",
+            "deleteQuoteDialogContent": "Êtes-vous sûr de vouloir supprimer ce devis ?",
+
+            "filtersTitle": "Filtres",
+            "resetFilterButton": "Réinitialiser",
+            "refineQuotesSubtitle": "Affiner la liste des devis",
+            "clientFilterLabel": "Client",
+            "allClientsOption": "Tous les clients",
+            "periodFilterLabel": "Période",
+            "startDatePlaceholder": "Date début",
+            "endDatePlaceholder": "Date fin",
+            "applyFiltersButton": "Appliquer les filtres",
+
+            "validUntilCardLabel": "Valide : {date}",
+            "@validUntilCardLabel": {
+              "placeholders": {
+                "date": {
+                  "type": "String"
+                }
+              }
+            },
+
+            "statusDraft": "Brouillon",
+            "statusSent": "Envoyé",
+            "statusAccepted": "Accepté",
+            "statusRefused": "Refusé",
+            "statusExpired": "Expiré",
+            "statusArchived": "Archivé",
+
+            "newInvoiceTitle": "Nouvelle Facture",
+            "invoiceCreatedDraftSuccess": "Facture {numero} créée en brouillon !",
+            "@invoiceCreatedDraftSuccess": {
+              "placeholders": {
+                "numero": {
+                  "type": "String"
+                }
+              }
+            },
+            "selectDueDateError": "Veuillez sélectionner une date d'échéance",
+            "dueDateLabel": "Date d'échéance",
+            "selectDueDateHint": "Sélectionner la date limite de règlement",
+            "paymentMethodRequiredLabel": "Mode de règlement requis",
+            "addedBillingItemsLabel": "Éléments de facturation ajoutés",
+            "paymentConditionsLegalMentionsLabel": "Conditions de règlement ou mentions légales",
+            "paymentConditionsHint": "Ex : Pénalités de retard de 10% après échéance...",
+            "generateInvoiceButton": "Générer la facture",
+
+            "invoicePaymentDescription": "Paiement facture {numero}",
+            "@invoicePaymentDescription": {
+              "placeholders": {
+                "numero": {
+                  "type": "String"
+                }
+              }
+            },
+            "invoiceDetailTitle": "Détail de la Facture",
+            "invoiceUpdatedSuccess": "Facture mise à jour",
+            "invoiceArchivedSuccess": "Facture annulée",
+            "generalInfoSection": "Informations générales",
+            "dueDateRowLabel": "Date d'échéance : {date}",
+            "@dueDateRowLabel": {
+              "placeholders": {
+                "date": {
+                  "type": "String"
+                }
+              }
+            },
+            "paymentMethodRowLabel": "Mode de règlement : {method}",
+            "@paymentMethodRowLabel": {
+              "placeholders": {
+                "method": {
+                  "type": "String"
+                }
+              }
+            },
+            "prestationsSection": "Prestations",
+            "financialSummarySection": "Résumé financier",
+            "totalHtLabel": "Total HT",
+            "vatLabel": "TVA ({rate}%)",
+            "@vatLabel": {
+              "placeholders": {
+                "rate": {
+                  "type": "num"
+                }
+              }
+            },
+            "amountPaidLabel": "Montant Payé",
+            "remainingDueLabel": "Reste à payer",
+            "totalTtcLabel": "Total TTC",
+            "issuedFromQuoteLabel": "Issu du devis {numero}",
+            "@issuedFromQuoteLabel": {
+              "placeholders": {
+                "numero": {
+                  "type": "String"
+                }
+              }
+            },
+            "availableActionsSection": "Actions disponibles",
+            "editInvoiceButton": "Modifier la facture",
+            "validateAndSendButton": "Valider et Envoyer",
+            "deleteButton": "Supprimer",
+            "deleteInvoiceDialogTitle": "Supprimer la facture",
+            "registerPaymentButton": "Enregistrer un paiement",
+            "remindForUnpaidButton": "Relancer pour impayé",
+            "toBePaidBeforeDate": "à régler avant le {date}",
+            "@toBePaidBeforeDate": {
+              "placeholders": {
+                "date": {
+                  "type": "String"
+                }
+              }
+            },
+            "asSoonAsPossible": "dès que possible",
+            "archiveInvoiceButton": "Annuler la facture",
+            "archiveInvoiceDialogTitle": "Annuler la facture",
+            "archiveInvoiceDialogContent": "Cette facture sera déplacée dans les factures annulées. Continuer ?",
+            "cancelButton": "Annuler",
+            "archiveButton": "Continuer",
+            "downloadOrSharePdfButton": "Télécharger / Partager le PDF",
+
+            "invoicesTitle": "Factures",
+            "tabActive": "Actives",
+            "tabArchived": "Annulées",
+            "clearAllFiltersButton": "Tout effacer",
+            "filterAll": "Tous",
+            "filterDrafts": "Brouillons",
+            "filterSent": "Envoyées",
+            "filterPaid": "Payées",
+            "filterPartial": "Partielles",
+            "filterArchived": "Archivées",
+            "invoiceDeletedSuccess": "Facture supprimée",
+            "noArchivedInvoicesFound": "Aucune facture archivée",
+            "noInvoicesFound": "Aucune facture trouvée",
+            "clearFiltersButton": "Effacer les filtres",
+            "deleteInvoiceDialogContent": "Êtes-vous sûr de vouloir supprimer cette facture ?",
+
+            "statusPaid": "Payée",
+            "statusPartial": "Partielle",
+            "statusSent": "Envoyée",
+            "statusPending": "En attente",
+            "statusArchived": "Annulée",
+            "statusDraft": "Brouillon",
+            "unknownNumber": "N° Inconnu",
+            "unknownClient": "Client inconnu",
+
+            "notificationsTitle": "Notifications",
+            "selectedCountTitle": "{count} sélectionné(s)",
+            "@selectedCountTitle": {
+              "placeholders": {
+                "count": {
+                  "type": "int"
+                }
+              }
+            },
+            "deleteNotificationsDialogTitle": "Supprimer les notifications",
+            "deleteNotificationsDialogContent": "Voulez-vous vraiment supprimer les {count} notifications sélectionnées ?",
+            "@deleteNotificationsDialogContent": {
+              "placeholders": {
+                "count": {
+                  "type": "int"
+                }
+              }
+            },
+            "markAllAsReadButton": "Tout marquer comme lu ({count})",
+            "@markAllAsReadButton": {
+              "placeholders": {
+                "count": {
+                  "type": "int"
+                }
+              }
+            },
+            "emptyNotificationsTitle": "Votre historique est propre",
+            "emptyNotificationsSubtitle": "Nous vous préviendrons dès qu'une facture ou un devis nécessitera votre attention.",
+            "closeButton": "Fermer",
+            "retryButton": "Réessayer",
+
+            "timeJustNow": "À l'instant",
+            "timeMinutesAgo": "Il y a {minutes} min",
+            "@timeMinutesAgo": {
+              "placeholders": {
+                "minutes": {
+                  "type": "int"
+                }
+              }
+            },
+            "timeHoursAgo": "Il y a {hours} h",
+            "@timeHoursAgo": {
+              "placeholders": {
+                "hours": {
+                  "type": "int"
+                }
+              }
+            },
+            "timeDaysAgo": "Il y a {days} j",
+            "@timeDaysAgo": {
+              "placeholders": {
+                "days": {
+                  "type": "int"
+                }
+              }
+            },
+
+            "fillAllEmailFieldsError": "Veuillez remplir tous les champs email",
+            "emailConfigSavedSuccess": "Configuration email enregistrée !",
+            "errorPrefix": "Erreur : {error}",
+            "@errorPrefix": {
+              "placeholders": {
+                "error": {
+                  "type": "String"
+                }
+              }
+            },
+            "profileUpdatedSuccess": "Coordonnées mises à jour !",
+            "passwordChangedSuccess": "Mot de passe changé avec succès !",
+            "settingsTitle": "Paramètres",
+            "editCoordinatesHeader": "Modifier mes coordonnées",
+            "firstNameLabel": "Prénom",
+            "lastNameLabel": "Nom",
+            "emailAddressLabel": "Adresse Email",
+            "phoneLabel": "Téléphone",
+            "iceLabel": "ICE (Maroc)",
+            "fiscalStatusLabel": "Statut Fiscal",
+            "statusAutoEntrepreneur": "Auto-entrepreneur",
+            "statusTpe": "TPE",
+            "statusArtisan": "Artisan",
+            "statusFreelance": "Freelance",
+            "statusCommercant": "Commerçant",
+            "saveProfileButton": "Enregistrer le profil",
+            "smtpConfigHeader": "Configuration SMTP Email",
+            "smtpGoogleInfoHint": "Validation 2 étapes Google requise. Utilisez un \"Mot de passe d'application\" généré sur votre compte Google.",
+            "profGmailLabel": "Adresse Gmail Professionnelle",
+            "googleAppPasswordLabel": "Mot de passe d'application Google",
+            "linkingButton": "Liaison...",
+            "linkGmailButton": "Lier mon compte Gmail",
+            "autoRemindersHeader": "Rappels automatiques",
+            "unpaidInvoiceReminderTitle": "Rappel facture impayée",
+            "unpaidInvoiceReminderSubtitle": "Vous serez averti des factures en retard",
+            "reminderAfterLabel": "Envoyer un rappel après",
+            "expiringQuoteReminderTitle": "Rappel devis expirant",
+            "expiringQuoteReminderSubtitle": "Alerte avant expiration du devis",
+            "warnBeforeExpirationLabel": "M'avertir avant expiration",
+            "taxDeclarationReminderTitle": "Rappel déclaration fiscale",
+            "taxDeclarationReminderSubtitle": "Rappel trimestriel auto-entrepreneur / TPE",
+            "cnssReminderTitle": "Rappel cotisation CNSS",
+            "cnssReminderSubtitle": "Rappel mensuel de paiement de cotisations",
+            "creditRequestNotifTitle": "Notifications demande de crédit",
+            "creditRequestNotifSubtitle": "Changement de statut de dossier de crédit",
+            "receptionModesHeader": "Modes de réception",
+            "inAppNotifTitle": "Notification dans l'application",
+            "pushNotifTitle": "Notification Push",
+            "smsNotifTitle": "SMS",
+            "smsNotifSubtitle": "Frais opérateur possibles",
+            "noPreferencesFound": "Aucune préférence trouvée.",
+            "savingLabel": "Sauvegarde...",
+            "securityButton": "Sécurité",
+            "logoutButton": "Déconnexion",
+            "fieldRequiredError": "Ce champ est obligatoire",
+
+            "passwordsDoNotMatchError": "Les mots de passe ne correspondent pas",
+            "changePasswordTitle": "Modifier le mot de passe",
+            "changePasswordSubtitle": "Choisissez un mot de passe sécurisé d'au moins 8 caractères.",
+            "oldPasswordLabel": "Ancien mot de passe",
+            "newPasswordLabel": "Nouveau mot de passe",
+            "confirmNewPasswordLabel": "Confirmer le nouveau mot de passe",
+            "requiredFieldError": "Requis",
+            "minCharactersError": "Minimum {count} caractères",
+            "@minCharactersError": {
+              "placeholders": {
+                "count": {
+                  "type": "int"
+                }
+              }
+            },
+            "cancelButton": "Annuler",
+            "validateButton": "Valider",
+
+            "deleteConfirmationMessage": "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.",
+            "deleteButton": "Supprimer",
+            "openPdfOption": "Ouvrir le PDF",
+            "sharePdfOption": "Partager (WhatsApp, Email...)",
+            "documentSubject": "Document {numero}",
+            "@documentSubject": {
+              "placeholders": {
+                "numero": {
+                  "type": "String"
+                }
+              }
+            },
+            "documentShareText": "Veuillez trouver ci-joint le document {numero}.",
+            "@documentShareText": {
+              "placeholders": {
+                "numero": {
+                  "type": "String"
+                }
+              }
+            },
+            "remindClientTitle": "Relancer le client",
+            "sendViaWhatsApp": "Envoyer via WhatsApp",
+            "noPhoneNumber": "Aucun numéro",
+            "whatsappReminderMessage": "Bonjour {clientNom},\n\nNous espérons que vous allez bien.\n\nNous vous rappelons que le document *{docNumero}* d'un montant de *{montant}* ({dateInfo}) est toujours en attente.\n\nMerci de bien vouloir le consulter dès que possible.\n\nCordialement,\nTPE Manager",
+            "@whatsappReminderMessage": {
+              "placeholders": {
+                "clientNom": { "type": "String" },
+                "docNumero": { "type": "String" },
+                "montant": { "type": "String" },
+                "dateInfo": { "type": "String" }
+              }
+            },
+            "sendViaEmail": "Envoyer par Email",
+            "noEmailAddress": "Aucune adresse",
+            "emailReminderSubject": "Rappel - {docNumero}",
+            "@emailReminderSubject": {
+              "placeholders": {
+                "docNumero": { "type": "String" }
+              }
+            },
+            "emailReminderBody": "Bonjour {clientNom},\n\nNous espérons que vous allez bien.\n\nNous vous rappelons que le document {docNumero} d'un montant de {montant} ({dateInfo}) est toujours en attente.\n\nNous vous remercions de bien vouloir effectuer les démarches nécessaires.\n\nCordialement,\nL'équipe TPE Manager",
+            "@emailReminderBody": {
+              "placeholders": {
+                "clientNom": { "type": "String" },
+                "docNumero": { "type": "String" },
+                "montant": { "type": "String" },
+                "dateInfo": { "type": "String" }
+              }
+            },
+
+            "navHome": "Accueil",
+            "navDevis": "Devis",
+            "navFactures": "Factures",
+            "navTresorerie": "Trésorerie",
+            "navCredit": "Crédit",
+
+            "selectDateHint": "Sélectionner une date",
+
+            "totalHtLabel": "Total HT",
+            "totalTtcLabel": "Total TTC",
+
+            "addLineTitle": "Ajouter une ligne",
+            "designationLabel": "Désignation / Description",
+            "unitPriceLabel": "Prix unitaire (DH)",
+            "quantityLabel": "Quantité",
+            "totalLineDisplay": "Total : {total} DH",
+            "@totalLineDisplay": {
+              "placeholders": {
+                "total": {
+                  "type": "String"
+                }
+              }
+            },
+            "addToDocumentButton": "Ajouter au document",
+
+            "paymentVirementLabel": "Virement",
+            "paymentVirementSub": "Bancaire",
+            "paymentEspecesLabel": "Espèces",
+            "paymentEspecesSub": "En main propre",
+            "paymentMobileLabel": "Mobile",
+            "paymentMobileSub": "Money",
+            "languageLabel": "Langue",
+
+            "conseilVolumeEleve": "Augmentez votre volume de facturation pour améliorer votre score.",
+            "conseilVolumeFaible": "Votre volume de facturation est encore faible.",
+            "conseilVolumeDebut": "Commencez à facturer régulièrement pour construire votre historique.",
+            "conseilAncienneteRecente": "Votre compte est encore récent. L'ancienneté améliore l'éligibilité.",
+            "conseilAncienneteSuite": "Continuez à utiliser l'application pour augmenter votre ancienneté.",
+            "conseilFacturesAttente": "Régularisez vos factures en attente pour améliorer votre score.",
+            "conseilFacturesImpayees": "Trop de factures impayées. Régularisez-les en priorité.",
+            "conseilFacturesAbsentes": "Émettez et encaissez des factures pour évaluer votre régularité.",
+            "conseilProfilFiscal": "Complétez votre profil fiscal pour améliorer votre éligibilité.",
+            "searchTransactionsHint": "Rechercher une transaction...",
+            "noSearchResults": "Aucun résultat trouvé",
+
+            "archiveMotifLabel": "Motif d'annulation",
+            "archiveMotifHint": "Expliquez pourquoi cette facture est annulée..."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

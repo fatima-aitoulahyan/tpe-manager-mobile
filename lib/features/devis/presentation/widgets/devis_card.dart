@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../shared/utils/currency_format.dart';
 import '../../data/models/devis_model.dart';
 import 'status_badge.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class DevisCard extends StatelessWidget {
   final DevisListModel devis;
@@ -16,6 +18,8 @@ class DevisCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -27,7 +31,7 @@ class DevisCard extends StatelessWidget {
           border: Border.all(color: const Color(0xFFE2E8F0)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.02),
+              color: Colors.black.withValues(alpha: 0.02),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -62,7 +66,7 @@ class DevisCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${devis.montantTtc.toStringAsFixed(2)} MAD',
+                  '${devis.montantTtc.toDH()} ',
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
@@ -79,7 +83,7 @@ class DevisCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Valide : ${devis.dateValidite}',
+                      l10n.validUntilCardLabel(devis.dateValidite),
                       style: const TextStyle(
                         fontSize: 12,
                         color: Color(0xFF94A3B8),

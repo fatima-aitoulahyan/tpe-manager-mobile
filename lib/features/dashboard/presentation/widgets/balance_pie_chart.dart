@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../shared/utils/currency_format.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class BalancePieChart extends StatelessWidget {
   final double recettes;
@@ -12,6 +14,7 @@ class BalancePieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final total = recettes + depenses;
     final rPct = total > 0 ? (recettes / total * 100).toStringAsFixed(1) : '0.0';
     final dPct = total > 0 ? (depenses / total * 100).toStringAsFixed(1) : '0.0';
@@ -29,9 +32,9 @@ class BalancePieChart extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _PieLegendRow(color: const Color(0xFF10B981), label: 'Recettes', pct: rPct, value: recettes),
+              _PieLegendRow(color: const Color(0xFF10B981), label: l10n.incomeLegendLabel, pct: rPct, value: recettes),
               const SizedBox(height: 10),
-              _PieLegendRow(color: const Color(0xFFEF4444), label: 'Dépenses', pct: dPct, value: depenses),
+              _PieLegendRow(color: const Color(0xFFEF4444), label: l10n.expensesLegendLabel, pct: dPct, value: depenses),
             ],
           ),
         ),
@@ -89,7 +92,7 @@ class _PieLegendRow extends StatelessWidget {
                 style: const TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
               ),
               Text(
-                '${value.toStringAsFixed(2)} MAD',
+                '${value.toDH()} ',
                 style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
               ),
             ],

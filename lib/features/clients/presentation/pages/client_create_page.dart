@@ -4,24 +4,29 @@ import '../../data/models/client_model.dart';
 import '../bloc/client_bloc.dart';
 import '../bloc/client_event.dart';
 import '../bloc/client_state.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class ClientCreatePage extends StatelessWidget {
   final ClientModel? client;
+  // Préremplit le nom en mode CRÉATION uniquement (ex: nom détecté par l'IA
+  // pour un client qui n'existe pas encore). Ignoré si [client] est fourni.
+  final String? initialNom;
 
-  const ClientCreatePage({super.key, this.client});
+  const ClientCreatePage({super.key, this.client, this.initialNom});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ClientBloc(),
-      child: _ClientCreateView(client: client),
+      child: _ClientCreateView(client: client, initialNom: initialNom),
     );
   }
 }
 
 class _ClientCreateView extends StatefulWidget {
   final ClientModel? client;
-  const _ClientCreateView({this.client});
+  final String? initialNom;
+  const _ClientCreateView({this.client, this.initialNom});
 
   @override
   State<_ClientCreateView> createState() => _ClientCreateViewState();
@@ -30,7 +35,7 @@ class _ClientCreateView extends StatefulWidget {
 class _ClientCreateViewState extends State<_ClientCreateView> {
   final _formKey         = GlobalKey<FormState>();
   late final _nomCtrl    = TextEditingController(
-      text: widget.client?.nom);
+      text: widget.client?.nom ?? widget.initialNom);
   late final _prenomCtrl = TextEditingController(
       text: widget.client?.prenom);
   late final _entrepriseCtrl = TextEditingController(
@@ -65,10 +70,12 @@ class _ClientCreateViewState extends State<_ClientCreateView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: Text(_isEditing ? 'Modifier le Client' : 'Nouveau Client',
+        title: Text(_isEditing ? l10n.editClientTitle : l10n.newClientTitle,
             style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF2563EB),
         foregroundColor: Colors.white,
@@ -79,12 +86,12 @@ class _ClientCreateViewState extends State<_ClientCreateView> {
           if (state is ClientCreated) {
             Navigator.pop(context, state.client);
             ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Client créé avec succès !')));
+                SnackBar(content: Text(l10n.clientCreatedSuccess)));
           }
           if (state is ClientUpdated) {
             Navigator.pop(context, state.client);
             ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Client mis à jour !')));
+                SnackBar(content: Text(l10n.clientUpdatedSuccess)));
           }
           if (state is ClientError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -104,7 +111,7 @@ class _ClientCreateViewState extends State<_ClientCreateView> {
                     child: CircleAvatar(
                       radius: 36,
                       backgroundColor:
-                      const Color(0xFF2563EB).withOpacity(0.1),
+                      const Color(0xFF2563EB).withValues(alpha: 0.1),
                       child: Text(
                         '${_nomCtrl.text.isNotEmpty ? _nomCtrl.text[0] : '?'}'
                             '${_prenomCtrl.text.isNotEmpty ? _prenomCtrl.text[0] : ''}',
@@ -120,53 +127,52 @@ class _ClientCreateViewState extends State<_ClientCreateView> {
 
                   Row(children: [
                     Expanded(child: _Field(
-                      label: 'Nom',
-                      hint: 'Benali',
+                      label: l10n.lastNameLabel,
+                      hint: l10n.lastNameHint,
                       controller: _nomCtrl,
                       onChanged: (_) => setState(() {}),
-                      validator: (v) => v!.trim().isEmpty ? 'Obligatoire' : null,
+                      validator: (v) => v!.trim().isEmpty ? l10n.fieldRequiredError : null,
                     )),
                     const SizedBox(width: 12),
                     Expanded(child: _Field(
-                      label: 'Prénom',
-                      hint: 'Hassan',
+                      label: l10n.firstNameLabel,
+                      hint: l10n.firstNameHint,
                       controller: _prenomCtrl,
                       onChanged: (_) => setState(() {}),
                     )),
                   ]),
 
                   _Field(
-                    label: 'Nom de l\'entreprise',
-                    hint: 'Ma Société (optionnel)',
+                    label: l10n.companyNameLabel,
+                    hint: l10n.companyNameHint,
                     controller: _entrepriseCtrl,
                     icon: Icons.business_outlined,
                   ),
 
                   _Field(
-                    label: 'ICE',
-                    hint: '001234567000 (optionnel)',
+                    label: l10n.iceLabel,
+                    hint: l10n.iceHint,
                     controller: _iceCtrl,
                     icon: Icons.badge_outlined,
                   ),
 
-
                   _Field(
-                    label: 'Adresse email',
-                    hint: 'client@email.com',
+                    label: l10n.emailAddressLabel,
+                    hint: l10n.emailAddressHint,
                     controller: _emailCtrl,
                     icon: Icons.email_outlined,
                     keyboardType: TextInputType.emailAddress,
                     validator: (v) {
                       if (v!.isNotEmpty && !v.contains('@')) {
-                        return 'Adresse email invalide';
+                        return l10n.invalidEmailError;
                       }
                       return null;
                     },
                   ),
 
                   _Field(
-                    label: 'Téléphone',
-                    hint: '0612345678',
+                    label: l10n.phoneLabel,
+                    hint: l10n.phoneHint,
                     controller: _telCtrl,
                     icon: Icons.phone_outlined,
                     keyboardType: TextInputType.phone,
@@ -190,7 +196,7 @@ class _ClientCreateViewState extends State<_ClientCreateView> {
                           ? const CircularProgressIndicator(
                           color: Colors.white)
                           : Text(
-                        _isEditing ? 'Enregistrer les modifications' : 'Créer le client',
+                        _isEditing ? l10n.saveChangesButton : l10n.createClientButton,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

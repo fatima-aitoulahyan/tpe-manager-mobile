@@ -105,4 +105,30 @@ class DevisRemoteDataSource {
     final res = await _dio.post('/devis/$devisId/convert_to_facture/');
     return res.data;
   }
+
+  Future<Map<String, dynamic>> generateFromText(String text) async {
+    try {
+      final res = await _dio.post(
+        '/devis/generate-from-text/',
+        data: {'text': text},
+      );
+      return res.data as Map<String, dynamic>;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404 && e.response?.data is Map) {
+        final data = e.response!.data as Map;
+        if (data.containsKey('client_nom_detecte')) {
+          throw ClientNotFoundAiException(
+            data['error'] ?? "Client introuvable",
+            data['client_nom_detecte'] as String,
+          );
+        }
+      }
+      rethrow;
+    }
+  }
+}
+class ClientNotFoundAiException implements Exception {
+  final String message;
+  final String clientNomDetecte;
+  ClientNotFoundAiException(this.message, this.clientNomDetecte);
 }

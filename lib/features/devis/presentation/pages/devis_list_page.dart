@@ -9,6 +9,7 @@ import '../bloc/devis_event.dart';
 import '../bloc/devis_state.dart';
 import '../widgets/advanced_filters_modal.dart';
 import '../widgets/devis_card.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class DevisListPage extends StatelessWidget {
   const DevisListPage({super.key});
@@ -47,13 +48,13 @@ class _DevisListViewState extends State<_DevisListView>
 
   List<ClientModel> _clients = [];
 
-  final List<Map<String, String>> _statutFilters = [
-    {'label': 'Tous',       'value': ''},
-    {'label': 'Brouillons', 'value': 'BROUILLON'},
-    {'label': 'Envoyés',    'value': 'ENVOYE'},
-    {'label': 'Acceptés',   'value': 'ACCEPTE'},
-    {'label': 'Refusés',    'value': 'REFUSE'},
-    {'label': 'Expirés',    'value': 'EXPIRE'},
+  List<Map<String, String>> _getStatutFilters(AppLocalizations l10n) => [
+    {'label': l10n.filterAll,       'value': ''},
+    {'label': l10n.filterDrafts,    'value': 'BROUILLON'},
+    {'label': l10n.filterSent,      'value': 'ENVOYE'},
+    {'label': l10n.filterAccepted,  'value': 'ACCEPTE'},
+    {'label': l10n.filterRefused,   'value': 'REFUSE'},
+    {'label': l10n.filterExpired,   'value': 'EXPIRE'},
   ];
 
   @override
@@ -94,7 +95,7 @@ class _DevisListViewState extends State<_DevisListView>
 
   void _applyFilters({bool archived = false}) {
     context.read<DevisBloc>().add(LoadDevisListPaginated(
-      statut:    archived ? 'ARCHIVE' : (_selectedStatut?.isNotEmpty == true ? _selectedStatut : 'ACTIVE'), // ← correction
+      statut:    archived ? 'ARCHIVE' : (_selectedStatut?.isNotEmpty == true ? _selectedStatut : null),
       clientId:  _selectedClient?.id,
       dateDebut: _dateDebut?.toIso8601String().split('T')[0],
       dateFin:   _dateFin?.toIso8601String().split('T')[0],
@@ -106,7 +107,7 @@ class _DevisListViewState extends State<_DevisListView>
     if (state is DevisListPaginatedLoaded && state.hasMore && !_isLoadingMore) {
       setState(() => _isLoadingMore = true);
       context.read<DevisBloc>().add(LoadDevisListPaginated(
-        statut:    archived ? 'ARCHIVE' : (_selectedStatut?.isNotEmpty == true ? _selectedStatut : 'ACTIVE'), // ← correction
+        statut:    archived ? 'ARCHIVE' : (_selectedStatut?.isNotEmpty == true ? _selectedStatut : null),
         clientId:  _selectedClient?.id,
         dateDebut: _dateDebut?.toIso8601String().split('T')[0],
         dateFin:   _dateFin?.toIso8601String().split('T')[0],
@@ -140,6 +141,7 @@ class _DevisListViewState extends State<_DevisListView>
     _scrollControllerArchived.dispose();
     super.dispose();
   }
+
   void _showAdvancedFilters() {
     showModalBottomSheet(
       context: context,
@@ -167,12 +169,14 @@ class _DevisListViewState extends State<_DevisListView>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text(
-          'Devis',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          l10n.quotesListTitle,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF2563EB),
         foregroundColor: Colors.white,
@@ -217,12 +221,13 @@ class _DevisListViewState extends State<_DevisListView>
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white70,
           indicatorColor: Colors.white,
-          tabs: const [
-            Tab(text: 'Actifs'),
-            Tab(text: 'Archivés'),
+          tabs: [
+            Tab(text: l10n.activeTabLabel),
+            Tab(text: l10n.archivedTabLabel),
           ],
         ),
-      ),      body: Column(
+      ),
+      body: Column(
         children: [
           if (_selectedClient != null || _dateDebut != null || _dateFin != null)
             Container(
@@ -269,9 +274,9 @@ class _DevisListViewState extends State<_DevisListView>
                       minimumSize: Size.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    child: const Text(
-                      'Tout effacer',
-                      style: TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.w600),
+                    child: Text(
+                      l10n.clearAllFiltersButton,
+                      style: const TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ],
@@ -282,7 +287,7 @@ class _DevisListViewState extends State<_DevisListView>
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildActiveTab(),
+                _buildActiveTab(l10n),
                 _buildArchivedTab(),
               ],
             ),
@@ -292,7 +297,8 @@ class _DevisListViewState extends State<_DevisListView>
     );
   }
 
-  Widget _buildActiveTab() {
+  Widget _buildActiveTab(AppLocalizations l10n) {
+    final statutFilters = _getStatutFilters(l10n);
     return Column(
       children: [
         SizedBox(
@@ -301,9 +307,9 @@ class _DevisListViewState extends State<_DevisListView>
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(
                 horizontal: 16, vertical: 8),
-            itemCount: _statutFilters.length,
+            itemCount: statutFilters.length,
             itemBuilder: (_, i) {
-              final f      = _statutFilters[i];
+              final f      = statutFilters[i];
               final selected = _selectedStatut == f['value'];
               return GestureDetector(
                 onTap: () {
@@ -346,6 +352,7 @@ class _DevisListViewState extends State<_DevisListView>
   Widget _buildList({required bool archived}) {
     return BlocConsumer<DevisBloc, DevisState>(
       listener: (context, state) {
+        final l10n = AppLocalizations.of(context)!;
         if (state is DevisListPaginatedLoaded || state is DevisError) {
           setState(() => _isLoadingMore = false);
         }
@@ -353,7 +360,7 @@ class _DevisListViewState extends State<_DevisListView>
           _applyFilters(archived: archived);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(state is DevisDeleted
-                ? 'Devis supprimé' : 'Devis dupliqué'),
+                ? l10n.quoteDeletedSuccessMessage : l10n.quoteDuplicatedSuccessMessage),
           ));
         }
         if (state is DevisError) {
@@ -364,6 +371,8 @@ class _DevisListViewState extends State<_DevisListView>
         }
       },
       builder: (context, state) {
+        final l10n = AppLocalizations.of(context)!;
+
         if (state is DevisLoading) {
           return const Center(
               child: CircularProgressIndicator(
@@ -391,15 +400,15 @@ class _DevisListViewState extends State<_DevisListView>
                   const SizedBox(height: 12),
                   Text(
                     archived
-                        ? 'Aucun devis archivé'
-                        : 'Aucun devis trouvé',
+                        ? l10n.noArchivedQuotesFound
+                        : l10n.noQuotesFound,
                     style: TextStyle(color: Colors.grey[500]),
                   ),
                   if (_activeFiltersCount > 0) ...[
                     const SizedBox(height: 8),
                     TextButton(
                       onPressed: _resetFilters,
-                      child: const Text('Effacer les filtres'),
+                      child: Text(l10n.clearFiltersButton),
                     ),
                   ],
 
@@ -444,30 +453,29 @@ class _DevisListViewState extends State<_DevisListView>
   }
 
   void _confirmDelete(BuildContext context, int id) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Supprimer le devis'),
-        content: const Text(
-            'Êtes-vous sûr de vouloir supprimer ce devis ?'),
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.deleteQuoteDialogTitle),
+        content: Text(l10n.deleteQuoteDialogContent),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler'),
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(l10n.cancelButton),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext);
               context.read<DevisBloc>().add(DeleteDevis(id));
             },
-            child: const Text('Supprimer',
-                style: TextStyle(color: Colors.red)),
+            child: Text(l10n.deleteAction,
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
     );
-  }
-}
+  }}
 
 class _FilterChip extends StatelessWidget {
   final String   label;
@@ -485,10 +493,10 @@ class _FilterChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: const Color(0xFF2563EB).withOpacity(0.1),
+        color: const Color(0xFF2563EB).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-            color: const Color(0xFF2563EB).withOpacity(0.3)),
+            color: const Color(0xFF2563EB).withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

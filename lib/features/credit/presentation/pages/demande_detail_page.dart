@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../../shared/utils/currency_format.dart';
 import '../../data/datasources/credit_remote_datasource.dart';
 import '../bloc/credit_bloc.dart';
 import '../bloc/credit_event.dart';
 import '../bloc/credit_state.dart';
 import '../widgets/statut_demande_badge.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class DemandeDetailPage extends StatelessWidget {
   final int id;
@@ -40,6 +42,8 @@ class _DemandeDetailView extends StatelessWidget {
   }
 
   void _showUploadOptions(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -49,8 +53,8 @@ class _DemandeDetailView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Type de document',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(l10n.documentTypeLabel,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             ListTile(
               leading: const Icon(Icons.badge_outlined),
@@ -70,7 +74,7 @@ class _DemandeDetailView extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.account_balance_outlined),
-              title: const Text('Relevé bancaire'),
+              title: Text(l10n.bankStatementLabel),
               onTap: () {
                 Navigator.pop(context);
                 _pickAndUpload(context, 'RELEVE_BANCAIRE');
@@ -84,11 +88,13 @@ class _DemandeDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('Détail de la demande',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(l10n.requestDetailTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF2563EB),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -102,8 +108,8 @@ class _DemandeDetailView extends StatelessWidget {
         listener: (context, state) {
           if (state is JustificatifUploaded) {
             ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text('Document ajouté avec succès')));
+                SnackBar(
+                    content: Text(l10n.documentAddedSuccess)));
           }
           if (state is CreditError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -149,14 +155,14 @@ class _DemandeDetailView extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          '${d.montantDemande.toStringAsFixed(0)} MAD',
+                          '${d.montantDemande.toDH()} ',
                           style: const TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF2563EB),
                           ),
                         ),
-                        Text('Sur ${d.dureeMois} mois',
+                        Text('${l10n.overMonthsPrefix} ${d.dureeMois} ${l10n.monthsLabel}',
                             style: TextStyle(color: Colors.grey[600])),
                       ],
                     ),
@@ -168,10 +174,10 @@ class _DemandeDetailView extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.05),
+                        color: Colors.red.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                            color: Colors.red.withOpacity(0.2)),
+                            color: Colors.red.withValues(alpha: 0.2)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,8 +186,8 @@ class _DemandeDetailView extends StatelessWidget {
                             const Icon(Icons.info_outline,
                                 size: 16, color: Colors.red),
                             const SizedBox(width: 6),
-                            const Text('Motif de refus',
-                              style: TextStyle(
+                            Text(l10n.rejectionReasonLabel,
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.red,
                                 fontSize: 13,
@@ -197,8 +203,8 @@ class _DemandeDetailView extends StatelessWidget {
                     const SizedBox(height: 16),
                   ],
 
-                  const Text('Objet du financement',
-                      style: TextStyle(
+                  Text(l10n.objetFinancementLabel,
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 14)),
                   const SizedBox(height: 8),
                   Container(
@@ -216,21 +222,21 @@ class _DemandeDetailView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Justificatifs',
-                          style: TextStyle(
+                      Text(l10n.justificatifsLabel,
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 14)),
                       if (d.statut == 'SOUMISE' ||
                           d.statut == 'DOSSIER_INCOMPLET')
                         TextButton.icon(
                           onPressed: () => _showUploadOptions(context),
                           icon: const Icon(Icons.add, size: 16),
-                          label: const Text('Ajouter'),
+                          label: Text(l10n.addButton),
                         ),
                     ],
                   ),
                   const SizedBox(height: 8),
                   if (d.justificatifs.isEmpty)
-                    Text('Aucun document ajouté',
+                    Text(l10n.noDocumentsAdded,
                         style: TextStyle(
                             fontSize: 12, color: Colors.grey[500]))
                   else
@@ -254,8 +260,8 @@ class _DemandeDetailView extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   if (d.offres.isNotEmpty) ...[
-                    const Text('Offres reçues',
-                        style: TextStyle(
+                    Text(l10n.receivedOffersLabel,
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 14)),
                     const SizedBox(height: 8),
                     ...d.offres.map((o) => Container(
@@ -266,7 +272,7 @@ class _DemandeDetailView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                             color: const Color(0xFF2563EB)
-                                .withOpacity(0.2)),
+                                .withValues(alpha: 0.2)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,15 +283,15 @@ class _DemandeDetailView extends StatelessWidget {
                           const SizedBox(height: 6),
                           Row(children: [
                             Expanded(child: Text(
-                                'Taux: ${o.tauxInteret}%',
+                                '${l10n.rateLabel}: ${o.tauxInteret}%',
                                 style: const TextStyle(fontSize: 12))),
                             Expanded(child: Text(
-                                '${o.dureeMois} mois',
+                                '${o.dureeMois} ${l10n.monthsLabel}',
                                 style: const TextStyle(fontSize: 12))),
                           ]),
                           const SizedBox(height: 4),
                           Text(
-                            'Mensualité : ${o.mensualiteEstimee.toStringAsFixed(2)} MAD',
+                            '${l10n.estimatedMonthlyPaymentLabel} : ${o.mensualiteEstimee.toDH()} ',
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               color: Color(0xFF2563EB),
@@ -303,8 +309,8 @@ class _DemandeDetailView extends StatelessWidget {
                                   } else {
                                     if (context.mounted) {
                                       ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Impossible d\'ouvrir le portail partenaire'),
+                                        SnackBar(
+                                          content: Text(l10n.unableToOpenPortalError),
                                           backgroundColor: Colors.red,
                                         ),
                                       );
@@ -317,13 +323,13 @@ class _DemandeDetailView extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                 ),
-                                child: const Row(
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.open_in_new, size: 16, color: Color(0xFF2563EB)),
-                                    SizedBox(width: 8),
-                                    Text('Finaliser sur le portail',
-                                      style: TextStyle(
+                                    const Icon(Icons.open_in_new, size: 16, color: Color(0xFF2563EB)),
+                                    const SizedBox(width: 8),
+                                    Text(l10n.finalizeOnPortalButton,
+                                      style: const TextStyle(
                                         color: Color(0xFF2563EB),
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -332,7 +338,8 @@ class _DemandeDetailView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ],                        ],
+                          ],
+                        ],
                       ),
                     )),
                   ],

@@ -17,6 +17,7 @@ class MainWrapper extends StatelessWidget {
       ),
     );
   }
+
   int _getSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.toString();
     if (location.startsWith('/devis')) return 1;
@@ -28,11 +29,21 @@ class MainWrapper extends StatelessWidget {
 
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
-      case 0: context.go('/dashboard'); break;
-      case 1: context.go('/devis'); break;
-      case 2: context.go('/factures'); break;
-      case 3: context.go('/cashflow'); break;
-      case 4: context.go('/credit'); break;
+      case 0:
+        context.go('/dashboard');
+        break;
+      case 1:
+        context.go('/devis');
+        break;
+      case 2:
+        context.go('/factures');
+        break;
+      case 3:
+        context.go('/cashflow');
+        break;
+      case 4:
+        context.go('/credit');
+        break;
     }
   }
 }

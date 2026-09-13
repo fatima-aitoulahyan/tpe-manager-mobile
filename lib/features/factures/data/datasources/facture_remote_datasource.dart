@@ -76,8 +76,11 @@ class FactureRemoteDataSource {
   }
 
   // ── POST /api/factures/{id}/change_status/ ──
-  Future<void> changeStatus(int id, String status) async {
-    await _dio.post('/factures/$id/change_status/', data: {'status': status});
+  Future<void> changeStatus(int id, String status, {String? motif}) async {
+    await _dio.post('/factures/$id/change_status/', data: {
+      'status': status,
+      if (motif != null && motif.trim().isNotEmpty) 'motif': motif.trim(),
+    });
   }
 
   // ── POST /api/factures/{id}/enregistrer_paiement/ ──

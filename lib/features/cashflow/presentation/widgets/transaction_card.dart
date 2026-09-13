@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../shared/utils/currency_format.dart';
 import '../../data/models/transaction_model.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class TransactionCard extends StatelessWidget {
   final TransactionModel transaction;
@@ -12,16 +14,17 @@ class TransactionCard extends StatelessWidget {
     required this.onDelete,
   });
 
-  String _categorieLabel(String? cat) {
-    const labels = {
-      'PAIEMENT_FACTURE': 'Paiement facture',
-      'ACOMPTE':          'Acompte',
-      'AUTRE_RECETTE':    'Autre recette',
-      'ACHAT_MATERIEL':   'Achat matériel',
-      'LOYER':            'Loyer',
-      'SALAIRE':          'Salaire',
-      'TRANSPORT':        'Transport',
-      'AUTRE_DEPENSE':    'Autre dépense',
+  String _categorieLabel(BuildContext context, String? cat) {
+    final l10n = AppLocalizations.of(context)!;
+    final labels = {
+      'PAIEMENT_FACTURE': l10n.catPaymentInvoice,
+      'ACOMPTE':          l10n.catDeposit,
+      'AUTRE_RECETTE':    l10n.catOtherIncome,
+      'ACHAT_MATERIEL':   l10n.catEquipmentPurchase,
+      'LOYER':            l10n.catRent,
+      'SALAIRE':          l10n.catSalary,
+      'TRANSPORT':        l10n.catTransport,
+      'AUTRE_DEPENSE':    l10n.catOtherExpense,
     };
     return labels[cat] ?? cat ?? '';
   }
@@ -37,7 +40,9 @@ class TransactionCard extends StatelessWidget {
     };
     return icons[cat] ?? Icons.category_outlined;
   }
+
   void _showDetailsBottomSheet(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isRecette = transaction.isRecette;
     final color     = isRecette ? Colors.green : Colors.red;
 
@@ -74,14 +79,14 @@ class TransactionCard extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: color.withOpacity(0.1),
+                            color: color.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Icon(_categorieIcon(transaction.categorie), color: color, size: 20),
                         ),
                         const SizedBox(width: 12),
                         Text(
-                          _categorieLabel(transaction.categorie),
+                          _categorieLabel(context, transaction.categorie),
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
                         ),
                       ],
@@ -89,11 +94,11 @@ class TransactionCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: color.withOpacity(0.1),
+                        color: color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        isRecette ? 'RECETTE' : 'DÉPENSE',
+                        isRecette ? l10n.tabRecettes.toUpperCase() : l10n.tabDepenses.toUpperCase(),
                         style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: color),
                       ),
                     ),
@@ -104,10 +109,10 @@ class TransactionCard extends StatelessWidget {
                 Center(
                   child: Column(
                     children: [
-                      const Text('Montant de la transaction', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 13)),
+                      Text(l10n.transactionAmountLabel, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13)),
                       const SizedBox(height: 4),
                       Text(
-                        '${isRecette ? '+' : '-'}${transaction.montant.toStringAsFixed(2)} MAD',
+                        '${isRecette ? '+' : '-'}${transaction.montant.toDH()} ',
                         style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: color),
                       ),
                     ],
@@ -117,18 +122,18 @@ class TransactionCard extends StatelessWidget {
                 const Divider(color: Color(0xFFF1F5F9)),
                 const SizedBox(height: 16),
 
-                _buildDetailRow('Description', transaction.description),
+                _buildDetailRow(l10n.descriptionLabel, transaction.description),
                 const SizedBox(height: 14),
-                _buildDetailRow("Date du paiement", transaction.date),
+                _buildDetailRow(l10n.paymentDateLabel, transaction.date),
 
                 if (transaction.categorie == 'PAIEMENT_FACTURE') ...[
                   const SizedBox(height: 14),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         width: 120,
-                        child: Text("Justificatif", style: TextStyle(color: Color(0xFF94A3B8), fontSize: 13, fontWeight: FontWeight.w500)),
+                        child: Text(l10n.justificationLabel, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13, fontWeight: FontWeight.w500)),
                       ),
                       Expanded(
                         child: InkWell(
@@ -138,18 +143,18 @@ class TransactionCard extends StatelessWidget {
                               context.go('/factures/${transaction.factureId}');
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Impossible de charger le lien de la facture.'))
+                                  SnackBar(content: Text(l10n.invoiceLoadError))
                               );
                             }
                           },
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.link, size: 16, color: Color(0xFF2563EB)),
-                              SizedBox(width: 4),
+                              const Icon(Icons.link, size: 16, color: Color(0xFF2563EB)),
+                              const SizedBox(width: 4),
                               Text(
-                                "Voir la facture",
-                                style: TextStyle(
+                                l10n.viewInvoiceLabel,
+                                style: const TextStyle(
                                   color: Color(0xFF2563EB),
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
@@ -171,6 +176,7 @@ class TransactionCard extends StatelessWidget {
       },
     );
   }
+
   Widget _buildDetailRow(String label, String value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +187,7 @@ class TransactionCard extends StatelessWidget {
         ),
         Expanded(
           child: Text(
-            value.isNotEmpty ? value : 'Aucune description',
+            value.isNotEmpty ? value : '-',
             style: const TextStyle(color: Color(0xFF1E293B), fontSize: 13, fontWeight: FontWeight.w600),
           ),
         ),
@@ -201,7 +207,7 @@ class TransactionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.06),
+            color: Colors.grey.withValues(alpha: 0.06),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -216,7 +222,7 @@ class TransactionCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -244,11 +250,11 @@ class TransactionCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: color.withOpacity(0.08),
+                        color: color.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        _categorieLabel(transaction.categorie),
+                        _categorieLabel(context, transaction.categorie),
                         style: TextStyle(
                           fontSize: 10,
                           color: color,
@@ -272,7 +278,7 @@ class TransactionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  '${isRecette ? '+' : '-'}${transaction.montant.toStringAsFixed(2)} MAD',
+                  '${isRecette ? '+' : '-'}${transaction.montant.toDH()} ',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -280,7 +286,6 @@ class TransactionCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4),
-
               ],
             ),
           ]),

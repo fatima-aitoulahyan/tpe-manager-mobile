@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/datasources/cashflow_remote_datasource.dart';
@@ -7,6 +8,8 @@ import '../bloc/cashflow_event.dart';
 import '../bloc/cashflow_state.dart';
 import '../widgets/add_transaction_sheet.dart';
 import '../widgets/transaction_card.dart';
+import '../../../../shared/utils/currency_format.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class CashflowPage extends StatelessWidget {
   const CashflowPage({super.key});
@@ -32,7 +35,10 @@ class _CashflowView extends StatefulWidget {
 class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
+  final TextEditingController _searchController = TextEditingController();
+  Timer? _debounce;
   String? _selectedType;
+  String? _searchQuery;
   final Set<int> _selectedIds = {};
 
   bool _isBalanceVisible = false;
@@ -59,8 +65,23 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
             : (_tabController.index == 1 ? 'RECETTE' : 'DEPENSE');
         _selectedIds.clear();
       });
-      context.read<CashflowBloc>().add(LoadTransactions(type: _selectedType));
+      context.read<CashflowBloc>().add(LoadTransactions(type: _selectedType, search: _searchQuery));
     });
+  }
+
+  void _onSearchChanged(String value) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 400), () {
+      setState(() => _searchQuery = value.trim().isEmpty ? null : value.trim());
+      context.read<CashflowBloc>().add(LoadTransactions(type: _selectedType, search: _searchQuery));
+    });
+  }
+
+  void _clearSearch() {
+    _debounce?.cancel();
+    _searchController.clear();
+    setState(() => _searchQuery = null);
+    context.read<CashflowBloc>().add(LoadTransactions(type: _selectedType));
   }
 
   void _loadMore() {
@@ -68,6 +89,7 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
     if (state is TransactionsLoaded && state.hasMore) {
       context.read<CashflowBloc>().add(LoadTransactions(
         type: _selectedType,
+        search: _searchQuery,
         page: state.currentPage + 1,
         isLoadMore: true,
       ));
@@ -85,15 +107,19 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
   }
 
   void _deleteSelectedTransactions() {
+    final l10n = AppLocalizations.of(context)!;
     final bloc = context.read<CashflowBloc>();
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Suppression multiple', style: TextStyle(fontWeight: FontWeight.bold)),
-        content: Text('Voulez-vous vraiment supprimer les ${_selectedIds.length} transactions sélectionnées ?'),
+        title: Text(l10n.multipleDeletionTitle, style: const TextStyle(fontWeight: FontWeight.bold)),
+        content: Text(l10n.multipleDeletionContent(_selectedIds.length)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Annuler', style: TextStyle(color: Color(0xFF64748B)))),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(l10n.cancelAction, style: const TextStyle(color: Color(0xFF64748B))),
+          ),
           TextButton(
             onPressed: () {
               Navigator.pop(dialogContext);
@@ -102,7 +128,7 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
               }
               setState(() => _selectedIds.clear());
             },
-            child: const Text('Supprimer', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            child: Text(l10n.deleteAction, style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -113,16 +139,20 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
   void dispose() {
     _tabController.dispose();
     _scrollController.dispose();
+    _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         title: Text(
-            _isSelectionMode ? '${_selectedIds.length} sélectionné(s)' : 'Trésorerie',
+            _isSelectionMode ? l10n.selectedCount(_selectedIds.length) : l10n.cashflowAppBarTitle,
             style: const TextStyle(fontWeight: FontWeight.bold)
         ),
         backgroundColor: _isSelectionMode ? const Color(0xFF1E3A8A) : const Color(0xFF2563EB),
@@ -130,14 +160,12 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
         elevation: 0,
         centerTitle: false,
         automaticallyImplyLeading: false,
-
         leading: _isSelectionMode
             ? IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => setState(() => _selectedIds.clear()),
         )
             : null,
-
         actions: [
           if (_isSelectionMode)
             IconButton(
@@ -155,13 +183,14 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
           labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
           dividerColor: Colors.transparent,
-          tabs: const [
-            Tab(text: 'Tout'),
-            Tab(text: 'Recettes'),
-            Tab(text: 'Dépenses'),
+          tabs: [
+            Tab(text: l10n.tabAll),
+            Tab(text: l10n.tabRecettes),
+            Tab(text: l10n.tabDepenses),
           ],
         ),
-      ),      body: Column(
+      ),
+      body: Column(
         children: [
           BlocBuilder<CashflowBloc, CashflowState>(
             buildWhen: (_, s) => s is DashboardLoaded,
@@ -174,7 +203,39 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
               );
             },
           ),
-
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+            child: TextField(
+              controller: _searchController,
+              onChanged: _onSearchChanged,
+              decoration: InputDecoration(
+                hintText: l10n.searchTransactionsHint,
+                hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 14),
+                prefixIcon: const Icon(Icons.search, color: Color(0xFF94A3B8), size: 20),
+                suffixIcon: _searchController.text.isNotEmpty
+                    ? IconButton(
+                  icon: const Icon(Icons.close, color: Color(0xFF94A3B8), size: 18),
+                  onPressed: _clearSearch,
+                )
+                    : null,
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -188,10 +249,10 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
           if (state is TransactionAdded) {
             context.read<CashflowBloc>()
               ..add(LoadDashboard())
-              ..add(LoadTransactions(type: _selectedType));
+              ..add(LoadTransactions(type: _selectedType, search: _searchQuery));
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.transaction.isRecette ? 'Paiement enregistré ✓' : 'Dépense enregistrée ✓'),
+                content: Text(state.transaction.isRecette ? l10n.paymentRecordedSuccess : l10n.expenseRecordedSuccess),
                 backgroundColor: state.transaction.isRecette ? const Color(0xFF10B981) : const Color(0xFFEF4444),
                 behavior: SnackBarBehavior.floating,
               ),
@@ -200,7 +261,7 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
           if (state is TransactionDeleted) {
             context.read<CashflowBloc>()
               ..add(LoadDashboard())
-              ..add(LoadTransactions(type: _selectedType));
+              ..add(LoadTransactions(type: _selectedType, search: _searchQuery));
           }
           if (state is CashflowError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -222,6 +283,8 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
   }
 
   Widget _buildList() {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocBuilder<CashflowBloc, CashflowState>(
       buildWhen: (_, s) => s is TransactionsLoaded || s is TransactionLoadingMore || s is CashflowLoading,
       builder: (context, state) {
@@ -238,9 +301,16 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.account_balance_wallet_outlined, size: 54, color: const Color(0xFFCBD5E1)),
+                  Icon(
+                    _searchQuery != null ? Icons.search_off_rounded : Icons.account_balance_wallet_outlined,
+                    size: 54,
+                    color: const Color(0xFFCBD5E1),
+                  ),
                   const SizedBox(height: 12),
-                  const Text('Aucune transaction', style: TextStyle(color: Color(0xFF94A3B8), fontWeight: FontWeight.w500)),
+                  Text(
+                    _searchQuery != null ? l10n.noSearchResults : l10n.noTransactions,
+                    style: const TextStyle(color: Color(0xFF94A3B8), fontWeight: FontWeight.w500),
+                  ),
                 ],
               ),
             );
@@ -250,7 +320,7 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
             onRefresh: () async {
               context.read<CashflowBloc>()
                 ..add(LoadDashboard())
-                ..add(LoadTransactions(type: _selectedType));
+                ..add(LoadTransactions(type: _selectedType, search: _searchQuery));
             },
             child: ListView.builder(
               controller: _scrollController,
@@ -287,7 +357,7 @@ class _CashflowViewState extends State<_CashflowView> with SingleTickerProviderS
                           width: isSelected ? 1.5 : 1,
                         ),
                         boxShadow: [
-                          BoxShadow(color: Colors.black.withOpacity(0.015), blurRadius: 8, offset: const Offset(0, 2)),
+                          BoxShadow(color: Colors.black.withValues(alpha: 0.015), blurRadius: 8, offset: const Offset(0, 2)),
                         ],
                       ),
                       child: IgnorePointer(
@@ -323,6 +393,8 @@ class _DashboardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       padding: const EdgeInsets.all(20),
@@ -336,9 +408,9 @@ class _DashboardCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Solde disponible',
-                style: TextStyle(color: Color(0xFF64748B), fontSize: 13, fontWeight: FontWeight.w500),
+              Text(
+                l10n.availableBalanceLabel,
+                style: const TextStyle(color: Color(0xFF64748B), fontSize: 13, fontWeight: FontWeight.w500),
               ),
               IconButton(
                 icon: Icon(
@@ -356,7 +428,7 @@ class _DashboardCard extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              isVisible ? '${dashboard.solde.toStringAsFixed(2)} MAD' : '•••••• MAD',
+              isVisible ? '${dashboard.solde.toDH()} ' : '•••••• DH',
               style: const TextStyle(color: Color(0xFF0F172A), fontSize: 26, fontWeight: FontWeight.bold, letterSpacing: -0.5),
             ),
           ),
@@ -364,7 +436,7 @@ class _DashboardCard extends StatelessWidget {
           Row(
             children: [
               Expanded(child: _MiniStat(
-                label: 'Recettes',
+                label: l10n.tabRecettes,
                 value: dashboard.recettesMois,
                 icon: Icons.arrow_downward_rounded,
                 color: const Color(0xFF10B981),
@@ -372,7 +444,7 @@ class _DashboardCard extends StatelessWidget {
               )),
               Container(width: 1, height: 32, color: const Color(0xFFE2E8F0)),
               Expanded(child: _MiniStat(
-                label: 'Dépenses',
+                label: l10n.tabDepenses,
                 value: dashboard.depensesMois,
                 icon: Icons.arrow_upward_rounded,
                 color: const Color(0xFFEF4444),
@@ -411,7 +483,7 @@ class _MiniStat extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(3),
-              decoration: BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
               child: Icon(icon, color: color, size: 12),
             ),
             const SizedBox(width: 6),
@@ -420,7 +492,7 @@ class _MiniStat extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          isVisible ? '${value.toStringAsFixed(2)} MAD' : '•••• MAD',
+          isVisible ? '${value.toDH()} ' : '•••• DH',
           style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 14),
         ),
       ],

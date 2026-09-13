@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tpe_mobile/shared/utils/currency_format.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class LigneProduitFormWidget extends StatefulWidget {
   final Function(Map<String, dynamic>) onAdd;
@@ -54,6 +56,8 @@ class _LigneDevisFormWidgetState extends State<LigneProduitFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -64,8 +68,8 @@ class _LigneDevisFormWidgetState extends State<LigneProduitFormWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Ajouter une ligne',
-            style: TextStyle(
+          Text(l10n.addLineTitle,
+            style: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 13,
               color: Colors.grey,
@@ -76,7 +80,7 @@ class _LigneDevisFormWidgetState extends State<LigneProduitFormWidget> {
           TextField(
             controller: _libelleCtrl,
             decoration: InputDecoration(
-              labelText: 'Désignation / Description',
+              labelText: l10n.designationLabel,
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8)),
               isDense: true,
@@ -94,7 +98,7 @@ class _LigneDevisFormWidgetState extends State<LigneProduitFormWidget> {
                     decimal: true),
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  labelText: 'Prix unitaire (MAD)',
+                  labelText: l10n.unitPriceLabel,
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8)),
                   isDense: true,
@@ -111,7 +115,7 @@ class _LigneDevisFormWidgetState extends State<LigneProduitFormWidget> {
                     decimal: true),
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  labelText: 'Quantité',
+                  labelText: l10n.quantityLabel,
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8)),
                   isDense: true,
@@ -127,13 +131,13 @@ class _LigneDevisFormWidgetState extends State<LigneProduitFormWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Total : ${_total.toStringAsFixed(2)} MAD',
+                l10n.totalLineDisplay(_total.toDH()),
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               ElevatedButton.icon(
                 onPressed: _add,
                 icon: const Icon(Icons.add, size: 16),
-                label: const Text('Ajouter au devis'),
+                label: Text(l10n.addToDocumentButton),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2563EB),
                   foregroundColor: Colors.white,

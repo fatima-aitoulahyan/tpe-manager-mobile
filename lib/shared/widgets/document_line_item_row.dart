@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tpe_mobile/shared/utils/currency_format.dart';
 
 class DocumentLineItemRow extends StatelessWidget {
   final String libelle;
@@ -42,14 +43,14 @@ class DocumentLineItemRow extends StatelessWidget {
               children: [
                 Text(libelle, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF1E293B))),
                 Text(
-                  '${quantite % 1 == 0 ? quantite.toInt() : quantite} × ${prixUnitaire.toStringAsFixed(2)} MAD',
+                  '${quantite % 1 == 0 ? quantite.toInt() : quantite} × ${prixUnitaire.toDH()} ',
                   style: const TextStyle(fontSize: 11, color: Color(0xFF94A3B8)),
                 ),
               ],
             ),
           ),
           Text(
-            '${(prixUnitaire * quantite).toStringAsFixed(2)} MAD',
+            '${(prixUnitaire * quantite).toDH()} ',
             style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF1E293B)),
           ),
           const SizedBox(width: 4),

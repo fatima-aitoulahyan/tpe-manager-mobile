@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../ bloc/facture_bloc.dart';
 import '../ bloc/facture_event.dart';
 import '../ bloc/facture_state.dart';
+
 import '../../../clients/data/datasources/client_remote_datasource.dart';
 import '../../../clients/data/models/client_model.dart';
 import '../../../clients/presentation/widgets/client_dropdown_selector.dart';
@@ -13,6 +14,7 @@ import '../../../../shared/widgets/financial_totals_card.dart';
 import '../../../../shared/widgets/payment_selector.dart';
 import '../../../../shared/widgets/ligne_devis_form.dart';
 import '../../data/datasources/facture_remote_datasource.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class FactureCreatePage extends StatelessWidget {
   const FactureCreatePage({super.key});
@@ -55,20 +57,21 @@ class _FactureCreateViewState extends State<_FactureCreateView> {
   }
 
   void _submit(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (!_formKey.currentState!.validate()) return;
     if (_selectedClient == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Veuillez sélectionner un client')));
+          SnackBar(content: Text(l10n.selectClientError)));
       return;
     }
     if (_dateEcheance == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Veuillez sélectionner une date d\'échéance')));
+          SnackBar(content: Text(l10n.selectDueDateError)));
       return;
     }
     if (_lignes.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Veuillez ajouter au moins une ligne de prestation')));
+          SnackBar(content: Text(l10n.selectAtLeastOneLineError)));
       return;
     }
     context.read<FactureBloc>().add(CreateFacture({
@@ -83,10 +86,12 @@ class _FactureCreateViewState extends State<_FactureCreateView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Text('Nouvelle Facture', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(l10n.newInvoiceTitle, style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF2563EB),
         foregroundColor: Colors.white,
         elevation: 0,
@@ -100,7 +105,7 @@ class _FactureCreateViewState extends State<_FactureCreateView> {
           if (state is FactureCreated) {
             context.go('/factures');
             ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Facture ${state.facture.numero} créée en brouillon !')));
+                SnackBar(content: Text(l10n.invoiceCreatedDraftSuccess(state.facture.numero))));
           }
           if (state is FactureError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -116,45 +121,45 @@ class _FactureCreateViewState extends State<_FactureCreateView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  _Label('Client'),
+                  _Label(l10n.clientLabel),
                   ClientDropdownSelector(
                     selectedClient: _selectedClient,
                     onSelected: (c) => setState(() => _selectedClient = c),
                   ),
                   const SizedBox(height: 20),
 
-                  _Label('Date d\'échéance'),
+                  _Label(l10n.dueDateLabel),
                   CustomDatePickerField(
                     date: _dateEcheance,
-                    hintText: 'Sélectionner la date limite de règlement',
+                    hintText: l10n.selectDueDateHint,
                     onPick: (d) => setState(() => _dateEcheance = d),
                   ),
                   const SizedBox(height: 20),
 
-                  _Label('Taux de TVA (%)'),
+                  _Label(l10n.vatRateLabel),
                   TextFormField(
                     controller: _tvaCtrl,
                     keyboardType: TextInputType.number,
                     onChanged: (_) => setState(() {}),
-                    decoration: _inputDecoration(hint: 'Ex : 20'),
+                    decoration: _inputDecoration(hint: l10n.vatRateHint),
                   ),
                   const SizedBox(height: 20),
 
-                  _Label('Mode de règlement requis'),
+                  _Label(l10n.paymentMethodRequiredLabel),
                   PaymentSelector(
                     selected: _modePaiement,
                     onSelect: (v) => setState(() => _modePaiement = v),
                   ),
                   const SizedBox(height: 20),
 
-                  _Label('Détails des prestations / articles'),
+                  _Label(l10n.addProductsOrServicesLabel),
                   LigneProduitFormWidget(
                     onAdd: (l) => setState(() => _lignes.add(l)),
                   ),
                   const SizedBox(height: 12),
 
                   if (_lignes.isNotEmpty) ...[
-                    _Label('Éléments de facturation ajoutés'),
+                    _Label(l10n.addedBillingItemsLabel),
                     ..._lignes.asMap().entries.map((e) {
                       final i = e.key;
                       final l = e.value;
@@ -168,11 +173,11 @@ class _FactureCreateViewState extends State<_FactureCreateView> {
                     const SizedBox(height: 16),
                   ],
 
-                  _Label('Conditions de règlement ou mentions légales'),
+                  _Label(l10n.paymentConditionsLegalMentionsLabel),
                   TextFormField(
                     controller: _conditionsCtrl,
                     maxLines: 2,
-                    decoration: _inputDecoration(hint: 'Ex : Pénalités de retard de 10% après échéance...'),
+                    decoration: _inputDecoration(hint: l10n.paymentConditionsHint),
                   ),
                   const SizedBox(height: 20),
 
@@ -198,9 +203,9 @@ class _FactureCreateViewState extends State<_FactureCreateView> {
                         height: 22,
                         child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                       )
-                          : const Text(
-                        'Générer la facture',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                          : Text(
+                        l10n.generateInvoiceButton,
+                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
                       ),
                     ),
                   ),

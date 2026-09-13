@@ -1,3 +1,9 @@
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 plugins {
     id("com.android.application")
     id("dev.flutter.flutter-gradle-plugin")

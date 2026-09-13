@@ -7,6 +7,7 @@ class LoadTransactions extends CashflowEvent {
   final String? categorie;
   final String? dateDebut;
   final String? dateFin;
+  final String? search;
   final int     page;
   final bool    isLoadMore;
 
@@ -15,6 +16,7 @@ class LoadTransactions extends CashflowEvent {
     this.categorie,
     this.dateDebut,
     this.dateFin,
+    this.search,
     this.page       = 1,
     this.isLoadMore = false,
   });
